@@ -1,0 +1,34 @@
+{#
+Renders a list of resources with icons and view links.
+
+resources - A list of resources to render
+package - A package object that the resources belong to.
+
+Example:
+
+  {% snippet "datasetsnippets/snippets/resources_list.html", package=package, resources=package.resources %}
+
+#}
+<section id="dataset-resources" class="resources">
+    <h2>{{ _('Resources') }}</h2>
+    {% block resource_list %}
+      {% if resources %}
+        <div class="html5-section download-multi modul-download-multi">
+          {% block resource_list_inner %}
+            {% for resource in resources %}
+              {% snippet 'datasetsnippets/snippets/resource_item.html', package=package, resource=resource %}
+            {% endfor %}
+          {% endblock %}
+        </div>
+      {% else %}
+        {% if h.check_access('resource_create', {'package_id': package['id']}) %}
+          {% trans url=h.url_for(controller='package', action='new_resource', id=package.name) %}
+            <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
+          {% endtrans %}
+        {% else %}
+          <p class="empty">{{ _('This dataset has no data') }}</p>
+        {% endif %}
+      {% endif %}
+    {% endblock %}
+  </section>
+  

@@ -1,0 +1,37 @@
+{#
+Construct an entry in the table of metadata for a dataset view.
+
+name
+  The field name identifying the metadata field, eg. geographical_coverage
+
+value
+  The value of the metadata field, eg. "Friedrichshain-Kreuzberg"
+
+title
+  The title of the metadata field, eg. "Geographische Abdeckung"
+
+render_function
+  A function to render the value of the metadata field, eg. h.render_datetime
+
+create_link
+  Boolean, if True create link to dataset search page (facet), if False don't.
+
+#}
+
+{% if value %}
+  <div class="row-fluid package-metadata-item">
+    <div class="span4">
+      <span class="field-label">{{ _(title) }}:</span>
+    </div>
+    <div class="span8">
+      {% set rendered_value = render_function(value) if render_function else value %}
+      <span class="field-value">
+        {%  if create_link %}
+          <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {name: value})}}'>{{ rendered_value }}</a>
+        {% else %}
+          {{ rendered_value }}
+        {% endif %}
+      </span>
+    </div>
+  </div>
+{% endif %}

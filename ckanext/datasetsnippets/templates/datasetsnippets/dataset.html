@@ -1,0 +1,26 @@
+{% set package = c.pkg_dict or pkg_dict %}
+
+<h6 class="aural" id="aural_maincontent">Inhaltsspalte</h6>
+<div class="span9 column-content">
+
+  <div class="html5-section article" role="main">
+    <div class="html5-header header">
+      <h1 class="title">{{ h.dataset_display_name(package) }}</h1>
+    </div>
+    
+    {% if package.notes %}
+    <div class="notes embedded-content">
+      {{ h.render_markdown(h.get_translated(package, 'notes')) }}
+    </div>
+    {% endif %}
+    
+    {% snippet "datasetsnippets/snippets/additional_info.html", package=package %}
+    
+    {% snippet "datasetsnippets/snippets/resources_list.html", package=package, resources=package.resources %}
+    
+  </div>
+
+  {% snippet "datasetsnippets/snippets/social_media_shariff.html" %}
+
+</div>
+
