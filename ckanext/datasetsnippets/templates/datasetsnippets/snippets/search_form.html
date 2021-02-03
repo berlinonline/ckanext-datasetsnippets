@@ -7,50 +7,70 @@
 
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
 
-  {% block search_input %}
-    <div class="search-input control-group input-group">
-      <p id="aural_datensatzsuche" class="aural">
-          Suche nach Datensätzen im Berliner Datenportal:
-      </p>  
-      <input 
-        type="text" 
-        class="search" 
-        name="q" 
-        value="{{ query }}" 
-        autocomplete="off"
-        aria-labelledby="aural_datensatzsuche"
-        placeholder="{{ placeholder }}">
-      {% block search_input_button %}
-      <button 
-        type="submit" 
-        value="search"
-        class="btn btn-default js-form-submit submit-button">
-        Suchen
-      </button>
-      {% endblock %}
-    </div>
-  {% endblock %}
+  <fieldset class="dp-filter-field panel--heavy">
 
-  {% block search_search_fields %}
-    {% if fields -%}
-      <span>{{ form.hidden_from_list(fields=fields) }}</span>
-    {%- endif %}
-  {% endblock %}
+    {% block search_input %}
+      <div class="search-input">
+        <p id="aural_datensatzsuche" class="aural">
+            Suche nach Datensätzen im Berliner Datenportal:
+        </p>  
+        <input 
+          type="text" 
+          class="search" 
+          name="q" 
+          value="{{ query }}" 
+          autocomplete="off"
+          aria-labelledby="aural_datensatzsuche"
+          placeholder="{{ placeholder }}">
+        {% block search_input_button %}
+        {% endblock %}
+      </div>
+    {% endblock %}
+
+    {% block search_search_fields %}
+      {% if fields -%}
+        <span>{{ form.hidden_from_list(fields=fields) }}</span>
+      {%- endif %}
+    {% endblock %}
+
+    <div id="dataset_search_filters">
+      {% for facet in c.facet_titles %}
+        {{ h.snippet('datasetsnippets/snippets/facet_list.html',
+          title=c.facet_titles[facet] ,
+          name=facet ,
+          label_function=h.berlintheme_facet_mapping ,
+          alternative_url="/" ~ h.berlin_dataset_path()
+          )
+        }}
+      {% endfor %}
+    </div>
+
+    <div class="dp-button-row">
+        <a class="btn" href="/datensaetze" title="Alle Filter zurücksetzen">
+          Zurücksetzen
+        </a>
+        <button type="submit" value="search" class="btn btn-default js-form-submit submit-button">
+          Suchen
+        </button>
+
+    </div>
+
+  </fieldset>
 
   <div class="row-fluid">
-  {% block search_title %}
+    {% block search_title %}
     <div class="span5">
-    {% if not error %}
+      {% if not error %}
       <h2>{% snippet 'datasetsnippets/snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
-    {% else %}
+      {% else %}
       <h2>Error</h2>
-    {% endif %}
+      {% endif %}
     </div>
-  {% endblock %}
-
-  {% block search_sortby %}
+    {% endblock %}
+  
+    {% block search_sortby %}
     <div class="span7">
-    {% if sorting %}
+      {% if sorting %}
       <div class="form-select control-group control-order-by">
         <div class="row-fluid">
           <div class="span4">
@@ -59,9 +79,10 @@
           <div class="span8">
             <select id="field-order-by" name="sort">
               {% for label, value in sorting %}
-                {% if label and value %}
-                  <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
-                {% endif %}
+              {% if label and value %}
+              <option value="{{ value }}" {% if sorting_selected==value %} selected="selected" {% endif %}>{{ label }}
+              </option>
+              {% endif %}
               {% endfor %}
             </select>
             {% block search_sortby_button %}
@@ -70,35 +91,37 @@
           </div>
         </div>
       </div>
-    {% endif %}
+      {% endif %}
     </div>
-  {% endblock %}
-
+    {% endblock %}
+  
   </div>
 
-  {% block search_facets %}
-    {% if facets %}
-      <p class="filter-list">
-        {% for field in facets.fields %}
-          {% set search_facets_items = facets.search.get(field)['items'] %}
-          <span class="facet">{{ facets.titles.get(field) }}:</span>
-          {% for value in facets.fields[field] %}
-            <span class="filtered pill">
-              {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
-                {{ facets.translated_fields[(field,value)] }}
-              {%- else -%}
-                {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-              {%- endif %}
-              <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="fa fa-times"></i></a>
-            </span>
-          {% endfor %}
-        {% endfor %}
-      </p>     
-      <button class="show-filters btn hidden">{{ _('Filter Results') }}</button>
-    {% endif %}
-  {% endblock %}
-
 </form>
+
+
+{% block search_facets %}
+  {% if facets %}
+  <p class="filter-list">
+    {% for field in facets.fields %}
+    {% set search_facets_items = facets.search.get(field)['items'] %}
+    <span class="facet">{{ facets.titles.get(field) }}:</span>
+    {% for value in facets.fields[field] %}
+    <span class="filtered pill">
+      {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+      {{ facets.translated_fields[(field,value)] }}
+      {%- else -%}
+      {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+      {%- endif %}
+      <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i
+          class="fa fa-times"></i></a>
+    </span>
+    {% endfor %}
+    {% endfor %}
+  </p>
+  <button class="show-filters btn hidden">{{ _('Filter Results') }}</button>
+  {% endif %}
+{% endblock %}
 
 {% if show_empty and count == 0 and not error %}
   {% trans %}
