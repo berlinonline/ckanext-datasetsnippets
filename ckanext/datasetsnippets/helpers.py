@@ -389,3 +389,30 @@ def organizations_for_user(user, permission='create_dataset'):
 def is_sysadmin(user_name):
     user = model.User.get(unicode(user_name))
     return user.sysadmin
+
+def get_facet_id_prefix(name):
+    '''Helper function to generate the markup id-prefix for a facet
+       selection box.
+    '''
+    return "dp_facet_" + name
+
+def has_active_item(items):
+    '''Helper function that returns True if the list of items contains
+       at least one that is active. Otherwise returns False.
+    '''
+    for item in items:
+      if item['active']:
+        return True
+    return False
+
+def active_items(items):
+    '''Helper function that returns the list of all active items from 
+       a list of facet items.
+    '''
+    return [item for item in items if item['active']]
+
+def active_item_labels(items):
+    '''Helper function that returns a comma-separated string with the labels of
+       all active items from a list of facet items.
+    '''
+    return ', '.join([item['display_name'] for item in items if item['active']])

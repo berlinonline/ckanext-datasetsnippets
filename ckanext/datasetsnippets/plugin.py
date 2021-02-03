@@ -62,4 +62,8 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_is_sysadmin': theme_helpers.is_sysadmin ,
             'berlin_dataset_path': theme_helpers.dataset_path ,
             'berlin_url_with_params': theme_helpers.url_with_params ,
+            'berlin_facet_prefix': theme_helpers.get_facet_id_prefix ,
+            'berlin_facet_has_active_item': theme_helpers.has_active_item ,
+            'berlin_facet_active_items': theme_helpers.active_items ,
+            'berlin_facet_active_item_labels': theme_helpers.active_item_labels ,
         }
