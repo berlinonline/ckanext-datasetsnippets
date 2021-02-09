@@ -55,7 +55,7 @@ within_tertiary
           {% else %}
             <span class="dp-filter-selector-label">{{title}}</span>
           {% endif %}
-          <span class="dp-caret dp-caret-down"></span>
+          <span class="dp-caret"></span>
         </a>
         <ul class="dropdown-menu">
           {% if items %}
@@ -69,6 +69,7 @@ within_tertiary
                 <a href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
                   <span>{{ label }} {{ count }}</span>
                 </a>
+                {% if item.active %}<div class="dp-check"></div>{% endif %}
               </li>
             {% endfor %}
             {% if h.get_param_int('_%s_limit' % name) %}
