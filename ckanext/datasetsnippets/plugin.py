@@ -66,4 +66,5 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_facet_has_active_item': theme_helpers.has_active_item ,
             'berlin_facet_active_items': theme_helpers.active_items ,
             'berlin_facet_active_item_labels': theme_helpers.active_item_labels ,
+            'berlin_label_for_sorting': theme_helpers.label_for_sorting ,
         }

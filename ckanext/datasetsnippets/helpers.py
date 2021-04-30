@@ -416,3 +416,8 @@ def active_item_labels(items):
        all active items from a list of facet items.
     '''
     return ', '.join([item['display_name'] for item in items if item['active']])
+
+def label_for_sorting(sortings, sorting):
+    '''Helper function to retrieve the label for a search sorting from a list of sortings.'''
+    flipped = { value: key for key,value in dict(sortings).items() }
+    return flipped.get(sorting, None)
