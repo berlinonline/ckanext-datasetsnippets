@@ -1,5 +1,8 @@
-{% import 'macros/form.html' as form %} {% set placeholder = placeholder if placeholder else _('Search datasets...') %} {% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %} {% set no_bottom_border
-= no_bottom_border if no_bottom_border else false %} {% set form_id = form_id if form_id else false %}
+{% import 'macros/form.html' as form %}
+{% set placeholder = placeholder if placeholder else _('Search datasets...') %}
+{% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
+{% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
+{% set form_id = form_id if form_id else false %}
 
 <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
 
@@ -18,8 +21,18 @@
         {% endblock %} {% block search_search_fields %} {% if fields -%}
         <span>{{ form.hidden_from_list(fields=fields) }}</span> {%- endif %} {% endblock %}
 
-        <div id="dataset_search_filters">
-            {% for facet in c.facet_titles %} {{ h.snippet('datasetsnippets/snippets/facet_list.html', title=c.facet_titles[facet] , name=facet , label_function=h.berlintheme_facet_mapping , alternative_url="/" ~ h.berlin_dataset_path() ) }} {% endfor %}
+        <div class="dataset_search_filters">
+            {% for facet in c.facet_titles %}
+                {% if facet != 'tags' %}
+                    {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
+                        title=c.facet_titles[facet],
+                        name=facet,
+                        label_function=h.berlintheme_facet_mapping,
+                        alternative_url="/" ~ h.berlin_dataset_path(),
+                        mode=display_mode)
+                    }}
+                {% endif %}
+            {% endfor %}
         </div>
 
         <div class="dp-button-row">
