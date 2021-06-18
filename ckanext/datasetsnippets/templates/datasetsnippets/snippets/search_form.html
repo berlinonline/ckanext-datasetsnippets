@@ -11,8 +11,8 @@
     <fieldset id="dp-filter-ui-{{display_mode}}" class="dp-filter-field panel--heavy">
 
         {% block search_input %}
-        <div class="search-input">
-            <div class="dp-search-input-label">Stichwort</div>
+        <div class="search-input dp-input">
+            <div class="dp-input-label">Stichwort</div>
             <p id="aural_datensatzsuche" class="aural">
                 Suche nach Datensätzen im Berliner Datenportal:
             </p>
@@ -21,12 +21,12 @@
         </div>
         {% endblock %}
         {% block tag_input %}
-        <div class="tag-input">
-            <div class="dp-search-input-label">Tags</div>
+        <div class="tag-input dp-input">
+            <div class="dp-input-label">Tags</div>
             <p id="aural_datensatztags" class="aural">
                 Geben Sie Tags zur Suche im Datenportal ein:
             </p>
-            <input type="text" class="search" name="dataset_tags" autocomplete="off" aria-labelledby="aural_datensatztags" placeholder="Eingabe für Stichwortsuche">
+            <input type="text" class="search" name="dataset_tags" autocomplete="off" aria-labelledby="aural_datensatztags" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
         </div>
         {% endblock %}
         {% block search_search_fields %}
