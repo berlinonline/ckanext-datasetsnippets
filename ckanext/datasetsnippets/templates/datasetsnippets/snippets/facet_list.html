@@ -2,7 +2,8 @@
 If defined, this should be a callable that accepts a `facet_item`. eg. lambda facet_item: facet_item.display_name.upper() By default it displays the facet item's display name, which should usually be good enough if_empty A string, which if defined, and
 the list of possible facet items is empty, is displayed in lieu of an empty list. count_label A callable which accepts an integer, and returns a string. This controls how a facet-item's count is displayed. extras Extra info passed into the add/remove
 params to make the url alternative_url URL to use when building the necessary URLs, instead of the default ones returned by url_for. Useful eg for dataset types. hide_empty Do not show facet if there are none, Default: false. within_tertiary Boolean for
-when a facet list should appear in the the right column of the page and not the left column. #} {% block facet_list %}
+when a facet list should appear in the the right column of the page and not the left column. #}
+{% block facet_list %}
     {% with items = items or h.get_facet_items_dict(name) %}
         {% if items %}
             {% set title = title or h.get_facet_title(name) %}
