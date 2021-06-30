@@ -4,105 +4,185 @@
 {% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
 {% set form_id = form_id if form_id else false %}
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+<div class="dp-overlayable kiekma dp-no-kiekma">
+    <div class="dp-overlayable-background"></div>
 
-    {% for display_mode in ['desktop', 'mobile'] %}
-
-    <fieldset id="dp-filter-ui-{{display_mode}}" class="dp-filter-field panel--heavy">
-
-        {% block search_input %}
-        <div class="search-input dp-input">
-            <div class="dp-input-label">Stichwort</div>
-            <p id="aural_datensatzsuche" class="aural">
-                Suche nach Datensätzen im Berliner Datenportal:
-            </p>
-            <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" aria-labelledby="aural_datensatzsuche" placeholder="{{ placeholder }}"> 
-            {% block search_input_button %} {% endblock %}
-        </div>
-        {% endblock %}
-        {% block tag_input %}
-        <div class="tag-input dp-input">
-            <div class="dp-input-label">Tags</div>
-            <p id="aural_datensatztags" class="aural">
-                Geben Sie Tags zur Suche im Datenportal ein:
-            </p>
-            <input type="text" class="search" name="dataset_tags" autocomplete="off" aria-labelledby="aural_datensatztags" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
-        </div>
-        {% endblock %}
-        {% block search_search_fields %}
-            {% if fields -%}
-                <span>{{ form.hidden_from_list(fields=fields) }}</span>
-            {%- endif %}
-        {% endblock %}
-
-        <div class="dataset_search_filters">
-            {% for facet in c.facet_titles %}
-                {% if facet != 'tags' %}
-                    {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
-                        title=c.facet_titles[facet],
-                        name=facet,
-                        label_function=h.berlintheme_facet_mapping,
-                        alternative_url="/" ~ h.berlin_dataset_path(),
-                        mode=display_mode)
-                    }}
-                {% endif %}
-            {% endfor %}
-        </div>
-
-        <div class="dp-button-row">
-            <a class="btn" href="/datensaetze" title="Alle Filter zurücksetzen">
-          Zurücksetzen
-        </a>
-            <button type="submit" value="search" class="btn btn-default js-form-submit submit-button">
-          Filtern
-        </button>
-
-        </div>
-
-    </fieldset>
-
-    {% endfor %}
-
-    <div class="dp-search-result">
-        {% block search_title %}
-        <div class="dp-search-result-title">
-            {%- if not error -%}
-                {%- snippet 'datasetsnippets/snippets/search_result_text.html', query=query, count=count, type=type -%}
-            {%- else -%}
-                Error 
-            {%- endif -%}
-        </div>
-        {% endblock %} 
-        {% block search_sortby %}
-            <div class="dp-search-result-sort form-select control-group control-order-by">
-                {% if sorting %}
-                <div class="dp-search-result-sort-label">
-                    <label for="field-order-by">{{ _('Order by') }}</label>
-                </div>
-
-                <div class="dp-list-dropdown btn-group">
-                    <span id="search-result-order-selector" style="display:none">Ändern sie die Sortierung der Suchergebnisse</span>
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="listbox" aria-labelledby="search-result-order-selector" id="search-result-order-button">
-                        <span class="dp-list-dropdown-label active">{{ h.berlin_label_for_sorting(sorting, sorting_selected) }}</span>
-                        <span class="dp-caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        {% for label, value in sorting %} {% if label and value %} {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
-                        <li{% if sorting_selected==value %} class="active" {% endif %}><a href="{{href}}">{{ label }}</a> {%- if sorting_selected==value -%}
-                            <div class="dp-check"></div>{%- endif -%}
-                            </li>
-                            {% endif %} {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-        {% endblock %}
-
+    <div class="dp-show-filter-ui dp-overlayable-button dp-overlayable-show" aria-haspopup="true" aria-expanded="false">
+        <div class="dp-show-filter-ui-label">Filter</div>
+        <div class="dp-caret dp-caret-left"></div>
     </div>
 
-</form>
+    <form {% if form_id %}id="{{ form_id }}" {% endif %}class="form--base {% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
 
-{% block search_facets %} 
+        <div class="dp-overlayable-content">
+            <div class="dp-overlayable-content__header">
+                <div class="dp-header-top">
+                    <h2 class="heading"><span>Filter</span></h2>
+                    <h2 class="heading"><span class="aural">Filter für Datensatzsuche</span></h2>
+                    <button type="button" class="dp-overlayable-button dp-overlayable-hide close-button">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                        <span class="aural">Schließen: Filter für Datensatzsuche</span>
+                    </button>
+                </div>
+                <a href="/datensaetze" title="Alle Filter zurücksetzen">Zurücksetzen</a>
+            </div>
+            <div id="dp-filter-ui" class="dp-overlayable-content__body">
+
+                {% block search_input %}
+                <div class="form-group">
+                    <label for="dataset_fulltext_search">Volltextsuche</label>
+                    <input id="dataset_fulltext_search" class="form-control" type="text" name="q" value="{{ query }}" autocomplete="off" placeholder="{{ placeholder }}">
+                </div>
+
+                {% endblock %}
+                {% block tag_input %}
+                <div class="form-group">
+                    <label for="dataset_tag_search">Tags</label>
+                    <input id="dataset_tag_search" class="form-control" type="text" name="dataset_tags" autocomplete="off" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
+                </div>
+                {% endblock %}
+                {% block search_search_fields %}
+                    {% if fields -%}
+                        <span>{{ form.hidden_from_list(fields=fields) }}</span>
+                    {%- endif %}
+                {% endblock %}
+
+                <div class="dataset_search_filters">
+                    {% for facet in c.facet_titles %}
+                        {% if facet != 'tags' %}
+                            {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
+                                title=c.facet_titles[facet],
+                                name=facet,
+                                label_function=h.berlintheme_facet_mapping,
+                                alternative_url="/" ~ h.berlin_dataset_path())
+                            }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="form-actions">
+                    <div class="form-actions__left">
+                        <a class="button" href="/datensaetze" title="Alle Filter zurücksetzen">
+                            Zurücksetzen
+                        </a>
+                    </div>
+                    <div class="form-actions__right">
+                        <button type="submit" value="search" class="button">
+                            Filtern
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+    {# <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+
+        <div class="dp-overlayable-content">
+            <div class="dp-overlayable-content__header">
+                <h2 class="heading"><span class="aural">Filter für Datensatzsuche</span></h2>
+                <button type="button" class="dp-overlayable-button dp-overlayable-hide close-button">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                    <span class="aural">Schließen: Filter für Datensatzsuche</span>
+                </button>
+            </div>        
+            <fieldset id="dp-filter-ui" class="dp-filter-field dp-overlayable-content__body panel--heavy">
+
+                {% block search_input %}
+                <div class="search-input dp-input">
+                    <div class="dp-input-label">Stichwort</div>
+                    <p id="aural_datensatzsuche" class="aural">
+                        Suche nach Datensätzen im Berliner Datenportal:
+                    </p>
+                    <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" aria-labelledby="aural_datensatzsuche" placeholder="{{ placeholder }}"> 
+                    {% block search_input_button %} {% endblock %}
+                </div>
+                {% endblock %}
+                {% block tag_input %}
+                <div class="tag-input dp-input">
+                    <div class="dp-input-label">Tags</div>
+                    <p id="aural_datensatztags" class="aural">
+                        Geben Sie Tags zur Suche im Datenportal ein:
+                    </p>
+                    <input type="text" class="search" name="dataset_tags" autocomplete="off" aria-labelledby="aural_datensatztags" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
+                </div>
+                {% endblock %}
+                {% block search_search_fields %}
+                    {% if fields -%}
+                        <span>{{ form.hidden_from_list(fields=fields) }}</span>
+                    {%- endif %}
+                {% endblock %}
+
+                <div class="dataset_search_filters">
+                    {% for facet in c.facet_titles %}
+                        {% if facet != 'tags' %}
+                            {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
+                                title=c.facet_titles[facet],
+                                name=facet,
+                                label_function=h.berlintheme_facet_mapping,
+                                alternative_url="/" ~ h.berlin_dataset_path())
+                            }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="dp-button-row">
+                    <a class="btn" href="/datensaetze" title="Alle Filter zurücksetzen">
+                        Zurücksetzen
+                    </a>
+                    <button type="submit" value="search" class="btn btn-default js-form-submit submit-button">
+                        Filtern
+                    </button>
+                </div>
+
+            </fieldset>
+        </div>
+
+    </form> #}
+
+
+</div>
+
+<div class="dp-search-result">
+    {% block search_title %}
+    <div class="dp-search-result-title">
+        {%- if not error -%}
+            {%- snippet 'datasetsnippets/snippets/search_result_text.html', query=query, count=count, type=type -%}
+        {%- else -%}
+            Error 
+        {%- endif -%}
+    </div>
+    {% endblock %} 
+    {% block search_sortby %}
+        <div class="dp-search-result-sort form-select control-group control-order-by">
+            {% if sorting %}
+            <div class="dp-search-result-sort-label">
+                <label for="field-order-by">{{ _('Order by') }}</label>
+            </div>
+
+            <div class="dp-list-dropdown btn-group">
+                <span id="search-result-order-selector" style="display:none">Ändern sie die Sortierung der Suchergebnisse</span>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="listbox" aria-labelledby="search-result-order-selector" id="search-result-order-button">
+                    <span class="dp-list-dropdown-label active">{{ h.berlin_label_for_sorting(sorting, sorting_selected) }}</span>
+                    <span class="dp-caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% for label, value in sorting %} {% if label and value %} {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
+                    <li{% if sorting_selected==value %} class="active" {% endif %}><a href="{{href}}">{{ label }}</a> {%- if sorting_selected==value -%}
+                        <div class="dp-check"></div>{%- endif -%}
+                        </li>
+                        {% endif %} {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    {% endblock %}
+
+</div>
+
+{# {% block search_facets %} 
     {% if facets %}
         <p class="filter-list">
             {% for field in facets.fields %} 
@@ -132,4 +212,4 @@
     {% trans %}
         <p id="search-error"><strong>There was an error while searching.</strong> Please try again.</p>
     {% endtrans %}
-{% endif %}
+{% endif %} #}
