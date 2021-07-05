@@ -420,6 +420,11 @@ def has_active_item(items):
         return True
     return False
 
+def active_item_count(items):
+    '''Helper function that returns the number of active items from a list of
+       facet items.'''
+    return len(active_items(items))
+
 def active_items(items):
     '''Helper function that returns the list of all active items from 
        a list of facet items.
