@@ -78,72 +78,29 @@
 
     </form>
 
-    {# <form {% if form_id %}id="{{ form_id }}" {% endif %}class="search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
-
-        <div class="dp-overlayable-content">
-            <div class="dp-overlayable-content__header">
-                <h2 class="heading"><span class="aural">Filter für Datensatzsuche</span></h2>
-                <button type="button" class="dp-overlayable-button dp-overlayable-hide close-button">
-                    <i class="fas fa-times" aria-hidden="true"></i>
-                    <span class="aural">Schließen: Filter für Datensatzsuche</span>
-                </button>
-            </div>        
-            <fieldset id="dp-filter-ui" class="dp-filter-field dp-overlayable-content__body panel--heavy">
-
-                {% block search_input %}
-                <div class="search-input dp-input">
-                    <div class="dp-input-label">Stichwort</div>
-                    <p id="aural_datensatzsuche" class="aural">
-                        Suche nach Datensätzen im Berliner Datenportal:
-                    </p>
-                    <input type="text" class="search" name="q" value="{{ query }}" autocomplete="off" aria-labelledby="aural_datensatzsuche" placeholder="{{ placeholder }}"> 
-                    {% block search_input_button %} {% endblock %}
-                </div>
-                {% endblock %}
-                {% block tag_input %}
-                <div class="tag-input dp-input">
-                    <div class="dp-input-label">Tags</div>
-                    <p id="aural_datensatztags" class="aural">
-                        Geben Sie Tags zur Suche im Datenportal ein:
-                    </p>
-                    <input type="text" class="search" name="dataset_tags" autocomplete="off" aria-labelledby="aural_datensatztags" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
-                </div>
-                {% endblock %}
-                {% block search_search_fields %}
-                    {% if fields -%}
-                        <span>{{ form.hidden_from_list(fields=fields) }}</span>
-                    {%- endif %}
-                {% endblock %}
-
-                <div class="dataset_search_filters">
-                    {% for facet in c.facet_titles %}
-                        {% if facet != 'tags' %}
-                            {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
-                                title=c.facet_titles[facet],
-                                name=facet,
-                                label_function=h.berlintheme_facet_mapping,
-                                alternative_url="/" ~ h.berlin_dataset_path())
-                            }}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-
-                <div class="dp-button-row">
-                    <a class="btn" href="/datensaetze" title="Alle Filter zurücksetzen">
-                        Zurücksetzen
-                    </a>
-                    <button type="submit" value="search" class="btn btn-default js-form-submit submit-button">
-                        Filtern
-                    </button>
-                </div>
-
-            </fieldset>
-        </div>
-
-    </form> #}
-
-
 </div>
+
+{% block search_facets %} 
+    {% if facets %}
+        <p class="filter-list">
+            {% for field in facets.fields %} 
+                {% set search_facets_items = facets.search.get(field)['items'] %}
+                <span class="facet">{{ facets.titles.get(field) }}:</span> 
+                {% for value in facets.fields[field] %}
+                    <span class="filtered pill">
+                        {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+                            {{ facets.translated_fields[(field,value)] }}
+                        {%- else -%}
+                            {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+                        {%- endif %}
+                        <a href="{{ facets.remove_field(field, value) }}" class="remove dp-trigger-reload" title="{{ _('Remove') }}"><i class="fa fa-times"></i></a>
+                    </span>
+                {% endfor %}
+            {% endfor %}
+        </p>
+        <button class="show-filters btn hidden">{{ _('Filter Results') }}</button> 
+    {% endif %}
+{% endblock %} 
 
 <div class="dp-search-result">
     {% block search_title %}
@@ -182,27 +139,6 @@
 
 </div>
 
-{# {% block search_facets %} 
-    {% if facets %}
-        <p class="filter-list">
-            {% for field in facets.fields %} 
-                {% set search_facets_items = facets.search.get(field)['items'] %}
-                <span class="facet">{{ facets.titles.get(field) }}:</span> 
-                {% for value in facets.fields[field] %}
-                    <span class="filtered pill">
-                        {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
-                            {{ facets.translated_fields[(field,value)] }}
-                        {%- else -%}
-                            {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-                        {%- endif %}
-                        <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="fa fa-times"></i></a>
-                    </span>
-                {% endfor %}
-            {% endfor %}
-        </p>
-        <button class="show-filters btn hidden">{{ _('Filter Results') }}</button> 
-    {% endif %}
-{% endblock %} 
 {% if show_empty and count == 0 and not error %}
     {% trans %}
         <p class="extra">Please try another search.</p>
@@ -212,4 +148,4 @@
     {% trans %}
         <p id="search-error"><strong>There was an error while searching.</strong> Please try again.</p>
     {% endtrans %}
-{% endif %} #}
+{% endif %}
