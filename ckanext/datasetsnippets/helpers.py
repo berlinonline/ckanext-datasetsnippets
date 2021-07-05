@@ -396,6 +396,21 @@ def get_facet_id_prefix(name):
     '''
     return "dp_facet_" + name
 
+def facet_plural_mapping():
+    return {
+        'groups': u'Kategorien',
+        'author_string': u'Quellen',
+        'geographical_coverage': u'Geografische Abdeckungen',
+        'geographical_granularity': u'Geografische Granularitäten',
+        'temporal_granularity': u'Zeitliche Granularitäten',
+        'res_format': u'Formate',
+        'license_id': u'Lizenzen',
+        'tags': u'Tags',
+        'berlin_type': u'Typen',
+        'organization': u'Organisationen',  
+    }
+
+
 def has_active_item(items):
     '''Helper function that returns True if the list of items contains
        at least one that is active. Otherwise returns False.
