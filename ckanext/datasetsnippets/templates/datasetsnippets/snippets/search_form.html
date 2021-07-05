@@ -49,7 +49,7 @@
 
                 <div class="dataset_search_filters">
                     {% for facet in c.facet_titles %}
-                        {% if facet != 'tags' %}
+                        {% if facet != 'tags' and facet != 'berlin_type' and facet != 'organization' %}
                             {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
                                 title=c.facet_titles[facet],
                                 name=facet,
