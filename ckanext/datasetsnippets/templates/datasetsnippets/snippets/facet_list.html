@@ -35,13 +35,15 @@ when a facet list should appear in the the right column of the page and not the 
                         <li class="dp-toggle-more dp-open">
                             <a onclick="dp_toggle_facet_list('{{id_prefix}}');">
                                 <span class="dp-caret"></span>
-                                {{ _('Show More {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }}
+                                {{ _('Mehr anzeigen') }}
+                                {# {{ _('Show More {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }} #}
                             </a>
                         </li>
                         <li class="dp-toggle-more dp-close">
                             <a onclick="dp_toggle_facet_list('{{id_prefix}}', true);">
                                 <span class="dp-caret"></span>
-                                {{ _('Show Only Popular {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }}
+                                {{ _('Weniger anzeigen') }}
+                                {# {{ _('Show Only Popular {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }} #}
                             </a>
                         </li>
                     {% endif %}
