@@ -431,6 +431,22 @@ def active_items(items):
     '''
     return [item for item in items if item['active']]
 
+def active_items_total():
+    '''Helper function that returns the total of active (selected) facet items across
+       all facets.'''
+    
+    total = 0
+    if c.search_facets:
+      for facet in c.search_facets:
+          items = c.search_facets[facet]['items']
+          count = 0
+          for item in items:
+              if (facet, item['name']) in request.params.items():
+                  count += 1
+          total = total + count
+    
+    return total
+
 def active_item_labels(items):
     '''Helper function that returns a comma-separated string with the labels of
        all active items from a list of facet items.

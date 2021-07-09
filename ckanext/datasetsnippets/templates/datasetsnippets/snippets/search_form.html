@@ -9,6 +9,9 @@
 
     <div class="dp-show-filter-ui dp-overlayable-button dp-overlayable-show" aria-haspopup="true" aria-expanded="false">
         <div class="dp-show-filter-ui-label">Filter</div>
+        {% if h.berlin_facet_active_items_total() > 0 %}
+            <div class="badge">{{ h.berlin_facet_active_items_total() }}</div>
+        {% endif %}
         <div class="dp-caret dp-caret-left"></div>
     </div>
 
