@@ -5,11 +5,11 @@ import re
 import json
 import logging
 import ckan.lib.helpers as h
+from ckan.lib.helpers import literal
 import ckan.logic as logic
 import ckan.model as model
-from ckan.common import _, c, config, response, request
-from urllib import urlencode
-from webhelpers.html import literal
+from ckan.common import _, c, config, request
+from urllib.parse import urlencode
 
 log = logging.getLogger(__name__)
 
