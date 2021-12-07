@@ -88,14 +88,14 @@ def recent_packages(package_type="dataset", sort_by='metadata_created desc', lim
   try:
     query = get_action('package_search')(context, data_dict)
     return query['results']
-  except SearchQueryError, se:
+  except SearchQueryError as se:
     # User's search parameters are invalid, in such a way that is not
     # achievable with the web interface, so return a proper error to
     # discourage spiders which are the main cause of this.
     log.info('Dataset search query rejected: %r', se.args)
     abort(400, _('Invalid search query: {error_message}')
           .format(error_message=str(se)))
-  except SearchError, se:
+  except SearchError as se:
     # May be bad input from the user, but may also be more serious like
     # bad code causing a SOLR syntax error, or a problem connecting to
     # SOLR
