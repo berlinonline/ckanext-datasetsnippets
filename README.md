@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/berlinonline/ckanext-datasetsnippets/workflows/Tests/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-datasetsnippets/actions)
 
-This plugin belongs to a set of plugins for the _Datenregister_ – the non-public [CKAN](https://ckan.org) instance that is part of Berlin's open data portal.
+This plugin belongs to a set of plugins for the _Datenregister_ – the non-public [CKAN](https://ckan.org) instance that is part of Berlin's open data portal [daten.berlin.de](https://daten.berlin.de).
 _ckanext-datasetsnippets_ provides markup snippets for dataset pages and dataset search.
 These snippets can be loaded from the data portals public CMS to handle all requests for datasets.
 
