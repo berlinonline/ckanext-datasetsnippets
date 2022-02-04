@@ -10,7 +10,7 @@
     <div class="dp-show-filter-ui dp-overlayable-button dp-overlayable-show" aria-haspopup="true" aria-expanded="false">
         <div class="dp-show-filter-ui-label">Filter</div>
         {% if h.berlin_facet_active_items_total() > 0 %}
-            <div class="badge">{{ h.berlin_facet_active_items_total() }}</div>
+            <div class="badge dp-activefacets">{{ h.berlin_facet_active_items_total() }}</div>
         {% endif %}
         <div class="dp-caret dp-caret-left"></div>
     </div>
@@ -41,7 +41,7 @@
                 {% block tag_input %}
                 <div class="form-group">
                     <label for="dataset_tag_search">Tags</label>
-                    <input id="dataset_tag_search" class="form-control" type="text" name="dataset_tags" autocomplete="off" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getall('tags')|join(', ') }}">
+                    <input id="dataset_tag_search" class="form-control" type="text" name="dataset_tags" autocomplete="off" placeholder="Eingabe für Stichwortsuche" value="{{ request.params.getlist('tags')|join(', ') }}">
                 </div>
                 {% endblock %}
                 {% block search_search_fields %}
@@ -56,7 +56,6 @@
                             {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
                                 title=c.facet_titles[facet],
                                 name=facet,
-                                label_function=h.berlintheme_facet_mapping,
                                 alternative_url="/" ~ h.berlin_dataset_path())
                             }}
                         {% endif %}

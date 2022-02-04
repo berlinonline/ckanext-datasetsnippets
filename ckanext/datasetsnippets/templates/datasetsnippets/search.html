@@ -49,7 +49,6 @@
         {{ h.snippet('datasetsnippets/snippets/facet_list.html', 
           title=c.facet_titles[facet] , 
           name=facet , 
-          label_function=h.berlintheme_facet_mapping ,
           alternative_url="/" ~ h.berlin_dataset_path()
         )
         }}
