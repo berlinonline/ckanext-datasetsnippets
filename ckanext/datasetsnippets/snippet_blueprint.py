@@ -48,6 +48,13 @@ def _finish(status_int, response_data=None):
     return make_response(response_msg, status_int, response_headers)
 
 def show_latest_datasets():
+    try:
+        context = {'model': model, 'user': c.user,
+                   'auth_user_obj': c.userobj}
+        check_access('snippet_read', context)
+    except NotAuthorized:
+        toolkit.abort(403, _('Not authorized to see this page'))
+
     template = "datasetsnippets/snippets/recent_packages.html"
     output = base.render(template)
 
@@ -66,6 +73,13 @@ def read_dataset(id):
         'for_view': True,
         'auth_user_obj': c.userobj,
     }
+    try:
+        context = {'model': model, 'user': c.user,
+                   'auth_user_obj': c.userobj}
+        check_access('snippet_read', context)
+    except NotAuthorized:
+        toolkit.abort(403, _('Not authorized to see this page'))
+
     try:
         c.pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
     except toolkit.ObjectNotFound:
@@ -89,7 +103,7 @@ def search_dataset():
     try:
         context = {'model': model, 'user': c.user,
                     'auth_user_obj': c.userobj}
-        check_access('site_read', context)
+        check_access('snippet_read', context)
     except NotAuthorized:
         toolkit.abort(403, _('Not authorized to see this page'))
 

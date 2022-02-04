@@ -7,11 +7,13 @@ from ckan.plugins.toolkit import config
 
 import ckanext.datasetsnippets.helpers as theme_helpers
 from ckanext.datasetsnippets import snippet_blueprint
+import ckanext.datasetsnippets.auth as snippet_auth
 
 class DatasetsnippetsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.IAuthFunctions)
 
     # IConfigurer
 
@@ -27,9 +29,7 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
         return snippet_blueprint.snippetapi
 
 
-    # -------------------------------------------------------------------
-    # Implementation ITemplateHelpers
-    # -------------------------------------------------------------------
+    # ITemplateHelpers
 
     def get_helpers(self):
         return {
@@ -46,4 +46,13 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_facet_active_item_labels': theme_helpers.active_item_labels ,
             'berlin_label_for_sorting': theme_helpers.label_for_sorting ,
             'berlin_facet_plural_mapping': theme_helpers.facet_plural_mapping ,
+        }
+
+    # IAuthFunctions
+    # http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IAuthFunctions
+
+    def get_auth_functions(self):
+        '''Implementation of http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IAuthFunctions.get_auth_functions'''
+        return {
+            'snippet_read': snippet_auth.snippet_read
         }
