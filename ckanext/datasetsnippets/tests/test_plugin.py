@@ -16,6 +16,15 @@ LOG = logging.getLogger(__name__)
 SCHEMA_PLUGIN = 'berlin_dataset_schema'
 SNIPPET_PLUGIN = 'datasetsnippets'
 
+
+@pytest.fixture
+def user():
+    '''Fixture to create a logged-in user.'''
+    user = model.User(name="vera_musterer", password=u"testtest")
+    model.Session.add(user)
+    model.Session.commit()
+    return user
+
 @pytest.fixture
 def datasets():
     '''Fixture to create some datasets.'''
@@ -50,11 +59,11 @@ def datasets():
             "('impressions' und 'visits') für alle Datensätze für"
             "jeden Monat.\r\n\r\nDer Datensatz wird monatlich erneuert.",
             "groups": [
-                { "name": group['name'] }
+                {"name": group['name']}
             ]
         }
     ]
-    
+
     for dataset_dict in dataset_dicts:
         test_helpers.call_action(
             "package_create",
@@ -64,36 +73,52 @@ def datasets():
 
     return dataset_dicts
 
+
 @pytest.mark.ckan_config('ckan.plugins', f"{SCHEMA_PLUGIN} {SNIPPET_PLUGIN}")
 @pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestPlugin(object):
 
     # Tests for the dataset page route and snippets
-    def test_dataset_route(self, app, datasets):
+    def test_dataset_route(self, app, datasets, user):
         '''Test that the routing for dataset page snippets works.'''
         dataset = datasets[0]
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
         response = app.get(
+            headers=[("Authorization", user.apikey)],
             url=dataset_snippet_url,
-            status=200 # this is a magic assert for the status (happens in CKANTestClient.open())
+            status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
         )
         data = json.loads(str(response.body))
         assert dataset['title'] == data['title']
         assert dataset['title'] in data['content']
 
-    def test_dataset_not_found(self, app, datasets):
+    def test_dataset_not_found(self, app, datasets, user):
         '''Test that the dataset route returns with 404 if the dataset is not found.'''
         dataset_snippet_url = url_for("snippetapi.read_dataset", id="unknown dataset")
         app.get(
+            headers=[("Authorization", user.apikey)],
             url=dataset_snippet_url,
-            status=404 # this is a magic assert for the status (happens in CKANTestClient.open())
+            status=404  # this is a magic assert for the status (happens in CKANTestClient.open())
         )
-        
-    def test_complete_dataset(self, app, datasets):
+
+    @pytest.mark.parametrize("url", [
+        "/snippet/dataset",
+        "/snippet/dataset/foo",
+        "/snippet/latest_datasets"
+    ])
+    def test_not_authorized_for_anonymous(self, app, url):
+        '''Test that snippet reading is not authorized for anonymous users.'''
+        app.get(
+            url=url,
+            status=403  # this is a magic assert for the status (happens in CKANTestClient.open())
+        )
+
+    def test_complete_dataset(self, app, datasets, user):
         '''Test rendering of a dataset with extensive metadata.'''
         dataset = datasets[0]
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
         response = app.get(
+            headers=[("Authorization", user.apikey)],
             url=dataset_snippet_url,
             status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
         )
@@ -104,10 +129,11 @@ class TestPlugin(object):
         assert "31.12.2018" in data['content']
 
     # Tests for the dataset search route and snippets
-    def test_dataset_search_route(self, app, datasets):
+    def test_dataset_search_route(self, app, datasets, user):
         '''Test that the routing for dataset search snippets works.'''
         dataset_search_url = url_for("snippetapi.search_dataset")
         response = app.get(
+            headers=[("Authorization", user.apikey)],
             url=dataset_search_url,
             status=200
         )
@@ -116,12 +142,13 @@ class TestPlugin(object):
         assert datasets[0]['title'] in data['content']
 
     # Tests for the latest datasets route and snippets
-    def test_latest_datasets_route(self, app, datasets):
+    def test_latest_datasets_route(self, app, datasets, user):
         '''Test that the routing for the "Latest Datasets" snippet works.'''
         latest_datasets_url = url_for("snippetapi.show_latest_datasets")
         response = app.get(
+            headers=[("Authorization", user.apikey)],
             url=latest_datasets_url,
-            status = 200
+            status=200
         )
         data = json.loads(str(response.body))
         assert "Latest Datasets" == data['title']
@@ -149,8 +176,9 @@ class TestPlugin(object):
             "expected": 3
         },
     ])
-    def test_active_items_total(self, app, data):
+    def test_active_items_total(self, app, data, user):
         response = app.get(
+            headers=[("Authorization", user.apikey)],
             url=data['url'],
             status=200
         )
@@ -160,4 +188,4 @@ class TestPlugin(object):
                 'content']
         else:
             assert f"<div class=\"badge dp-activefacets\">{data['expected']}</div>" in body[
-            'content']
+                'content']
