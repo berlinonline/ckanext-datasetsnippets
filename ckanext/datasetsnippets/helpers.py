@@ -131,10 +131,6 @@ def active_items_total():
     # search facets. Just count the number of URL parameters. In any successful search,
     # they will be equal to the number of selected search parameters.
 
-
-    log.debug(f"search_facets: {c.search_facets}")
-    log.debug(f"request parameters: {list(request.args.items(multi=True))}")
-
     return len(list(request.args.items(multi=True)))
 
 def active_item_labels(items):

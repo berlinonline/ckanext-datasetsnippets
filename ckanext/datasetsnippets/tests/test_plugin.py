@@ -7,7 +7,7 @@ import pytest
 from flask import Flask
 
 import ckan.model as model
-from ckan.plugins.toolkit import url_for
+from ckan.plugins.toolkit import config, url_for
 import ckan.tests.factories as factories
 import ckan.tests.helpers as test_helpers
 
@@ -15,6 +15,7 @@ import ckan.tests.helpers as test_helpers
 LOG = logging.getLogger(__name__)
 SCHEMA_PLUGIN = 'berlin_dataset_schema'
 SNIPPET_PLUGIN = 'datasetsnippets'
+config['search.facets'] = u'organization groups tags res_format license_id foo'
 
 
 @pytest.fixture
@@ -73,9 +74,50 @@ def datasets():
 
     return dataset_dicts
 
+@pytest.fixture
+def lotsa_datasets():
+    '''Fixture to create lots of datasets.'''
+    sysadminuser = model.User(name="admin", password=u'test', sysadmin=True)
+    model.Session.add(sysadminuser)
+    model.Session.commit()
+    group = factories.Group()
+    data = {
+        "id": group['id'],
+        "username": sysadminuser.name,
+        "role": "editor"
+    }
+    result = test_helpers.call_action("group_member_create", **data)
+    dataset_dicts = []
+    for i in range(100):
+        dataset_dicts.append({
+            "name": f"testing-{i}",
+            "title": f"Testing {i}",
+            "berlin_source": "test",
+            "berlin_type": "datensatz",
+            "date_released": "2018-06-25",
+            "date_updated": "2019-01-01",
+            "temporal_coverage_from": "2011-09-01",
+            "temporal_coverage_to": "2018-12-31",
+            "maintainer_email": "opendata@berlin.de",
+            "author": "BerlinOnline Stadtportal GmbH & Co. KG",
+            "license_id": "cc-by",
+            "notes": f"Ein Testdatensatz, nämlich der {i}.",
+            "groups": [
+                {"name": group['name']}
+            ]
+        })
+
+    for dataset_dict in dataset_dicts:
+        test_helpers.call_action(
+            "package_create",
+            context={"user": sysadminuser.id},
+            **dataset_dict
+        )
+
+    return dataset_dicts
 
 @pytest.mark.ckan_config('ckan.plugins', f"{SCHEMA_PLUGIN} {SNIPPET_PLUGIN}")
-@pytest.mark.usefixtures('with_plugins', 'clean_db')
+@pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
 class TestPlugin(object):
 
     # Tests for the dataset page route and snippets
@@ -131,7 +173,7 @@ class TestPlugin(object):
     # Tests for the dataset search route and snippets
     def test_dataset_search_route(self, app, datasets, user):
         '''Test that the routing for dataset search snippets works.'''
-        dataset_search_url = url_for("snippetapi.search_dataset")
+        dataset_search_url = "/snippet/dataset?sort=title_string+asc"
         response = app.get(
             headers=[("Authorization", user.apikey)],
             url=dataset_search_url,
@@ -172,6 +214,9 @@ class TestPlugin(object):
             "expected": 2
         },
         {
+            # would like to use url_for(), but that doesn't work for
+            # duplicate parameters (foo), as they have to be passed as
+            # arguments to url_for(). Can't have two arguments with the same name.
             "url": "/snippet/dataset?license_id=cc-by&foo=bar&foo=baz",
             "expected": 3
         },
@@ -189,3 +234,23 @@ class TestPlugin(object):
         else:
             assert f"<div class=\"badge dp-activefacets\">{data['expected']}</div>" in body[
                 'content']
+
+    def test_value_error(self, app, user):
+        '''Test that we get a 400 if we provide an non-integer as a limit parameter.'''
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url="/snippet/dataset?_foo_limit=x",
+            status=400
+        )
+
+    def test_pager(self, app, user, lotsa_datasets):
+        '''Test that the routing for dataset search snippets works.'''
+        dataset_search_url = url_for("snippetapi.search_dataset")
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url=dataset_search_url,
+            status=200
+        )
+        # data = json.loads(str(response.body))
+        # assert "Index" == data['title']
+        # assert datasets[0]['title'] in data['content']
