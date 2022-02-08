@@ -4,12 +4,14 @@
 
 This plugin belongs to a set of plugins for the _Datenregister_ – the non-public [CKAN](https://ckan.org) instance that is part of Berlin's open data portal [daten.berlin.de](https://daten.berlin.de).
 _ckanext-datasetsnippets_ provides markup snippets for dataset pages and dataset search.
-These snippets can be loaded from the data portals public CMS to handle all requests for datasets.
+These snippets can be loaded from the data portal's public CMS to handle all requests for datasets.
 
 The plugin implements the following CKAN interfaces:
 
 - [IRoutes](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IRoutes)
 - [ITemplateHelpers](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.ITemplateHelpers)
+- [IBlueprint](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IBlueprint)
+- [IAuthFunctions](http://docs.ckan.org/en/latest/extensions/plugin-interfaces.html#ckan.plugins.interfaces.IAuthFunctions)
 
 ## Requirements
 

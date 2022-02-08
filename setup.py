@@ -17,7 +17,7 @@ setup(
     # http://packaging.python.org/en/latest/tutorial.html#version
     version='0.1.0',
 
-    description='''Markup snippets for dataset views, search, etc.''',
+    description='''Markup snippets for CKAN dataset views, search, etc.''',
     long_description=long_description,
 
     # The project's main homepage.
@@ -48,7 +48,7 @@ setup(
 
 
     # What does your project relate to?
-    keywords='''CKAN IRoutes ITemplateHelpers package dataset includes snippets''',
+    keywords='''CKAN IRoutes ITemplateHelpers IBlueprint IAuthFunctions package dataset includes snippets''',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
