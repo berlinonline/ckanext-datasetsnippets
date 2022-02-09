@@ -17,7 +17,7 @@ jobs:
     # needs: lint
     strategy:
       matrix:
-        ckan-version: [2.9.5, 2.9]
+        ckan-version: [2.9]
       fail-fast: false
 
     name: CKAN ${{ matrix.ckan-version }}
@@ -59,7 +59,7 @@ jobs:
       run: |
         ckan -c test.ini db init
     - name: Run tests
-      run: pytest --ckan-ini=test.ini --cov=ckanext.datasetsnippets --cov-report=xml --cov-append --disable-warnings ckanext/datasetsnippets/tests
+      run: pytest --log-cli-level=10 --ckan-ini=test.ini --cov=ckanext.datasetsnippets --cov-report=xml --cov-append --disable-warnings ckanext/datasetsnippets/tests
     - name: Upload coverage report to codecov
       uses: codecov/codecov-action@v2
       with:
