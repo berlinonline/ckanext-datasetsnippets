@@ -65,7 +65,7 @@ def datasets():
         }
     ]
 
-    log.debug(f"user: {sysadminuser}")
+    LOG.debug(f"user: {sysadminuser}")
 
     for dataset_dict in dataset_dicts:
         test_helpers.call_action(
