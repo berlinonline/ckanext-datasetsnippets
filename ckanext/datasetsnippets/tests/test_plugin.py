@@ -66,6 +66,7 @@ def datasets():
     ]
 
     for dataset_dict in dataset_dicts:
+        import pdb; pdb.set_trace()
         test_helpers.call_action(
             "package_create",
             context={"user": sysadminuser.id},
