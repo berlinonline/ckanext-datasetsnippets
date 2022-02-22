@@ -1,6 +1,4 @@
 name: Tests
-env:
-   CODECOV_VERSION: 'v0.1.15'
 on:
   push:
     branches:
@@ -66,7 +64,6 @@ jobs:
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.datasetsnippets --cov-report=xml --cov-append --disable-warnings ckanext/datasetsnippets/tests
     - name: Upload coverage report to codecov
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
-        version: ${{ env.CODECOV_VERSION }}
