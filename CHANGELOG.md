@@ -2,6 +2,7 @@
 
 ## Development
 
+- Remove reference to IRoutes interface from readme.
 - Remove some unused folders.
 
 ## [0.1.1](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.1)
