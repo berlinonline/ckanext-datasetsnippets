@@ -15,8 +15,6 @@ import ckan.tests.helpers as test_helpers
 LOG = logging.getLogger(__name__)
 SCHEMA_PLUGIN = 'berlin_dataset_schema'
 SNIPPET_PLUGIN = 'datasetsnippets'
-config['search.facets'] = u'organization groups tags res_format license_id foo'
-
 
 @pytest.fixture
 def user():
@@ -117,6 +115,7 @@ def lotsa_datasets():
     return dataset_dicts
 
 @pytest.mark.ckan_config('ckan.plugins', f"{SCHEMA_PLUGIN} {SNIPPET_PLUGIN}")
+@pytest.mark.ckan_config('search.facets', 'organization groups tags res_format license_id foo')
 @pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
 class TestPlugin(object):
 
