@@ -2,6 +2,8 @@
 
 ## Development
 
+- Remove some unused folders.
+
 ## [0.1.1](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.1)
 
 _(2022-02-22)_
