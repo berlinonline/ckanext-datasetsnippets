@@ -152,7 +152,7 @@ def search_dataset():
             if param not in ['q', 'page', 'sort'] \
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
-                fq += ' %s:"%s"' % (param, value)
+                fq += f' {param}:"{value}"'
                 c.fields_grouped[param] = [value]
 
         context = {'model': model, 'session': model.Session,
@@ -217,14 +217,13 @@ def search_dataset():
         # User's search parameters are invalid, in such a way that is not
         # achievable with the web interface, so return a proper error to
         # discourage spiders which are the main cause of this.
-        LOG.info('Dataset search query rejected: %r', se.args)  # pragma: no cover
-        toolkit.abort(400, _('Invalid search query: {error_message}')  # pragma: no cover
-                      .format(error_message=str(se)))  # pragma: no cover
+        LOG.info(f'Dataset search query rejected: {se.args}')  # pragma: no cover
+        toolkit.abort(400, _(f'Invalid search query: {str(se)}'))  # pragma: no cover
     except SearchError as se:  # pragma: no cover
         # May be bad input from the user, but may also be more serious like
         # bad code causing a SOLR syntax error, or a problem connecting to
         # SOLR
-        LOG.error('Dataset search error: %r', se.args)  # pragma: no cover
+        LOG.error(f'Dataset search error: {se.args}')  # pragma: no cover
         c.query_error = True  # pragma: no cover
         c.search_facets = {}  # pragma: no cover
         c.page = h.Page(collection=[])  # pragma: no cover
@@ -234,12 +233,10 @@ def search_dataset():
     c.search_facets_limits = {}
     for facet in c.search_facets.keys():
         try:
-            limit = int(request.params.get('_%s_limit' % facet,
+            limit = int(request.params.get(f'_{facet}_limit',
                         int(config.get('search.facets.default', 10))))
         except ValueError:
-            toolkit.abort(400, _('Parameter "{parameter_name}" is not '
-                            'an integer').format(
-                    parameter_name='_%s_limit' % facet))
+            toolkit.abort(400, _('Parameter "_{facet}_limit" is not an integer'))
         c.search_facets_limits[facet] = limit
 
     template = "datasetsnippets/search.html"
