@@ -19,19 +19,17 @@ create_link
 #}
 
 {% if value %}
-  <div class="row-fluid package-metadata-item">
-    <div class="span4">
-      <span class="field-label">{{ _(title) }}:</span>
+  <li>
+    <div class="cell">
+      <div class="text--strong">{{ _(title) }}:</div>
     </div>
-    <div class="span8">
+    <div class="cell">
       {% set rendered_value = render_function(value) if render_function else value %}
-      <span class="field-value">
-        {%  if create_link %}
-          <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {name: value})}}'>{{ rendered_value }}</a>
-        {% else %}
-          {{ rendered_value }}
-        {% endif %}
-      </span>
+      {%  if create_link %}
+        <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {name: value})}}'>{{ rendered_value }}</a>
+      {% else %}
+        {{ rendered_value }}
+      {% endif %}
     </div>
-  </div>
+  </li>
 {% endif %}

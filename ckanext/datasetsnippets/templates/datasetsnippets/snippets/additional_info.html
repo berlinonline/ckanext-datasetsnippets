@@ -1,131 +1,122 @@
-<section class="additional-info">
-    <h2>{{ _('Informationen zum Datensatz') }}</h2>
-    {% if package.license_id %}
-    <div class="row-fluid package-metadata-item">
-      <div class="span4">
-        <span class="field-label">{{ _('License') }}:</span>
-      </div>
-      <div class="span8">
-        <span class="field-value"><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"license_id": package.license_id})}}'>{{ package.license_title }} ({{ package.license_id}})</a></span>
-      </div>
+<h2>{{ _('Informationen zum Datensatz') }}</h2>
+<ul class="list--tablelist block">
+  {% if package.license_id %}
+  <li>
+    <div class="cell">
+      <div class="text--strong">{{ _('License') }}:</div>
     </div>
-    {% endif %}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', title='Text für Namensnennung', value=package.attribution_text, create_link=False) }}
-    {%  if package.groups %}
-      <div class="row-fluid package-metadata-item">
-        <div class="span4">
-          <span class="field-label">{{ _('Kategorie') }}:</span>
-        </div>
-        <div class="span8">
-          {% set separator = joiner("|") %}
+    <div class="cell">
+      <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"license_id": package.license_id})}}'>{{
+      package.license_title }} ({{ package.license_id}})</a>
+    </div>
+  </li>
+  {% endif %}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', title='Text für Namensnennung', value=package.attribution_text, create_link=False) }}
+  {%  if package.groups %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('Kategorie') }}:</div>
+      </div>
+      <div class="cell">
+        <ul class="list--horizontal bordered">
           {% for group in package.groups %}
-            {{ separator() }} <span class="field-value"><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a></span>
+          <li>
+            <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a>
+          </li>
           {% endfor %}
-        </div>
+        </ul>
       </div>
-    {%  endif %}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_coverage', title='Geographischer Bezug', value=package.geographical_coverage, create_link=True) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_granularity', title='Geographische Granularität', value=package.geographical_granularity, create_link=True) }}
-    {%  if package.temporal_coverage_from %}
-      <div class="row-fluid package-metadata-item">
-        <div class="span4">
-          <span class="field-label">{{ _('Zeitlicher Bezug') }}:</span>
-        </div>
-        <div class="span8">
-          <span class="field-value">
-            {% if package.temporal_coverage_to %}
-              vom
-            {% endif %}
-            {{ h.berlin_render_datetime(package.temporal_coverage_from) }}
-            {% if package.temporal_coverage_to %}
-              bis zum {{ h.berlin_render_datetime(package.temporal_coverage_to) }}
-            {% endif %}
-          </span>
-        </div>
+    </li>
+  {%  endif %}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_coverage', title='Geographischer Bezug', value=package.geographical_coverage, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_granularity', title='Geographische Granularität', value=package.geographical_granularity, create_link=True) }}
+  {%  if package.temporal_coverage_from %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('Zeitlicher Bezug') }}:</div>
       </div>
-    {% endif %}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='temporal_granularity', title='Zeitliche Granularität', value=package.temporal_granularity, create_link=True) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_released', title='Veröffentlicht', value=package.date_released, render_function=h.berlin_render_datetime) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_updated', title='Aktualisiert', value=package.date_updated, render_function=h.berlin_render_datetime) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='author', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer', title='Kontaktperson', value=package.maintainer) }}
-    {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer_email', title='E-Mail Kontakt', value=package.maintainer_email, render_function=h.berlin_unlink_email) }}
-    {% if package.url %}
-      <div class="row-fluid package-metadata-item">
-        <div class="span4">
-          <span class="field-label">{{ _('Webseite') }}:</span>
-        </div>
-        <div class="span8">
-          <span class="field-value">
-            <a href="{{ package.url }}">{{ package.url }}</a>
-          </span>
-        </div>
+      <div class="cell">
+        {% if package.temporal_coverage_to %}
+          vom
+        {% endif %}
+        {{ h.berlin_render_datetime(package.temporal_coverage_from) }}
+        {% if package.temporal_coverage_to %}
+          bis zum {{ h.berlin_render_datetime(package.temporal_coverage_to) }}
+        {% endif %}
       </div>
-    {% endif %}
-    {%  if package.tags %}
-      <div class="row-fluid package-metadata-item">
-        <div class="span4">
-          <span class="field-label">{{ _('Stichworte') }}:</span>
-        </div>
-        <div class="span8">
-          {% set separator = joiner("|") %}
+    </li>
+  {% endif %}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='temporal_granularity', title='Zeitliche Granularität', value=package.temporal_granularity, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_released', title='Veröffentlicht', value=package.date_released, render_function=h.berlin_render_datetime) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_updated', title='Aktualisiert', value=package.date_updated, render_function=h.berlin_render_datetime) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='author', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer', title='Kontaktperson', value=package.maintainer) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer_email', title='E-Mail Kontakt', value=package.maintainer_email, render_function=h.berlin_unlink_email) }}
+  {% if package.url %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('Webseite') }}:</div>
+      </div>
+      <div class="cell">
+        <a href="{{ package.url }}">{{ package.url }}</a>
+      </div>
+    </li>
+  {% endif %}
+  {%  if package.tags %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('Stichworte') }}:</div>
+      </div>
+      <div class="cell">
+        <ul class="list--horizontal bordered">
           {% for tag in package.tags %}
-            {{ separator() }} <span class="field-value"><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"tags": tag.name})}}'>{{ tag.display_name }}</a></span>
+            <li><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"tags": tag.name})}}'>{{ tag.display_name }}</a></li>
           {% endfor %}
-        </div>
+        </ul>
       </div>
-    {% endif %}
-  
-  {# TODO: package.metadata_modified in footer
-  
-      <h3>{{ _('Timestamps') }}</h3>
-      <table class="table table-striped table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th scope="col">{{ _('Field') }}</th>
-            <th scope="col">{{ _('Value') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% if package.metadata_modified %}
-            <tr>
-              <th scope="row" class="dataset-label">{{ _("Metadaten Letzte Änderung") }}</th>
-              <td class="dataset-details">{{ package.metadata_modified }}</td>
-            </tr>
-          {% endif %}
-          {% if package.metadata_created %}
-            <tr>
-              <th scope="row" class="dataset-label">{{ _("Metadaten erstellt") }}</th>
-              <td class="dataset-details">{{ package.metadata_created }}</td>
-            </tr>
-          {% endif %}
-        </tbody>
-      </table>
-  #}
-  
-  {# TODO: Weitere Metadaten in collapsible box (only show if any)
-      <h3>{{ _('Weitere Metadaten') }}</h3>
-      <table class="table table-striped table-bordered table-condensed">
-        <thead>
-          <tr>
-            <th scope="col">{{ _('Field') }}</th>
-            <th scope="col">{{ _('Value') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% block extras scoped %}
-          {% for extra in h.sorted_extras(package.extras, exclude=['berlin.type', 'username', 'attribution_text', 'date_released', 'date_updated', 'temporal_coverage_from', 'temporal_coverage_to', 'temporal_granularity', 'geographical_coverage']) %}
-            {% set key, value = extra %}
-            <tr rel="dc:relation" resource="_:extra{{ i }}">
-              <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</th>
-              <td class="dataset-details" property="rdf:value">{{ value }}</td>
-            </tr>
-          {% endfor %}
-        {% endblock %}
-  
-      </tbody>
-    </table>
-  #}
-  
-  
-</section>
+    </li>
+  {% endif %}
+  {% if package.metadata_modified %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _("Metadaten Letzte Änderung") }}</div>
+      </div>
+      <div>{{ package.metadata_modified }}</div>
+    </li>
+  {% endif %}
+  {% if package.metadata_created %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _("Metadaten erstellt") }}</div>
+      </div>
+      <div>{{ package.metadata_created }}</div>
+    </li>
+  {% endif %}
+</ul>
+
+
+{# TODO: Weitere Metadaten in collapsible box (only show if any)
+  <h3>{{ _('Weitere Metadaten') }}</h3>
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th scope="col">{{ _('Field') }}</th>
+        <th scope="col">{{ _('Value') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% block extras scoped %}
+      {% for extra in h.sorted_extras(package.extras, exclude=['berlin.type', 'username', 'attribution_text', 'date_released', 'date_updated', 'temporal_coverage_from', 'temporal_coverage_to', 'temporal_granularity', 'geographical_coverage']) %}
+        {% set key, value = extra %}
+        <tr rel="dc:relation" resource="_:extra{{ i }}">
+          <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</th>
+          <td class="dataset-details" property="rdf:value">{{ value }}</td>
+        </tr>
+      {% endfor %}
+    {% endblock %}
+
+  </tbody>
+</table>
+#}
+
+

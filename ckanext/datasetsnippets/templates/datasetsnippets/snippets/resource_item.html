@@ -9,28 +9,20 @@ Example:
   {% snippet "datasetsnippets/snippets/resource_item.html", package=package, resources=package.resources %}
 
 #}
-<div class="resource-item html5-section download modul-download">
-  <div class="resource-item__format-icon format-label--large"
-       data-format="{{ resource.format.lower() or 'data' }}">
-       {{ h.get_translated(resource, 'format') }}
+
+<div class="modul-download panel--white block--halfgap">
+  <div class="left">
+    <h3 class="title">{{ h.berlin_resource_label(resource) }}</h3>
+    {% if resource.description %}
+      <p class="text">
+        {{ h.markdown_extract(h.get_translated(resource, 'description'), extract_length=1000) }}
+      </p>
+    {% endif %}
+    <ul class="caption list--clean">
+      <li class="doc-type">Format: {{ h.get_translated(resource, 'format') }}</li>
+    </ul>
   </div>
-  <div class="html5-section body">
-    {% block resource_item_title %}
-      <h4 class="title">{{ h.berlin_resource_label(resource) }}</h4>
-    {% endblock %}
-    {% block resource_item_description %}
-      <div class="textile description">
-        <p>
-          {% if resource.description %}
-            {{ h.markdown_extract(h.get_translated(resource, 'description'), extract_length=1000) }}
-          {% endif %}
-        </p>
-      </div>
-    {% endblock %}
+  <div class="right">
+    <a class="link button button--extern" href="{{ resource.url }}" target="_blank">{{ _('Zur Ressource') }}</a>
   </div>
-  {% if resource.url and h.is_url(resource.url) %}
-    <p class="download-btn">
-      <a href="{{ resource.url }}" class="btn">{{ _('Zur Ressource') }}</a>
-    </p>
-  {% endif %}
 </div>

@@ -9,20 +9,20 @@ Example:
   {% snippet "datasetsnippets/snippets/resources_list.html", package=package, resources=package.resources %}
 
 #}
-<section id="dataset-resources" class="resources">
-    <h2>{{ _('Resources') }}</h2>
+
+<div class="fullwidth panel--heavy">
+  <div class="fullwidth__inner block">
+    <h2 class="title">{{ _('Resources') }}</h2>
     {% block resource_list %}
       {% if resources %}
-        <div class="html5-section download-multi modul-download-multi">
-          {% block resource_list_inner %}
-            {% for resource in resources %}
-              {% snippet 'datasetsnippets/snippets/resource_item.html', package=package, resource=resource %}
-            {% endfor %}
-          {% endblock %}
-        </div>
+        {% block resource_list_inner %}
+          {% for resource in resources %}
+            {% snippet 'datasetsnippets/snippets/resource_item.html', package=package, resource=resource %}
+          {% endfor %}
+        {% endblock %}
       {% else %}
         <p class="empty">{{ _('This dataset has no data') }}</p>
       {% endif %}
     {% endblock %}
-  </section>
-  
+  </div>
+</div>

@@ -2,6 +2,8 @@
 
 ## Development
 
+- Implement the [vertical "Asset Service"](http://styleguide.berlin.de/patterns/11-vertical_assetservice-page-startseite/11-vertical_assetservice-page-startseite.html) of the current berlin.de design system.
+
 ## [0.1.2](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.2)
 
 _(2023-05-22)_
