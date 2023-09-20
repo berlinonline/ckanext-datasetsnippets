@@ -8,51 +8,92 @@ when a facet list should appear in the the right column of the page and not the 
         {% set title = title or h.get_facet_title(name) %}
         {% set id_prefix = h.berlin_facet_prefix(name) %}
         {% set active_count = h.berlin_facet_active_item_count(items) %}
-        <div class="dp-list-dropdown btn-group form-group{{ ' active' if active_count > 0 }}">
-            <span id="{{id_prefix}}_selector" style="display:none">Setzen sie den Filter vom Typ '{{title}}', um die Suche einzuschränken.</span>
-            <a class="btn dropdown-toggle search_category_button" aria-haspopup="listbox" aria-labelledby="{{id_prefix}}_selector" id="{{id_prefix}}_button">
-                <span class='dp-list-dropdown-label'>{{title}}</span>
-                <span class='badge'>{{ active_count }}</span>
-                <span class="dp-caret"></span>
-            </a>
-            <ul class="dropdown-menu {{id_prefix}}">
-                {% if items %}
-                    {% for item in items %} 
-                        {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
-                        {% set label = label_function(item, name) if label_function else item.display_name %} {% set label_truncated = h.truncate(label, 45, '…') if not label_function else label %}
-                        {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
-                        <li class="element {% if item.active %} active{% endif %}{% if loop.index0 < 10 %} common{% else %} uncommon{% endif %}">
-                            <a class="dp-trigger-reload" href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
-                                <span>{{ label }} {{ count if not item.active }}</span>
-                            </a>
-                            {% if item.active %}
-                                <div class="dp-check"></div>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                    {% if items|length > 10 %}
-                        <li class="divider"></li>
-                        <li class="dp-toggle-more dp-open">
-                            <a onclick="dp_toggle_facet_list('{{id_prefix}}');">
-                                <span class="dp-caret"></span>
-                                {{ _('Mehr anzeigen') }}
-                                {# {{ _('Show More {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }} #}
-                            </a>
-                        </li>
-                        <li class="dp-toggle-more dp-close">
-                            <a onclick="dp_toggle_facet_list('{{id_prefix}}', true);">
-                                <span class="dp-caret"></span>
-                                {{ _('Weniger anzeigen') }}
-                                {# {{ _('Show Only Popular {facet_type}').format(facet_type=h.berlin_facet_plural_mapping()[name]) }} #}
-                            </a>
-                        </li>
-                    {% endif %}
-                {% else %}
-                    <li>
-                        <a>{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</a>
-                    </li>
+        <fieldset class="facet">
+          <legend class="facet__head">
+            <button data-collapsible-trigger="opened" class="facet-title opened" type="button" aria-controls="facet_{{id_prefix}}"
+              aria-expanded="true">
+              <span class="text">{{title}}</span>
+              <a href="#" role="button" class="js-formhelp-flyin-overlay qmark-icon" title="Hilfe"
+                data-original-title="{{title}}: Hier ist der Hilfetext." data-title="Hilfe" aria-expanded="false">?</a>
+            </button>
+          </legend>
+          <div class="facet__body opened" id="facet_{{id_prefix}}">
+            {% if items %}
+              {% set max_shown = 3%}
+              {% for item in items %}
+                {% set label = label_function(item, name) if label_function else item.display_name %}
+                {% set label_truncated = h.truncate(label, 45, '…') if not label_function else label %}
+                {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
+                {% if loop.index == max_shown + 1 %}
+                  <div class="hidden-facet-entries closed" id="entries_{{id_prefix}}" style="display: none;">
                 {% endif %}
-            </ul>
-        </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="check_{{id_prefix}}_{{loop.index}}" name="check_{{id_prefix}}_{{loop.index}}" data-facetname="{{ name }}" data-facetvalue="{{ item.name }}"{% if item.active %} checked{% endif %}>
+                  <label class="form-check-label" for="check_{{id_prefix}}_{{loop.index}}">
+                    {{label}}
+                  </label>
+                </div>
+                {% if loop.last and items|length > max_shown %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+              {% if items|length > max_shown %}
+                <button data-collapsible-trigger="closed" class="facet-entries-toggler closed" type="button"
+                  aria-controls="entries_{{id_prefix}}" data-closetext="Weniger anzeigen" data-opentext="Mehr anzeigen" aria-expanded="false">
+                  <span class="text">Mehr anzeigen</span>
+                </button>
+              {% endif %}
+            {% else %}
+              {{ _('There are no {facet_type} that match this search').format(facet_type=title) }}
+            {% endif %}
+          </div>
+        </fieldset>
     {% endwith %}
 {% endblock %}
+{#
+  <div class="dp-list-dropdown btn-group form-group{{ ' active' if active_count > 0 }}">
+    <span id="{{id_prefix}}_selector" style="display:none">Setzen sie den Filter vom Typ '{{title}}', um die Suche einzuschränken.</span>
+    <a class="btn dropdown-toggle search_category_button" aria-haspopup="listbox" aria-labelledby="{{id_prefix}}_selector" id="{{id_prefix}}_button">
+        <span class='dp-list-dropdown-label'>{{title}}</span>
+        <span class='badge'>{{ active_count }}</span>
+        <span class="dp-caret"></span>
+    </a>
+    <ul class="dropdown-menu {{id_prefix}}">
+        {% if items %}
+            {% for item in items %} 
+                {% set href = h.remove_url_param(name, item.name, extras=extras, alternative_url=alternative_url) if item.active else h.add_url_param(new_params={name: item.name}, extras=extras, alternative_url=alternative_url) %}
+                {% set label = label_function(item, name) if label_function else item.display_name %} {% set label_truncated = h.truncate(label, 45, '…') if not label_function else label %}
+                {% set count = count_label(item['count']) if count_label else ('(%d)' % item['count']) %}
+                <li class="element {% if item.active %} active{% endif %}{% if loop.index0 < 10 %} common{% else %} uncommon{% endif %}">
+                    <a class="dp-trigger-reload" href="{{ href }}" title="{{ label if label != label_truncated else '' }}">
+                        <span>{{ label }} {{ count if not item.active }}</span>
+                    </a>
+                    {% if item.active %}
+                        <div class="dp-check"></div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            {% if items|length > 10 %}
+                <li class="divider"></li>
+                <li class="dp-toggle-more dp-open">
+                    <a onclick="dp_toggle_facet_list('{{id_prefix}}');">
+                        <span class="dp-caret"></span>
+                        {{ _('Mehr anzeigen') }}
+                    </a>
+                </li>
+                <li class="dp-toggle-more dp-close">
+                    <a onclick="dp_toggle_facet_list('{{id_prefix}}', true);">
+                        <span class="dp-caret"></span>
+                        {{ _('Weniger anzeigen') }}
+                    </a>
+                </li>
+            {% endif %}
+        {% else %}
+            <li>
+                <a>{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</a>
+            </li>
+        {% endif %}
+    </ul>
+  </div>
+
+#}

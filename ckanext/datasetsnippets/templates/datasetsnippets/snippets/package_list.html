@@ -17,12 +17,14 @@ Example:
 #}
 {% block package_list %}
   {% if packages %}
-    <ul class="{{ list_class or 'dataset-list unstyled' }}">
+    <ol class="block list--clean list--fullwidth">
+    <li>
+    </li>
     	{% block package_list_inner %}
 	      {% for package in packages %}
 	        {% snippet 'datasetsnippets/snippets/package_item.html', package=package, item_class=item_class, hide_resources=hide_resources, banner=banner, truncate=truncate, truncate_title=truncate_title, faceted=faceted %}
 	      {% endfor %}
 	    {% endblock %}
-    </ul>
+    </ol>
   {% endif %}
 {% endblock %}

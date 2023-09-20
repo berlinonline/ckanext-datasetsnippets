@@ -23,10 +23,13 @@ def url_with_params(url, params):
     '''
     if not params:
         return url
+    return url + u'?' + encode_params(params)
+
+def encode_params(params):
     params = [(k, v.encode('utf-8') if isinstance(v, str) else str(v))
               for k, v in params.items()]
-    return url + u'?' + urlencode(params)
-
+    return urlencode(params)
+   
 def dataset_path():
   return config.get('datasetsnippets.path', 'dataset')
 

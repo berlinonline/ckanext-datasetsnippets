@@ -39,6 +39,7 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_resource_label': theme_helpers.resource_label ,
             'berlin_dataset_path': theme_helpers.dataset_path ,
             'berlin_url_with_params': theme_helpers.url_with_params ,
+            'berlin_encode_params': theme_helpers.encode_params ,
             'berlin_facet_prefix': theme_helpers.get_facet_id_prefix ,
             'berlin_facet_active_items': theme_helpers.active_items ,
             'berlin_facet_active_item_count': theme_helpers.active_item_count ,

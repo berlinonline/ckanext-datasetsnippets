@@ -22,6 +22,39 @@ Example:
 {% set num_tags = num_tags or 3 %}
 {% set faceted = faceted or false %}
 
+<li>
+  <article class="modul-card" data-add-clickable-area="smart">
+    <header class="card__header">
+      <h3 class="title" style="cursor: pointer;">{{ h.truncate(title, truncate_title) }}</h3>
+      <div class="card__meta subtitle text--meta">
+        <p>Card subtitle</p>
+  
+      </div>
+      <div class="card__functions functions">
+        Card functions (Edit, Delete, Bookmark)
+      </div>
+    </header>
+    <div class="card__body">
+      <p>
+        {% if notes %}
+          {{ notes|urlize }}
+        {% else %}
+          {{ _("This dataset has no description") }}
+        {% endif %}
+        <a href="/{{ [ h.berlin_dataset_path(), package['name'] ] | join('/') }}" class="more" data-mainlink="true">Details<span class="aural">zu:
+            {{ h.truncate(title, truncate_title) }}</span></a>
+      </p>
+    </div>
+    <div class="card__footer">
+      <div class="row leftandright center">
+        <div class="left">Card footer left (e.g. Price)</div>
+        <div class="left">Card footer right (e.g. Action Button)</div>
+      </div>
+    </div>
+  </article>
+</li>
+{#
+
 {% block package_item %}
   <li class="{{ item_class or "dataset-item" }}">
     {% block content %}
@@ -184,3 +217,4 @@ Example:
     </div>
   </li>
 {% endblock %}
+#}
