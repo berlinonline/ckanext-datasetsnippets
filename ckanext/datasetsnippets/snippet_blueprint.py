@@ -148,7 +148,7 @@ def search_dataset():
         c.fields_grouped = {}
         search_extras = {}
         fq = ''
-        for (param, value) in request.params.items():
+        for (param, value) in request.args.items(multi=True):
             if param not in ['q', 'page', 'sort'] \
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
