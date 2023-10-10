@@ -32,6 +32,9 @@ when a facet list should appear in the the right column of the page and not the 
                   <label class="form-check-label" for="check_{{id_prefix}}_{{loop.index}}">
                     {{label}}
                   </label>
+                  {% if not item.active %}
+                    <span class="dp-facet_count">{{ count }}</span>
+                  {% endif %}
                 </div>
                 {% if loop.last and items|length > max_shown %}
                   </div>
