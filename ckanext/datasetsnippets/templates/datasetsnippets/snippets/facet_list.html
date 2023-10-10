@@ -4,7 +4,7 @@ the list of possible facet items is empty, is displayed in lieu of an empty list
 params to make the url alternative_url URL to use when building the necessary URLs, instead of the default ones returned by url_for. Useful eg for dataset types. hide_empty Do not show facet if there are none, Default: false. within_tertiary Boolean for
 when a facet list should appear in the the right column of the page and not the left column. #}
 {% block facet_list %}
-    {% with items = items or h.get_facet_items_dict(name) %}
+    {% with items = items or h.get_facet_items_dict(name, search_facets or c.search_facets) %}
         {% set title = title or h.get_facet_title(name) %}
         {% set id_prefix = h.berlin_facet_prefix(name) %}
         {% set active_count = h.berlin_facet_active_item_count(items) %}

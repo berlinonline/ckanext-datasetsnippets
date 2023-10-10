@@ -35,6 +35,7 @@
               {{ h.snippet('datasetsnippets/snippets/facet_list.html',
                 title=c.facet_titles[facet],
                 name=facet,
+                search_facets=search_facets,
                 alternative_url="/" ~ h.berlin_dataset_path())
               }}
             {% endif %}
