@@ -11,6 +11,8 @@ import ckan.model as model
 from ckan.common import _, c, config, request
 from urllib.parse import urlencode
 
+from ckanext.berlin_dataset_schema.schema import Schema
+
 log = logging.getLogger(__name__)
 
 get_action = logic.get_action
@@ -146,3 +148,25 @@ def label_for_sorting(sortings, sorting):
     '''Helper function to retrieve the label for a search sorting from a list of sortings.'''
     flipped = { value: key for key,value in dict(sortings).items() }
     return flipped.get(sorting, None)
+
+def description_for_facet(facet_name: str) -> str:
+    '''Helper function to retrieve the textual description for a facet from the
+      JSON schema.
+    '''
+    schema = Schema()
+    description = _("Attribut existiert nicht.")
+    # handle some special cases:
+    if facet_name == 'author_string':
+        facet_name = 'author'
+    elif facet_name == 'res_format':
+        facet_name = 'resources'
+        if schema.contains(facet_name):
+            definition = Schema().attribute_definition(facet_name)
+            definition = definition['items']['properties']['format']
+            return definition.get('user_help_text', _("Beschreibung fehlt"))
+
+    if schema.contains(facet_name):
+        definition = Schema().attribute_definition(facet_name)
+        description = definition.get('user_help_text', _("Beschreibung fehlt"))
+
+    return description

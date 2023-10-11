@@ -14,7 +14,7 @@ when a facet list should appear in the the right column of the page and not the 
               aria-expanded="true">
               <span class="text">{{title}}</span>
               <a href="#" role="button" class="js-formhelp-flyin-overlay qmark-icon" title="Hilfe"
-                data-original-title="{{title}}: Hier ist der Hilfetext." data-title="Hilfe" aria-expanded="false">?</a>
+                data-original-title="{{ h.berlin_description_for_facet(name) }}" data-title="Hilfe: {{title}}" aria-expanded="false">?</a>
             </button>
           </legend>
           <div class="facet__body opened" id="facet_{{id_prefix}}">
