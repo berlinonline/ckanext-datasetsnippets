@@ -1,6 +1,9 @@
 """
 Main module for ckanext-datasetsnippets
 """
+
+import os
+
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import config
@@ -8,6 +11,7 @@ from ckan.plugins.toolkit import config
 import ckanext.datasetsnippets.helpers as theme_helpers
 from ckanext.datasetsnippets import snippet_blueprint
 import ckanext.datasetsnippets.auth as snippet_auth
+from ckanext.datasetsnippets.resource_mappings import ResourceMapping
 
 class DatasetsnippetsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -22,6 +26,12 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'datasetsnippets')
         config['datasetsnippets.path'] = "datensaetze"
+
+        path = os.path.abspath(__file__)
+        dir_path = os.path.dirname(path)
+        resource_mappings_path = os.path.join(dir_path, "mappings", "resource_format_mappings.json")
+        self.resource_mappings = ResourceMapping()
+        self.resource_mappings.load_mappings(resource_mappings_path)
 
     # IBlueprint
 
@@ -48,6 +58,7 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_label_for_sorting': theme_helpers.label_for_sorting ,
             'berlin_facet_plural_mapping': theme_helpers.facet_plural_mapping ,
             'berlin_description_for_facet': theme_helpers.description_for_facet ,
+            'berlin_css_class_for_format_string': theme_helpers.css_class_for_format_string ,
         }
 
     # IAuthFunctions

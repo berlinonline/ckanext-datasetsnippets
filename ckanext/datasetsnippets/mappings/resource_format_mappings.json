@@ -1,0 +1,163 @@
+{
+    "Textual Document": {
+        "code": "textual",
+        "types": {
+            "PDF": [
+                "PDF",
+                ".pdf",
+                "zip:pdf"
+            ],
+            "DOCX": [
+                "DOCX",
+                "DOC"
+            ],
+            "TXT": [
+                "TXT"
+            ]
+        }
+    },
+    "Tabular Data": {
+        "code": "tabular",
+        "types": {
+            "CSV": [
+                "CSV",
+                ".csv",
+                "zip:csv"
+            ],
+            "XLSX": [
+                "XLSX",
+                "xlsx",
+                "XLS",
+                ".xls"
+            ],
+            "ODS": [
+                "ODS"
+            ]
+        }
+    },
+    "Archive": {
+        "code": "archive",
+        "types": {
+            "ZIP": [
+                "ZIP",
+                ".zip"
+            ]
+        }
+    },
+    "Website": {
+        "code": "website",
+        "types": {
+            "HTML": [
+                "HTML",
+                "Webseite",
+                "webseite",
+                "application/x-php"
+            ]
+        }
+    },
+    "GIS Data": {
+        "code": "gis",
+        "types": {
+            "GEOJSON": [
+                "GEOJSON-Datei",
+                "GeoJSON",
+                "gjson"
+            ],
+            "KML/KMZ": [
+                "KML",
+                "kmz",
+                "zip:KMZ"
+            ],
+            "SHAPE": [
+                "shape",
+                "zip:SHP",
+                "zip:shp",
+                "zip:dbf, zip:prj, zip:shp, zip:shx"
+            ],
+            "MapInfo TAB": [
+                "zip:dat, zip:id, zip:map, zip:tab"
+            ],
+            "WFS": [
+                "WFS"
+            ],
+            "WMS": [
+                "WMS"
+            ],
+            "GPX": [
+                "gpx"
+            ],
+            "GML": [
+                "zip:gml, zip:xsd"
+            ]
+        }
+    },
+    "Feed": {
+        "code": "feed",
+        "types": {
+            "Atom": [
+                "Atom"
+            ],
+            "RSS": [
+                "RSS"
+            ],
+            "JSON Feed": [
+                "jrss"
+            ]
+        }
+    },
+    "Tree-shaped Data": {
+        "code": "tree",
+        "types": {
+            "JSON": [
+                "JSON"
+            ],
+            "XML": [
+                "XML"
+            ]
+        }
+    },
+    "Bitmap Image": {
+        "code": "bitmap",
+        "types": {
+            "TIF": [
+                "JPG",
+                "JPEG",
+                "PNG",
+                "TIF"
+            ]
+        }
+    },
+    "3D Data": {
+        "code": "3d",
+        "types": {
+            "DXF": [
+                "zip:DXF",
+                "zip:dxf"
+            ]
+        }
+    },
+    "Transport Data": {
+        "code": "transport",
+        "types": {
+            "GTFS": [
+                "GTFS"
+            ]
+        }
+    },
+    "API": {
+        "code": "api",
+        "types": {
+            "API": [
+                "API"
+            ]
+        }
+    },
+    "Generic Data": {
+        "code": "generic",
+        "types": {
+            "Protobuf": [
+                "pbf"
+            ]
+        }
+    }
+}

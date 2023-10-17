@@ -12,6 +12,7 @@ from ckan.common import _, c, config, request
 from urllib.parse import urlencode
 
 from ckanext.berlin_dataset_schema.schema import Schema
+from ckanext.datasetsnippets.resource_mappings import ResourceMapping
 
 log = logging.getLogger(__name__)
 
@@ -170,3 +171,16 @@ def description_for_facet(facet_name: str) -> str:
         description = definition.get('user_help_text', _("Beschreibung fehlt"))
 
     return description
+
+def css_class_for_format_string(format_string: str) -> str:
+    '''Helper function to generate a CSS class for a given resource format string.'''
+    mapping = ResourceMapping().format_string_mappings()
+    css_prefix = "dp-resource"
+    css_class = f"{css_prefix}-undefined"
+    category = mapping.get(format_string, None)
+    if category:
+        category_definition = ResourceMapping().category_mappings().get(category, None)
+        if category_definition:
+            code = category_definition.get('code', 'undefined')
+            css_class = f"{css_prefix}-{code}"
+    return css_class

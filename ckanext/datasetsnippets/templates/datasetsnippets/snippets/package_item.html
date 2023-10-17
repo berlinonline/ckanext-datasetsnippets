@@ -69,6 +69,24 @@ Example:
           </div>
         </div>
       </div>
+
+      {% if package.resources %}
+        <div class="dp-dataset-metadatum dp-dataset-formats">
+          <div class="dp-dataset-metadatum__header">
+            {{ _('Formats') }}:
+          </div>
+          <div class="dp-resource-icon-list">
+
+            {% for resource in package.resources %}
+              <div class="dp-resource-icon-mini {{ h.berlin_css_class_for_format_string(resource.format) }}">
+                <div class="dp-resource-icon-label">
+                  {{ resource.format | default('?', true) }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </article>
 </li>
