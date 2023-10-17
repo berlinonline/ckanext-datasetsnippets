@@ -26,16 +26,9 @@ Example:
   <article class="modul-card" data-add-clickable-area="smart">
     <header class="card__header">
       <h3 class="title" style="cursor: pointer;">{{ h.truncate(title, truncate_title) }}</h3>
-      <div class="card__meta subtitle text--meta">
-        <p>Card subtitle</p>
-  
-      </div>
-      <div class="card__functions functions">
-        Card functions (Edit, Delete, Bookmark)
-      </div>
     </header>
     <div class="card__body">
-      <p>
+      <div class="dp-dataset-metadatum dp-dataset-description">
         {% if notes %}
           {{ notes|urlize }}
         {% else %}
@@ -43,12 +36,38 @@ Example:
         {% endif %}
         <a href="/{{ [ h.berlin_dataset_path(), package['name'] ] | join('/') }}" class="more" data-mainlink="true">Details<span class="aural">zu:
             {{ h.truncate(title, truncate_title) }}</span></a>
-      </p>
-    </div>
-    <div class="card__footer">
-      <div class="row leftandright center">
-        <div class="left">Card footer left (e.g. Price)</div>
-        <div class="left">Card footer right (e.g. Action Button)</div>
+      </div>
+      {% if package.groups %}
+        <div class="dp-dataset-metadatum dp-dataset-category text--meta">
+          {% for group in package.groups %}
+              <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a>
+              {{ "|" if not loop.last else "" }}
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="dp-dataset-metadatum dp-dataset-metadatum__row">
+        {% if package.license_id %}
+          <div class="dp-dataset-metadatum__column">
+            <div class="dp-dataset-metadatum__header">
+              {{ _('License') }}:
+            </div>
+            <div class="dp-dataset-metadatum__body">
+              {{ package.license_id}}
+            </div>
+          </div>
+        {% endif %}
+        <div class="dp-dataset-metadatum__column">
+          <div class="dp-dataset-metadatum__header">
+            Stand:
+          </div>
+          <div class="dp-dataset-metadatum__body">
+            {% if package.date_updated %}
+              {{ h.berlin_render_datetime(package.date_updated) }}
+            {% else %}
+              {{ h.berlin_render_datetime(package.metadata_modified) }}
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
   </article>
