@@ -23,8 +23,6 @@ class ResourceMapping(plugins.SingletonPlugin):
           with open(mappings_path) as json_data:
               self._category_mappings = json.load(json_data)
               self._format_string_mappings = self.reverse_category_mapping(self._category_mappings)
-              LOG.info(self._category_mappings)
-              LOG.info(self._format_string_mappings)
         except Exception:
             raise MappingsError(f"Could not load mappings from {mappings_path}.")
 
