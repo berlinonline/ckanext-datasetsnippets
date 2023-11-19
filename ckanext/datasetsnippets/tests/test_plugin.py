@@ -195,44 +195,6 @@ class TestPlugin(object):
         assert "Latest Datasets" == data['title']
         assert datasets[0]['title'] in data['content']
 
-    @pytest.mark.parametrize("data", [
-        {
-            "url": "/snippet/dataset",
-            "expected": 0
-        },
-        {
-            "url": "/snippet/dataset?foo=bar",
-            "expected": 1
-        },
-        {
-            "url": "/snippet/dataset?license_id=cc-by",
-            "expected": 1
-        },
-        {
-            "url": "/snippet/dataset?license_id=cc-by&foo=bar",
-            "expected": 2
-        },
-        {
-            # would like to use url_for(), but that doesn't work for
-            # duplicate parameters (foo), as they have to be passed as
-            # arguments to url_for(). Can't have two arguments with the same name.
-            "url": "/snippet/dataset?license_id=cc-by&foo=bar&foo=baz",
-            "expected": 3
-        },
-    ])
-    def test_active_items_total(self, app, data, user):
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=data['url'],
-            status=200
-        )
-        body = json.loads(str(response.body))
-        if data['expected'] == 0:
-            assert "<div class=\"badge dp-activefacets\">" not in body[
-                'content']
-        else:
-            assert f"<div class=\"badge dp-activefacets\">{data['expected']}</div>" in body[
-                'content']
 
     def test_value_error(self, app, user):
         '''Test that we get a 400 if we provide an non-integer as a limit parameter.'''

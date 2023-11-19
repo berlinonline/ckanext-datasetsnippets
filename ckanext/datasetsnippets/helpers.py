@@ -126,19 +126,6 @@ def active_items(items):
     '''
     return [item for item in items if item['active']]
 
-def active_items_total():
-    '''Helper function that returns the total of active (selected) facet items across
-       all facets.'''
-    
-    # CKAN behaviour is that _every_ URL parameter is interpreted as as the name of a 
-    # search facet, even if such a facet doesn't exist. Non-existing search facets will 
-    # lead to 0 search results.
-    # Therefore, there is no need to filter the URL parameters for ones that are actually
-    # search facets. Just count the number of URL parameters. In any successful search,
-    # they will be equal to the number of selected search parameters.
-
-    return len(list(request.args.items(multi=True)))
-
 def active_item_labels(items):
     '''Helper function that returns a comma-separated string with the labels of
        all active items from a list of facet items.
