@@ -200,7 +200,7 @@ class TestPlugin(object):
         '''Test that we get a 400 if we provide an non-integer as a limit parameter.'''
         response = app.get(
             headers=[("Authorization", user.apikey)],
-            url="/snippet/dataset?_foo_limit=x",
+            url="/snippet/dataset?_groups_limit=x",
             status=400
         )
 
