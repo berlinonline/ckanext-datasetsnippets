@@ -1,0 +1,77 @@
+<div class="dp-search-result-top">
+  {% block search_title %}
+    <div class="dp-search-result-summary">
+      {% if not error %}
+        {% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}
+      {% else %}
+        Error
+      {% endif %}
+    </div>
+  {% endblock %}
+  {% block search_sortby %}
+    <div class="dp-search-result-sort">
+      <div class="dp-select">
+        <select id="field-order-by" name="sort">
+          {% for label, value in sorting %}
+          {% if label and value %}
+          {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
+          <option value="{{ value }}"{% if sorting_selected==value %} selected{% endif %}>{{ label }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        <span class="focus"></span>
+      </div>
+    </div>
+  {% endblock %}
+</div>
+{% block search_facets %}
+  {% if facets %}
+  <div class="dp-filter-list">
+    {% set search_facets_items = facets.search.get('tags')['items'] %}
+    {% for value in facets.fields['tags'] %}
+    <button type="button" class="pill pill--filter pill--big active" title="{{ _('Remove') }}">
+      {%- if facets.translated_fields and facets.translated_fields.has_key(('tags',value)) -%}
+      {{ facets.translated_fields[('tags',value)] }}
+      {%- else -%}
+      {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+      {%- endif %}
+      <a href="{{ facets.remove_field('tags', value) }}" class="fas fa-times" aria-hidden="true"></a></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endblock %}
+
+
+
+
+
+{# {% block search_sortby %}
+<div class="dp-search-result-sort form-select control-group control-order-by">
+  {% if sorting %}
+  <div class="dp-search-result-sort-label">
+    <label for="field-order-by">{{ _('Order by') }}</label>
+  </div>
+
+  <div class="dp-list-dropdown btn-group">
+    <span id="search-result-order-selector" style="display:none">Ändern sie die Sortierung der Suchergebnisse</span>
+    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="listbox"
+      aria-labelledby="search-result-order-selector" id="search-result-order-button">
+      <span class="dp-list-dropdown-label active">{{ h.berlin_label_for_sorting(sorting, sorting_selected) }}</span>
+      <span class="dp-caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      {% for label, value in sorting %} {% if label and value %}
+        {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
+        <li{% if sorting_selected==value %} class="active" {% endif %}>
+          <a href="{{href}}">{{ label }}</a> 
+          {%- if sorting_selected==value -%}
+            <div class="dp-check"></div>
+          {%- endif -%}
+        </li>
+        {% endif %} {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endblock %} #}
+
