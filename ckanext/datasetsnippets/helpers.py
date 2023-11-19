@@ -181,17 +181,20 @@ def get_middle_cells(current_page: int) -> list:
     cells.append({
         "page_number": current_page - 3,
         "label": "…",
+        "link": False,
         "current": False
     })
     for index in range(current_page -2, current_page +3):
         cells.append({
             "page_number": index,
             "label": str(index),
+            "link": True,
             "current": True if (index == current_page) else False
         })
     cells.append({
         "page_number": current_page + 3,
         "label": "…",
+        "link": False,
         "current": False
     })
     return cells
@@ -203,6 +206,7 @@ def pagination_cells(current_page: int, page_count: int) -> list:
     cells.append({
         "page_number": 1,
         "label": "1",
+        "link": True,
         "current": True if (1 == current_page) else False
     })
     # middle part
@@ -213,6 +217,7 @@ def pagination_cells(current_page: int, page_count: int) -> list:
     cells.append({
         "page_number": page_count ,
         "label": str(page_count),
+        "link": True,
         "current": True if (page_count == current_page) else False
     })
     return cells

@@ -24,9 +24,13 @@ The cells the be displayed in the pagination UI.
       </li>
     {% endif %}
     {% for cell in cells %}
+      {% if cell['link'] %}
         <li{% if cell['current'] %} class="active" aria-current="page"{% endif %}>
           <a href="{{ h.berlin_pagination_url_for_page(cell['page_number']) }}">{{ cell['label'] }}</a>
         </li>
+      {% else %}
+        <li><span aria-hidden="true">{{ cell['label'] }}</span></li>
+      {% endif %}
     {% endfor %}
     <li class="mobile-counter"><span>{{ page }} / {{ page_count }}</span></li>
     {% if page == page_count %}
