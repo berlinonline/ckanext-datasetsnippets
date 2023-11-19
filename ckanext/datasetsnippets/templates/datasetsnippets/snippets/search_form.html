@@ -23,9 +23,9 @@
             </legend>
             <div class="facet__body">
               <div class="form-group">
-                <input aria-label="Geben Sie hier ein Stichwort ein" class="form-control"
+                <input aria-label="Geben Sie hier ein Stichwort ein" class="tagify--outside"
                   id="dataset_tag_search" type="text" name="dataset_tags" autocomplete="off"
-                  placeholder="Eingabe für Stichwortsuche"
+                  placeholder=""
                   value="{{ request.params.getlist('tags')|join(', ') }}">
               </div>
             </div>
