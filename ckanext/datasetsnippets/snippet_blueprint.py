@@ -153,7 +153,8 @@ def search_dataset():
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
                 fq += f' {param}:"{value}"'
-                c.fields_grouped[param] = [value]
+                c.fields_grouped.setdefault(param, [])
+                c.fields_grouped[param].append(value)
 
         context = {'model': model, 'session': model.Session,
                     'user': c.user, 'for_view': True,
