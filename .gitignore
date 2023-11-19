@@ -47,3 +47,4 @@ docs/_build/
 # local stuff
 .vscode
 styleguide/
+ckanenv/
