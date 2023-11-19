@@ -65,6 +65,13 @@
           {% block package_search_results_list %}
             {{ h.snippet('datasetsnippets/snippets/package_list.html', packages=c.page.items, faceted=true) }}
           {% endblock %}
+          {% block page_pagination %}
+            {% if c.page.page_count > 1 %}
+              {{ h.snippet('datasetsnippets/snippets/pagination.html',
+                page=c.page.page, page_count=c.page.page_count, cells=h.berlin_pagination_cells(c.page.page, c.page.page_count))
+              }}
+            {% endif %}
+          {% endblock %}
         </div>
       </div>
     </div>

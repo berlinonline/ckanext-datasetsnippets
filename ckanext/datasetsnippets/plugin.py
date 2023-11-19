@@ -59,6 +59,8 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_facet_plural_mapping': theme_helpers.facet_plural_mapping ,
             'berlin_description_for_facet': theme_helpers.description_for_facet ,
             'berlin_css_class_for_format_string': theme_helpers.css_class_for_format_string ,
+            'berlin_pagination_cells': theme_helpers.pagination_cells ,
+            'berlin_pagination_url_for_page': theme_helpers.pagination_url_for_page ,
         }
 
     # IAuthFunctions

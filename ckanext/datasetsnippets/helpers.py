@@ -14,6 +14,8 @@ from urllib.parse import urlencode
 from ckanext.berlin_dataset_schema.schema import Schema
 from ckanext.datasetsnippets.resource_mappings import ResourceMapping
 
+from werkzeug.datastructures import MultiDict
+
 log = logging.getLogger(__name__)
 
 get_action = logic.get_action
@@ -171,3 +173,52 @@ def css_class_for_format_string(format_string: str) -> str:
             code = category_definition.get('code', 'undefined')
             css_class = f"{css_prefix}-{code}"
     return css_class
+
+def get_middle_cells(current_page: int) -> list:
+    '''Helper function to get the middle part of the cells in the pagination
+      counter.'''
+    cells = []
+    cells.append({
+        "page_number": current_page - 3,
+        "label": "…",
+        "current": False
+    })
+    for index in range(current_page -2, current_page +3):
+        cells.append({
+            "page_number": index,
+            "label": str(index),
+            "current": True if (index == current_page) else False
+        })
+    cells.append({
+        "page_number": current_page + 3,
+        "label": "…",
+        "current": False
+    })
+    return cells
+
+def pagination_cells(current_page: int, page_count: int) -> list:
+    '''Helper function to return a list of cells for the pagination counter,
+      base on the max page count and the current page.'''
+    cells = []
+    cells.append({
+        "page_number": 1,
+        "label": "1",
+        "current": True if (1 == current_page) else False
+    })
+    # middle part
+    middle_cells = get_middle_cells(current_page)
+    for cell in middle_cells:
+        if cell['page_number'] > 1 and cell['page_number'] < page_count:
+            cells.append(cell)
+    cells.append({
+        "page_number": page_count ,
+        "label": str(page_count),
+        "current": True if (page_count == current_page) else False
+    })
+    return cells
+
+def pagination_url_for_page(page: int) -> str:
+    params_nopage = [(k, v) for k, v in request.params.items()
+                        if k != 'page']
+    params_nopage.append(('page', page))
+    return url_with_params(dataset_path(), MultiDict(params_nopage))

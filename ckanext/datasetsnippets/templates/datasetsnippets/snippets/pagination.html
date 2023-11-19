@@ -1,0 +1,42 @@
+{#
+Construct a pagination block conforming to the Berlin style guide:
+http://styleguide.berlin.de/patterns/11-vertical_assetservice-page-element-pagination/11-vertical_assetservice-page-element-pagination.html.
+
+page
+The number of the current page.
+
+page_count
+The total number of pages / number of the last page.
+
+cells
+The cells the be displayed in the pagination UI.
+
+#}
+<nav class="pagination" aria-label="Seite wechseln">
+  <ul>
+    {% if page == 1 %}
+      <li aria-disabled="true" class="pager-item-previous disabled">
+        <div><i class="fas fa-chevron-left" aria-hidden="true"></i> <span class="aural">Seite zurück</span></div>
+      </li>
+    {% else %}
+      <li class="pager-item-previous">
+        <a href="{{ h.berlin_pagination_url_for_page(page - 1) }}" title="Eine Seite zurück blättern"><i class="fas fa-chevron-left" aria-hidden="true"></i></a>
+      </li>
+    {% endif %}
+    {% for cell in cells %}
+        <li{% if cell['current'] %} class="active" aria-current="page"{% endif %}>
+          <a href="{{ h.berlin_pagination_url_for_page(cell['page_number']) }}">{{ cell['label'] }}</a>
+        </li>
+    {% endfor %}
+    <li class="mobile-counter"><span>{{ page }} / {{ page_count }}</span></li>
+    {% if page == page_count %}
+      <li aria-disabled="true" class="pager-item-next disabled">
+        <div><i class="fas fa-chevron-right" aria-hidden="true"></i> <span class="aural">Seite weiter</span></div>
+      </li>
+    {% else %}
+      <li class="pager-item-next">
+        <a href="{{ h.berlin_pagination_url_for_page(page + 1) }}" title="Eine Seite weiter blättern"><i class="fas fa-chevron-right" aria-hidden="true"></i></a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
