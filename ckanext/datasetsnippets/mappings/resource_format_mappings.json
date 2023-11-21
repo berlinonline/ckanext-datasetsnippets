@@ -119,10 +119,14 @@
     "Bitmap Image": {
         "code": "bitmap",
         "types": {
-            "TIF": [
+            "JPG": [
                 "JPG",
-                "JPEG",
-                "PNG",
+                "JPEG"
+            ],
+            "PNG": [
+                "PNG"
+            ],
+            "TIF": [
                 "TIF"
             ]
         }
