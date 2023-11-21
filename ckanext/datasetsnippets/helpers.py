@@ -156,6 +156,17 @@ def description_for_facet(facet_name: str) -> str:
 
     return description
 
+def unique_resource_formats(resources: dict) -> dict:
+    '''Helper function to derive the list of unique formats from a set of resources.'''
+    formats = [format_for_format_string(resource['format']) for resource in resources]
+    return set(formats)
+
+def format_for_format_string(format_string: str) -> str:
+    '''Helper function to derive the abstract format type ("CSV") from a concrete
+       format string ("zip:csv"). Returns format_string if no format is found.'''
+    mapping = ResourceMapping().format_string_format_mapping()
+    return mapping.get(format_string, format_string)
+
 def format_code_for_format_string(format_string: str) -> str:
     '''Helper function to derive the abstract format code ("tabular") for a given
        concrete format string ("zip:csv"). Returns None if no code is found.'''

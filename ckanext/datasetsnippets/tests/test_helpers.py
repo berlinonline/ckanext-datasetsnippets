@@ -131,3 +131,60 @@ class TestHelpers(object):
     ])
     def test_active_item_labels(self, data):
         assert dshelpers.active_item_labels(data['items']) == data['expected']
+
+    @pytest.mark.parametrize("data", [
+        {
+            'resources': [
+                {
+                    "name": "res_1",
+                    "format": "CSV"
+                },
+                {
+                    "name": "res_2",
+                    "format": ".csv"
+                },
+                {
+                    "name": "res_3",
+                    "format": "PDF"
+                },
+                {
+                    "name": "res_4",
+                    "format": "PDF"
+                },
+                {
+                    "name": "res_5",
+                    "format": "PDF"
+                },
+                {
+                    "name": "res_6",
+                    "format": "GeoJSON"
+                },
+                {
+                    "name": "res_7",
+                    "format": "XLS"
+                },
+            ],
+            'formats': [ "CSV", "PDF", "GEOJSON", "XLSX" ]
+        },
+        {
+            'resources': [
+                {
+                    "name": "res_1",
+                    "format": ".foonknown"
+                },
+                {
+                    "name": "res_2",
+                    "format": "GTFS"
+                },
+                {
+                    "name": "res_3",
+                    "format": "JPEG"
+                },
+            ],
+            'formats': [ "JPG", "GTFS", ".foonknown" ]
+        },
+    ])
+    def test_unique_resource_formats(self, data: dict):
+        '''Test that the concrete format strings in a list of resources are correctly
+           boiled down to unique abstract formats.'''
+        assert set(dshelpers.unique_resource_formats(data['resources'])) == set(data['formats'])

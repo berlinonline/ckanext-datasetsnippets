@@ -77,10 +77,10 @@ Example:
           </div>
           <div class="dp-resource-icon-list">
 
-            {% for resource in package.resources %}
-              <div class="dp-resource-icon-mini {{ h.berlin_css_class_for_format_string(resource.format) }}">
+            {% for format in h.berlin_unique_resource_formats(package.resources) %}
+              <div class="dp-resource-icon-mini {{ h.berlin_css_class_for_format_string(format) }}">
                 <div class="dp-resource-icon-label">
-                  {{ resource.format | default('?', true) }}
+                  {{ format | default('(' + _('unknown') + ')', true) }}
                 </div>
               </div>
             {% endfor %}
