@@ -156,17 +156,25 @@ def description_for_facet(facet_name: str) -> str:
 
     return description
 
+def format_code_for_format_string(format_string: str) -> str:
+    '''Helper function to derive the abstract format code ("tabular") for a given
+       concrete format string ("zip:csv"). Returns None if no code is found.'''
+    mapping = ResourceMapping().format_string_category_mapping()
+    category = mapping.get(format_string, None)
+    code = None
+    if category:
+        category_definition = ResourceMapping().category_mapping().get(category, None)
+        if category_definition:
+            code = category_definition.get('code', None)
+    return code
+
 def css_class_for_format_string(format_string: str) -> str:
     '''Helper function to generate a CSS class for a given resource format string.'''
-    mapping = ResourceMapping().format_string_mappings()
     css_prefix = "dp-resource"
     css_class = f"{css_prefix}-undefined"
-    category = mapping.get(format_string, None)
-    if category:
-        category_definition = ResourceMapping().category_mappings().get(category, None)
-        if category_definition:
-            code = category_definition.get('code', 'undefined')
-            css_class = f"{css_prefix}-{code}"
+    code = format_code_for_format_string(format_string)
+    if code:
+        css_class = f"{css_prefix}-{code}"
     return css_class
 
 def get_middle_cells(current_page: int) -> list:
