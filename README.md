@@ -15,7 +15,45 @@ The plugin implements the following CKAN interfaces:
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.8 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.9 (which requires Python 3).
+
+## API
+
+The Snippet API has the following two endpoints:
+
+### `/snippet/dataset`
+
+This is the search endpoint of the snippet API, which is equivalent to `/dataset` in the regular CKAN UI.
+Without additional parameters, this returns markup for the paginated list of all datasets.
+Parameters (search facets, ordering etc.) can be use to restrict the result.
+The parameters are identical to the regular CKAN search parameters.
+
+### `/snippet/dataset/<id>`
+
+This is the dataset detail endpoint of the snippet API, which is equivalent to `/dataset/<id>` in the regular CKAN UI. 
+`<id>` is the name or id of a dataset.
+
+## Configuration
+
+The plugin introduces two configuration options:
+
+### datasetsnippets.path
+
+Defines the path component that is prefixed to links that the snippets contain.
+In the regular CKAN UI, this would be `dataset`, but the site calling the snippet API might require a different path.
+
+```ini
+datasetsnippets.path = "datensaetze"
+```
+
+### datasetsnippets.datasets_per_page
+
+Defines how many datasets are shown per result page in pagination.
+The option is equivalent to [ckan.datasets_per_page](https://docs.ckan.org/en/2.9/maintaining/configuration.html#ckan-datasets-per-page), but only applies to the snippets and leaves the regular CKAN UI untouched.
+
+```ini
+datasetsnippets.datasets_per_page = 10
+```
 
 ## License
 
