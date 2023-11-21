@@ -11,7 +11,7 @@
     </div>
   </li>
   {% endif %}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', title='Text für Namensnennung', value=package.attribution_text, create_link=False) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', title='Text für Namensnennung', value=package.attribution_text, create_link=False) }}
   {%  if package.groups %}
     <li>
       <div class="cell">
@@ -28,8 +28,8 @@
       </div>
     </li>
   {%  endif %}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_coverage', title='Geographischer Bezug', value=package.geographical_coverage, create_link=True) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='geographical_granularity', title='Geographische Granularität', value=package.geographical_granularity, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='geographical_coverage', title='Geographischer Bezug', value=package.geographical_coverage, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='geographical_granularity', title='Geographische Granularität', value=package.geographical_granularity, create_link=True) }}
   {%  if package.temporal_coverage_from %}
     <li>
       <div class="cell">
@@ -46,12 +46,12 @@
       </div>
     </li>
   {% endif %}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='temporal_granularity', title='Zeitliche Granularität', value=package.temporal_granularity, create_link=True) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_released', title='Veröffentlicht', value=package.date_released, render_function=h.berlin_render_datetime) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='date_updated', title='Aktualisiert', value=package.date_updated, render_function=h.berlin_render_datetime) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='author', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer', title='Kontaktperson', value=package.maintainer) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata-item.html', name='maintainer_email', title='E-Mail Kontakt', value=package.maintainer_email, render_function=h.berlin_unlink_email) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='temporal_granularity', title='Zeitliche Granularität', value=package.temporal_granularity, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='date_released', title='Veröffentlicht', value=package.date_released, render_function=h.berlin_render_datetime) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='date_updated', title='Aktualisiert', value=package.date_updated, render_function=h.berlin_render_datetime) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='author', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='maintainer', title='Kontaktperson', value=package.maintainer) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='maintainer_email', title='E-Mail Kontakt', value=package.maintainer_email, render_function=h.berlin_unlink_email) }}
   {% if package.url %}
     <li>
       <div class="cell">
