@@ -24,10 +24,6 @@ def _encode_params(params):
     return [(k, v.encode('utf-8') if isinstance(v, str) else str(v))
             for k, v in params]
 
-def url_with_params(url, params):
-    params = _encode_params(params)
-    return url + u'?' + urlencode(params)
-
 def _finish(status_int, response_data=None):
     '''When a controller method has completed, call this method
     to prepare the response.
@@ -134,11 +130,6 @@ def search_dataset():
         c.sort_by_fields = [field.split()[0]
                             for field in sort_by.split(',')]
 
-    def pager_url(q=None, page=None):
-        params = list(params_nopage)
-        params.append(('page', page))
-        return url_with_params("/datensaetze", params)
-
     c.search_url_params = urlencode(_encode_params(params_nopage))
 
     try:
@@ -208,7 +199,6 @@ def search_dataset():
         c.page = h.Page(
             collection=query['results'],
             page=page,
-            url=pager_url,
             item_count=query['count'],
             items_per_page=limit
         )

@@ -134,11 +134,6 @@ def active_item_labels(items):
     '''
     return ', '.join([item['display_name'] for item in items if item['active']])
 
-def label_for_sorting(sortings, sorting):
-    '''Helper function to retrieve the label for a search sorting from a list of sortings.'''
-    flipped = { value: key for key,value in dict(sortings).items() }
-    return flipped.get(sorting, None)
-
 def description_for_facet(facet_name: str) -> str:
     '''Helper function to retrieve the textual description for a facet from the
       JSON schema.
