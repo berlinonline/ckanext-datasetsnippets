@@ -92,7 +92,6 @@ class TestHelpers(object):
     def test_plural_mapping(self, data):
         assert dshelpers.facet_plural_mapping()[data['name']] == data['plural']
 
-# [item['display_name'] for item in items if item['active']]
     @pytest.mark.parametrize("data", [
         {
             "items": [
@@ -188,3 +187,28 @@ class TestHelpers(object):
         '''Test that the concrete format strings in a list of resources are correctly
            boiled down to unique abstract formats.'''
         assert set(dshelpers.unique_resource_formats(data['resources'])) == set(data['formats'])
+
+    @pytest.mark.parametrize("data", [
+        { "format_string": "zip:csv", "category": "tabular" },
+        { "format_string": ".csv", "category": "tabular" },
+        { "format_string": "XLSX", "category": "tabular" },
+        { "format_string": "webseite", "category": "website" },
+        { "format_string": "GeoJSON", "category": "gis" },
+    ])
+    def test_format_code_for_format_string(self, data: dict):
+        '''Sanity test to check that the correct category code is returned for a given
+           format string.'''
+        assert dshelpers.format_code_for_format_string(data['format_string']) == data['category']
+
+    @pytest.mark.parametrize("data", [
+        { "format_string": "zip:csv", "css_class": "dp-resource-tabular" },
+        { "format_string": ".csv", "css_class": "dp-resource-tabular" },
+        { "format_string": "XLSX", "css_class": "dp-resource-tabular" },
+        { "format_string": "webseite", "css_class": "dp-resource-website" },
+        { "format_string": "GeoJSON", "css_class": "dp-resource-gis" },
+        { "format_string": ".foonknown", "css_class": "dp-resource-undefined" },
+    ])
+    def test_css_class_for_format_string(self, data: dict):
+        '''Sanity test to check that the correct css class for a given format string is
+           generated.'''
+        assert dshelpers.css_class_for_format_string(data['format_string']) == data['css_class']
