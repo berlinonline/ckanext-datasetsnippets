@@ -112,7 +112,7 @@ def search_dataset():
     c.query_error = False
     page = h.get_page_number(request.params)
 
-    limit = int(config.get('ckan.datasets_per_page', 20))
+    limit = int(config.get('datasetsnippets.datasets_per_page', 20))
 
     # most search operations should reset the page counter:
     params_nopage = [(k, v) for k, v in request.params.items()
