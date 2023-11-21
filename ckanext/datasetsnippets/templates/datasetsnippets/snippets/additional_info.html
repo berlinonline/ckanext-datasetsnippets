@@ -49,7 +49,7 @@
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='temporal_granularity', title='Zeitliche Granularität', value=package.temporal_granularity, create_link=True) }}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='date_released', title='Veröffentlicht', value=package.date_released, render_function=h.berlin_render_datetime) }}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='date_updated', title='Aktualisiert', value=package.date_updated, render_function=h.berlin_render_datetime) }}
-  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='author', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
+  {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='author_string', title='Veröffentlichende Stelle', value=package.author, create_link=True) }}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='maintainer', title='Kontaktperson', value=package.maintainer) }}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='maintainer_email', title='E-Mail Kontakt', value=package.maintainer_email, render_function=h.berlin_unlink_email) }}
   {% if package.url %}
