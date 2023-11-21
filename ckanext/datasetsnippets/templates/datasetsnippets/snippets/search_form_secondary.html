@@ -13,11 +13,11 @@
       <div class="dp-select">
         <select id="field-order-by" name="sort">
           {% for label, value in sorting %}
-          {% if label and value %}
-          {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
-          <option value="{{ value }}"{% if sorting_selected==value %} selected{% endif %}>{{ label }}</option>
+            {% if label and value %}
+              {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
+              <option value="{{ value }}"{% if sorting_selected==value %} selected{% endif %}>{{ label }}</option>
             {% endif %}
-            {% endfor %}
+          {% endfor %}
         </select>
         <span class="focus"></span>
       </div>
@@ -29,13 +29,14 @@
   <div class="dp-filter-list">
     {% set search_facets_items = facets.search.get('tags')['items'] %}
     {% for value in facets.fields['tags'] %}
-    <button type="button" class="pill pill--filter pill--big active" title="{{ _('Remove') }}">
-      {%- if facets.translated_fields and facets.translated_fields.has_key(('tags',value)) -%}
-      {{ facets.translated_fields[('tags',value)] }}
-      {%- else -%}
-      {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
-      {%- endif %}
-      <a href="{{ facets.remove_field('tags', value) }}" class="fas fa-times" aria-hidden="true"></a></button>
+      <button type="button" class="pill pill--filter pill--big active" title="{{ _('Remove') }}">
+        {%- if facets.translated_fields and facets.translated_fields.has_key(('tags', value)) -%}
+          {{ facets.translated_fields[('tags', value)] }}
+        {%- else -%}
+          {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+        {%- endif %}
+        <a href="{{ facets.remove_field('tags', value) }}" class="fas fa-times" aria-hidden="true"></a>
+      </button>
     {% endfor %}
   </div>
   {% endif %}
