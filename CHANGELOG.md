@@ -2,7 +2,11 @@
 
 ## Development
 
-- Implement the [vertical "Asset Service"](http://styleguide.berlin.de/patterns/11-vertical_assetservice-page-startseite/11-vertical_assetservice-page-startseite.html) of the current berlin.de design system.
+## [0.1.3](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.3)
+
+_(2023-11-22)_
+
+- Implement the [vertical "Asset Service"](http://styleguide.berlin.de/patterns/11-vertical_assetservice-page-startseite/11-vertical_assetservice-page-startseite.html) of the current berlin.de design system. This affects all templates.
 - Group various format strings (`CSV`, `.csv`, `zip:csv`) into abstract formats (`CSV`). Group formats (`CSV`, `XLSX`) into more general resource classes (`tabular data`).
 - Introduce a new setting `datasetsnippets.datasets_per_page` that's equivalent to [ckan.datasets_per_page](https://docs.ckan.org/en/2.9/maintaining/configuration.html#ckan-datasets-per-page), but only applies to the snippets and leaves the regular CKAN UI untouched.
 
