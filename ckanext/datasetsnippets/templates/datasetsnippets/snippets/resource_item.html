@@ -12,7 +12,14 @@ Example:
 
 <div class="modul-download panel--white block--halfgap">
   <div class="left">
-    <h3 class="title">{{ h.berlin_resource_label(resource) }}</h3>
+    <div class="dp-resource-header">
+      <h3 class="title">{{ h.berlin_resource_label(resource) }}</h3>
+      <div class="dp-resource-icon-mini {{ h.berlin_css_class_for_format_string(resource.format) }}">
+        <div class="dp-resource-icon-label">
+          {{ resource.format | default('(' + _('unknown') + ')', true) }}
+        </div>
+      </div>
+    </div>
     {% if resource.description %}
       <p class="text">
         {{ h.markdown_extract(h.get_translated(resource, 'description'), extract_length=1000) }}
