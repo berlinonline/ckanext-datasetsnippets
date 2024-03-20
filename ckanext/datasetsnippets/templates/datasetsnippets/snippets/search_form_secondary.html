@@ -12,6 +12,7 @@
     <div class="dp-search-result-sort">
       <div class="dp-select">
         <select id="field-order-by" name="sort">
+          <option value="" selected>Sortieren nach</option>
           {% for label, value in sorting %}
             {% if label and value %}
               {% set href = h.remove_url_param(key="sort", replace=value, extras=extras, alternative_url=alternative_url) %}
