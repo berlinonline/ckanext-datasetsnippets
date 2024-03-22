@@ -21,11 +21,24 @@
 </div>
 <div id="layout-grid__area--maincontent">
   <h1 class="title">{{ h.dataset_display_name(package) }}</h1>
-  {% if package.notes %}
-  <p>
-    {{ h.render_markdown(h.get_translated(package, 'notes')) }}
-  </p>
-  {% endif %}
+  <section class="modul-text_bild imagealignleft">
+    {% if package.preview_image %}
+      <div class="image">
+        <div class="image__image">
+          <img src="{{ h.sanitize_url(package.preview_image)}}" alt="Vorschaugrafik zu Datensatz '{{ package.title }}'"/>
+        </div>
+        <p class="image__copyright">
+          {{ package.author }} |
+            {{ package.license_title }} ({{ package.license_id}})
+        </p>
+      </div>
+    {% endif %}
+    {% if package.notes %}
+      <div class="text">
+        {{ h.render_markdown(h.get_translated(package, 'notes')) }}
+      </div>
+    {% endif %}
+  </section>
 
   {% snippet "datasetsnippets/snippets/additional_info.html", package=package %}
 

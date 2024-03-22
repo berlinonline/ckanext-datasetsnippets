@@ -2,6 +2,8 @@
 
 ## Development
 
+- Use the new field `preview_image` (see [ckanext-berlin_dataset_schema](https://github.com/berlinonline/ckanext-berlin_dataset_schema)). Markup is based on the [Text Image](https://styleguide.berlin.de/patterns/11-vertical_assetservice-page-modul-textbild/11-vertical_assetservice-page-modul-textbild.html) module.
+
 ## [0.1.3](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.3)
 
 _(2023-11-22)_
