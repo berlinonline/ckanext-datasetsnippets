@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.1.4](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.4)
+
+_(2024-03-22)_
+
 - Use the new field `preview_image` (see [ckanext-berlin_dataset_schema](https://github.com/berlinonline/ckanext-berlin_dataset_schema)). Markup is based on the [Text Image](https://styleguide.berlin.de/patterns/11-vertical_assetservice-page-modul-textbild/11-vertical_assetservice-page-modul-textbild.html) module.
 - Change Solr image reference in github CI ([test.yml](.github/workflows/test.yml)) to the new naming scheme according to https://github.com/ckan/ckan-solr.
 
