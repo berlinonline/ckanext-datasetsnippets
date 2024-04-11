@@ -30,6 +30,18 @@
   {%  endif %}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='geographical_coverage', title='Geographischer Bezug', value=package.geographical_coverage, create_link=True) }}
   {{ h.snippet('datasetsnippets/snippets/metadata_item.html', name='geographical_granularity', title='Geographische Granularität', value=package.geographical_granularity, create_link=True) }}
+  {# Musterdatensatz #}
+  {% if package.sample_record %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('Musterdatensatz') }}:</div>
+      </div>
+      <div class="cell">
+        {{ h.berlin_render_sample_record(package.sample_record, class='extern') }}
+      </div>
+    </li>
+  {% endif %}
+
   {%  if package.temporal_coverage_from %}
     <li>
       <div class="cell">
