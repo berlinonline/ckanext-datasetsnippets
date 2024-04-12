@@ -42,6 +42,18 @@
     </li>
   {% endif %}
 
+  {# High-value datasets #}
+  {% if package.hvd_category %}
+    <li>
+      <div class="cell">
+        <div class="text--strong">{{ _('High-Value-Dataset-Kategorie') }}:</div>
+      </div>
+      <div class="cell">
+        {{ h.berlin_render_hvd_category(package.hvd_category, class='extern') }}
+      </div>
+    </li>
+  {% endif %}
+
   {%  if package.temporal_coverage_from %}
     <li>
       <div class="cell">
