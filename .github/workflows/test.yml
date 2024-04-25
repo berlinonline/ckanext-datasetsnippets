@@ -58,6 +58,10 @@ jobs:
         git clone https://github.com/berlinonline/ckanext-berlin_dataset_schema
         pip install -e ckanext-berlin_dataset_schema
         pip install -r ckanext-berlin_dataset_schema/requirements.txt
+        # Install ckanext-berlintheme
+        git clone https://github.com/berlinonline/ckanext-berlintheme
+        pip install -e ckanext-berlintheme
+        pip install -r ckanext-berlintheme/requirements.txt
     - name: Setup extension (CKAN >= 2.9)
       run: |
         ckan -c test.ini db init
