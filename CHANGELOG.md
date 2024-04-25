@@ -2,6 +2,10 @@
 
 ## Development
 
+## [0.1.5](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.5)
+
+_(2024-04-25)_
+
 - If a dataset has no preview image, show a dummy preview image.
 - Mark external organizations.
 - Add new metadata field `hvd_category` (to link to the category of high-value datasets as defined by the [EU commission implementing regulation 2023/138](https://eur-lex.europa.eu/eli/reg_impl/2023/138/oj?uri=CELEX:32023R0138)).
