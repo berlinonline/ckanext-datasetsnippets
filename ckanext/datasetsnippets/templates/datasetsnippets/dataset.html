@@ -21,6 +21,19 @@
 </div>
 <div id="layout-grid__area--maincontent">
   <h1 class="title">{{ h.dataset_display_name(package) }}</h1>
+  {% if h.berlin_org_is_external(package.owner_org) %}
+    <div class="modul-text_wichtig dp-message">
+      <div>
+        <h2 class="title">{{ _('Externer Datensatz')}}</h2>
+          <div class="text textile">
+            <p>
+              Dies ist ein externer Datensatz, der nicht von einer Behörde der Berliner Verwaltung veröffentlicht wurde.
+            </p>
+          </div>
+      </div>
+      <div class="dp-message-icon"><i class="fas fa-exclamation-circle"></i></div>
+    </div>
+  {% endif %}
   <section class="modul-text_bild imagealignleft">
     {% if package.preview_image %}
       <div class="image">
