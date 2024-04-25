@@ -35,17 +35,19 @@
     </div>
   {% endif %}
   <section class="modul-text_bild imagealignleft">
+    {% set preview_image = "/modules/contrib/data_tunnel/images/dataset_dummy.png" %}
     {% if package.preview_image %}
-      <div class="image">
-        <div class="image__image">
-          <img src="{{ h.sanitize_url(package.preview_image)}}" alt="Vorschaugrafik zu Datensatz '{{ package.title }}'"/>
-        </div>
-        <p class="image__copyright">
-          {{ package.author }} |
-            {{ package.license_title }} ({{ package.license_id}})
-        </p>
-      </div>
+      {% set preview_image = h.sanitize_url(package.preview_image) %}
     {% endif %}
+    <div class="image">
+      <div class="image__image">
+        <img src="{{ preview_image }}" alt="Vorschaugrafik zu Datensatz '{{ package.title }}'"/>
+      </div>
+      <p class="image__copyright">
+        {{ package.author }} |
+          {{ package.license_title }} ({{ package.license_id}})
+      </p>
+    </div>
     {% if package.notes %}
       <div class="text">
         {{ h.render_markdown(h.get_translated(package, 'notes')) }}
