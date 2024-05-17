@@ -25,10 +25,10 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'datasetsnippets')
-        config['datasetsnippets.path'] = "datensaetze"
+        config['datasetsnippets.path'] = config.get('datasetsnippets.path', 'datensaetze')
         # we introduce a new config setting here to be able to have
         # different behaviour in snippets and regular CKAN UI
-        config['datasetsnippets.datasets_per_page'] = 10
+        config['datasetsnippets.datasets_per_page'] = config.get('datasetsnippets.datasets_per_page', 10)
 
         path = os.path.abspath(__file__)
         dir_path = os.path.dirname(path)

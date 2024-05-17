@@ -2,6 +2,7 @@
 
 ## Development
 
+- When setting config values in `plugin.py`, don't overwrite values that might have been set elsewhere.
 - Add help text for tags in facet list.
 - Change "Stichwort" to "Schlagwort" for tags.
 
