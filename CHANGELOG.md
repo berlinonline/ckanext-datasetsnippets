@@ -2,6 +2,9 @@
 
 ## Development
 
+- Add help text for tags in facet list.
+- Change "Stichwort" to "Schlagwort" for tags.
+
 ## [0.1.5](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.5)
 
 _(2024-04-25)_

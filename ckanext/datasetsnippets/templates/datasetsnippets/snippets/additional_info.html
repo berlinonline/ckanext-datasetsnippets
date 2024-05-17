@@ -20,9 +20,9 @@
       <div class="cell">
         <ul class="list--horizontal bordered">
           {% for group in package.groups %}
-          <li>
-            <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a>
-          </li>
+            <li>
+              <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a>
+            </li>
           {% endfor %}
         </ul>
       </div>
@@ -89,7 +89,7 @@
   {%  if package.tags %}
     <li>
       <div class="cell">
-        <div class="text--strong">{{ _('Stichworte') }}:</div>
+        <div class="text--strong">{{ _('Schlagworte') }}:</div>
       </div>
       <div class="cell">
         <ul class="list--horizontal bordered">
