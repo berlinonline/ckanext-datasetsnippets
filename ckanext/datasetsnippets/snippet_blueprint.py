@@ -1,9 +1,9 @@
 # encoding: utf-8
 
 from collections import OrderedDict
-from flask import Blueprint, make_response
+from flask import Blueprint, make_response, request
 import logging
-import json
+import re
 from urllib.parse import urlencode
 
 from ckan.common import asbool
@@ -16,9 +16,25 @@ from ckan.plugins import toolkit
 from ckan.common import _, c, request, config
 
 LOG = logging.getLogger(__name__)
+ROOT_BREADCRUMB_MIN_LENGTH = 1
+ROOT_BREADCRUMB_MAX_LENGTH = 25
 
 NotAuthorized = logic.NotAuthorized
 check_access = logic.check_access
+
+def _is_breadcrumb_valid(breadcrumb: str) -> bool:
+    '''
+    `breadcrumb` length < ROOT_BREADCRUMB_MAX_LENGTH and > ROOT_BREADCRUMB_MIN_LENGTH,
+    and only contain alphanumeric characters, space or dash.
+    If `breadcrumb` length is 1, it must only contain alphanumeric characters.
+    '''
+    if len(breadcrumb) < ROOT_BREADCRUMB_MAX_LENGTH and len(breadcrumb) >= ROOT_BREADCRUMB_MIN_LENGTH:
+      disallowed = re.compile(r'[^A-Za-z0-9- ]').search
+      if len(breadcrumb) == 1:
+          disallowed = re.compile(r'[^A-Za-z0-9]').search
+      return not bool(disallowed(breadcrumb))
+    else:
+        return False
 
 def _encode_params(params):
     return [(k, v.encode('utf-8') if isinstance(v, str) else str(v))
@@ -81,8 +97,20 @@ def read_dataset(id):
     except toolkit.ObjectNotFound:
         toolkit.abort(404)
 
+    if 'root_breadcrumb' in request.args:
+        root_breadcrumb = request.args.get('root_breadcrumb')
+        if not _is_breadcrumb_valid(root_breadcrumb):
+          data = {
+              "success": False,
+              "message": f"Parameter 'root_breadcrumb' is invalid (must be longer than {ROOT_BREADCRUMB_MIN_LENGTH} and no longer than {ROOT_BREADCRUMB_MAX_LENGTH} and match /A-Za-z0-9- /)."
+          }
+          return _finish(400, data)
+    else:
+        root_breadcrumb = config.get(
+        'datasetsnippets.default_root_breadcrumb', 'Homepage')
+
     template = "datasetsnippets/dataset.html"
-    output = base.render(template)
+    output = base.render(template, extra_vars={"root_breadcrumb": root_breadcrumb})
 
     data = {
         "title": c.pkg_dict['title'],
@@ -102,6 +130,18 @@ def search_dataset():
         check_access('snippet_read', context)
     except NotAuthorized:
         toolkit.abort(403, _('Not authorized to see this page'))
+
+    if 'root_breadcrumb' in request.args:
+        root_breadcrumb = request.args.get('root_breadcrumb')
+        if not _is_breadcrumb_valid(root_breadcrumb):
+          data = {
+              "success": False,
+              "message": f"Parameter 'root_breadcrumb' is invalid (must be longer than {ROOT_BREADCRUMB_MIN_LENGTH} and no longer than {ROOT_BREADCRUMB_MAX_LENGTH} and match /A-Za-z0-9- /)."
+          }
+          return _finish(400, data)
+    else:
+        root_breadcrumb = config.get(
+        'datasetsnippets.default_root_breadcrumb', 'Homepage')
 
     # unicode format (decoded from utf8)
     q = c.q = request.params.get('q', u'')
@@ -231,7 +271,7 @@ def search_dataset():
         c.search_facets_limits[facet] = limit
 
     template = "datasetsnippets/search.html"
-    output = base.render(template)
+    output = base.render(template, extra_vars={"root_breadcrumb": root_breadcrumb})
 
     data = {
         "title": u'Index' ,

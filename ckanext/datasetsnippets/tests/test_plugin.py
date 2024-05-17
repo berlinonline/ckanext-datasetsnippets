@@ -236,3 +236,57 @@ class TestPlugin(object):
         assert tag_1 in data['content']
         assert 'dp-filter-list' in data['content']
         assert '"pill' in data['content']
+
+    @pytest.mark.parametrize("breadcrumb", [
+        "Startseite", "Berlin Open Data", "Berlin Open Data-Dev", "X"
+    ])
+    def test_valid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
+        '''
+        Test some valid root_breadcrumb parameter values and check that they
+        show up in the returned snippets.
+        '''
+        dataset = datasets[0]
+        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url=dataset_snippet_url,
+            query_string={"root_breadcrumb": breadcrumb},
+            status=200
+        )
+        data = json.loads(str(response.body))
+        assert breadcrumb in data['content']
+
+        dataset_search_url = url_for("snippetapi.search_dataset")
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url=dataset_search_url,
+            query_string={"root_breadcrumb": breadcrumb},
+            status=200
+        )
+        data = json.loads(str(response.body))
+        assert breadcrumb in data['content']
+
+    @pytest.mark.parametrize("breadcrumb", [
+        "", " ", "-", "<a href='http://spam.com'>Startseite</a>", "Berlin Open Data Berlin Open Data", "Berlin Open Data-Dev!"
+    ])
+    def test_invalid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
+        '''
+        Test some invalid root_breadcrumb parameter values and check that we
+        get an invalid response.
+        '''
+        dataset = datasets[0]
+        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url=dataset_snippet_url,
+            query_string={"root_breadcrumb": breadcrumb},
+            status=400
+        )
+
+        dataset_search_url = url_for("snippetapi.search_dataset")
+        response = app.get(
+            headers=[("Authorization", user.apikey)],
+            url=dataset_search_url,
+            query_string={"root_breadcrumb": breadcrumb},
+            status=400
+        )

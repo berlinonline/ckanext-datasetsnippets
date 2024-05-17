@@ -33,6 +33,11 @@ The parameters are identical to the regular CKAN search parameters.
 This is the dataset detail endpoint of the snippet API, which is equivalent to `/dataset/<id>` in the regular CKAN UI. 
 `<id>` is the name or id of a dataset.
 
+### Parameters
+
+Both endpoints allow a `root_breadcrumb` parameter to set the root element of the breadcrumb returned in the snippets.
+The `root_breadcrumb`-URL-parameter takes precedence over the `datasetsnippets.default_root_breadcrumb` config (see below).
+
 ## Configuration
 
 The plugin introduces two configuration options:
@@ -43,7 +48,7 @@ Defines the path component that is prefixed to links that the snippets contain.
 In the regular CKAN UI, this would be `dataset`, but the site calling the snippet API might require a different path.
 
 ```ini
-datasetsnippets.path = "datensaetze"
+datasetsnippets.path = 'datensaetze'
 ```
 
 ### datasetsnippets.datasets_per_page
@@ -53,6 +58,14 @@ The option is equivalent to [ckan.datasets_per_page](https://docs.ckan.org/en/2.
 
 ```ini
 datasetsnippets.datasets_per_page = 10
+```
+
+### datasetsnippets.default_root_breadcrumb
+
+Defines the string that is used as the root element for the breadcrumb that is part of the returned snippets.
+
+```ini
+datasetsnippets.default_root_breadcrumb = 'Berlin Open Data'
 ```
 
 ## License

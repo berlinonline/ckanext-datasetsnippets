@@ -2,6 +2,7 @@
 
 ## Development
 
+- The root element of the breadcrumb in the returned snippets can now be configured, either via a `root_breadcrumb`-URL parameter, or via the newly introduced config `datasetsnippets.default_root_breadcrumb`.
 - When setting config values in `plugin.py`, don't overwrite values that might have been set elsewhere.
 - Add help text for tags in facet list.
 - Change "Stichwort" to "Schlagwort" for tags.
