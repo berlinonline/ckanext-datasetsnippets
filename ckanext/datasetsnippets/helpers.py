@@ -50,7 +50,7 @@ def render_datetime(datetime):
   return h.render_datetime(datetime, date_format=dateformat())
 
 
-def recent_packages(package_type="dataset", sort_by='metadata_created desc', limit=5):
+def recent_packages(package_type="dataset", sort_by='metadata_created desc', limit=6):
   from ckan.lib.search import SearchError, SearchQueryError
 
   context = {'model': model, 'user': c.user,

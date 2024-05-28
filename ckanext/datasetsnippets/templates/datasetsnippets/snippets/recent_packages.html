@@ -15,8 +15,8 @@ header_title
 {% set package_type = package_type if package_type else 'dataset' %}
 {% set sort_by = sort_by if sort_by else 'metadata_created desc' %}
 
-<ul class="list">
+<ul class="flexgrid grid--3">
   {% for package in h.berlin_recent_packages(package_type, sort_by) %}
-    <li><a href="/{{ [ h.berlin_dataset_path(), package['name'] ] | join('/') }}">{{ h.dataset_display_name(package) }}</a></li>
+    {% snippet 'datasetsnippets/snippets/package_item.html', package=package %}
   {% endfor %}
 </ul>
