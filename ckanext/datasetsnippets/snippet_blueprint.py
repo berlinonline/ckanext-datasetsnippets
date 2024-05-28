@@ -134,14 +134,18 @@ def search_dataset():
     if 'root_breadcrumb' in request.args:
         root_breadcrumb = request.args.get('root_breadcrumb')
         if not _is_breadcrumb_valid(root_breadcrumb):
-          data = {
-              "success": False,
-              "message": f"Parameter 'root_breadcrumb' is invalid (must be longer than {ROOT_BREADCRUMB_MIN_LENGTH} and no longer than {ROOT_BREADCRUMB_MAX_LENGTH} and match /A-Za-z0-9- /)."
-          }
-          return _finish(400, data)
+            data = {
+                "success": False,
+                "message": f"Parameter 'root_breadcrumb' is invalid (must be longer than {ROOT_BREADCRUMB_MIN_LENGTH} and no longer than {ROOT_BREADCRUMB_MAX_LENGTH} and match /A-Za-z0-9- /)."
+            }
+            return _finish(400, data)
     else:
         root_breadcrumb = config.get(
         'datasetsnippets.default_root_breadcrumb', 'Homepage')
+
+    # remove the root_breadcrumb parameter if present (will confuse search)
+    params_nobreadcrumb = [(k, v) for k, v in request.params.items()
+                        if k != 'root_breadcrumb']
 
     # unicode format (decoded from utf8)
     q = c.q = request.params.get('q', u'')
@@ -151,7 +155,7 @@ def search_dataset():
     limit = int(config.get('datasetsnippets.datasets_per_page', 20))
 
     # most search operations should reset the page counter:
-    params_nopage = [(k, v) for k, v in request.params.items()
+    params_nopage = [(k, v) for k, v in params_nobreadcrumb
                         if k != 'page']
 
     def remove_field(key, value=None, replace=None):
@@ -180,7 +184,8 @@ def search_dataset():
         search_extras = {}
         fq = ''
         for (param, value) in request.args.items(multi=True):
-            if param not in ['q', 'page', 'sort'] \
+            # remove the root_breadcrumb parameter if present (will confuse search)
+            if param not in ['q', 'page', 'sort', 'root_breadcrumb'] \
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
                 fq += f' {param}:"{value}"'

@@ -265,6 +265,8 @@ class TestPlugin(object):
         )
         data = json.loads(str(response.body))
         assert breadcrumb in data['content']
+        assert "Index" == data['title']
+        assert datasets[0]['title'] in data['content']
 
     @pytest.mark.parametrize("breadcrumb", [
         "", " ", "-", "<a href='http://spam.com'>Startseite</a>", "Berlin Open Data Berlin Open Data", "Berlin Open Data-Dev!"
