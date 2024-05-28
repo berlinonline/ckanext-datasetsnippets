@@ -7,7 +7,8 @@
     </div>
     <div class="cell">
       <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"license_id": package.license_id})}}'>{{
-      package.license_title }} ({{ package.license_id}})</a>
+      package.license_title }} ({{ package.license_id}})</a> |
+      <a href="{{ package.license_url}}" class="extern">{{ _('zum Lizenztext') }}</a>
     </div>
   </li>
   {% endif %}
