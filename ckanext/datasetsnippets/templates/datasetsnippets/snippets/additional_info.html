@@ -6,7 +6,8 @@
       <div class="text--strong">{{ _('License') }}:</div>
     </div>
     <div class="cell">
-      <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"license_id": package.license_id})}}'>{{
+      <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"license_id": package.license_id})}}'
+      alt="{{ _('Andere Datensätze mit der Lizenz ') + package.license_id }}">{{
       package.license_title }} ({{ package.license_id}})</a> |
       <a href="{{ package.license_url}}" class="extern">{{ _('zum Lizenztext') }}</a>
     </div>
@@ -22,7 +23,7 @@
         <ul class="list--horizontal bordered">
           {% for group in package.groups %}
             <li>
-              <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}'>{{ group.display_name }}</a>
+              <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"groups": group.name})}}' alt="{{ _('Andere Datensätze der Kategorie ') + group.display_name }}">{{ group.display_name }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -83,7 +84,7 @@
         <div class="text--strong">{{ _('Webseite') }}:</div>
       </div>
       <div class="cell">
-        <a href="{{ package.url }}">{{ package.url }}</a>
+        <a href="{{ package.url }}" class="extern">{{ package.url }}</a>
       </div>
     </li>
   {% endif %}
@@ -95,7 +96,7 @@
       <div class="cell">
         <ul class="list--horizontal bordered">
           {% for tag in package.tags %}
-            <li><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"tags": tag.name})}}'>{{ tag.display_name }}</a></li>
+            <li><a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {"tags": tag.name})}}' alt="{{ _('Andere Datensätze mit dem Schlagwort ') + tag.display_name }}">{{ tag.display_name }}</a></li>
           {% endfor %}
         </ul>
       </div>

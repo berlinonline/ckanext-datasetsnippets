@@ -26,7 +26,8 @@ create_link
     <div class="cell">
       {% set rendered_value = render_function(value) if render_function else value %}
       {%  if create_link %}
-        <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {name: value})}}'>{{ rendered_value }}</a>
+        <a href='/{{ h.berlin_url_with_params(h.berlin_dataset_path(), {name: value})}}'
+           alt="{{ _('Andere Datensätze mit: ') + _(title) + ': ' + rendered_value }}">{{ rendered_value }}</a>
       {% else %}
         {{ rendered_value }}
       {% endif %}
