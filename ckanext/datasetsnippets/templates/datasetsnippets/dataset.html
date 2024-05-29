@@ -34,13 +34,13 @@
       <div class="dp-message-icon"><i class="fas fa-exclamation-circle"></i></div>
     </div>
   {% endif %}
-  <section class="modul-text_bild imagealignleft">
+  <section class="modul-text_bild textbildbreit">
     {% set preview_image = "/modules/contrib/data_tunnel/images/dataset_dummy.png" %}
     {% if package.preview_image %}
       {% set preview_image = h.sanitize_url(package.preview_image) %}
     {% endif %}
     <div class="image">
-      <div class="image__image">
+      <div class="image__image dataset">
         <img src="{{ preview_image }}" alt="Vorschaugrafik zu Datensatz '{{ package.title }}'"/>
       </div>
       <p class="image__copyright">
