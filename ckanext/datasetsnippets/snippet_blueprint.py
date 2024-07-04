@@ -99,7 +99,8 @@ def read_dataset(id):
 
     print(f"private: {c.pkg_dict['private']}")
     print(f"state: {c.pkg_dict['state']}")
-    assert(c.pkg_dict['private'])
+    print(c.pkg_dict)
+    assert(False)
     # even if the requesting user/token has permission, don't ever return
     # deleted or private datasets
     if c.pkg_dict['state'] == 'deleted' or c.pkg_dict['private']:
