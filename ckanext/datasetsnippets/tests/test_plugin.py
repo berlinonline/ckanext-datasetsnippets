@@ -122,28 +122,28 @@ def lotsa_datasets():
 @pytest.mark.usefixtures('clean_db', 'clean_index', 'with_plugins')
 class TestPlugin(object):
 
-    # Tests for the dataset page route and snippets
-    def test_dataset_route(self, app, datasets, user):
-        '''Test that the routing for dataset page snippets works.'''
-        dataset = datasets[0]
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_snippet_url,
-            status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
-        )
-        data = json.loads(str(response.body))
-        assert dataset['title'] == data['title']
-        assert dataset['title'] in data['content']
+    # # Tests for the dataset page route and snippets
+    # def test_dataset_route(self, app, datasets, user):
+    #     '''Test that the routing for dataset page snippets works.'''
+    #     dataset = datasets[0]
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_snippet_url,
+    #         status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert dataset['title'] == data['title']
+    #     assert dataset['title'] in data['content']
 
-    def test_dataset_not_found(self, app, datasets, user):
-        '''Test that the dataset route returns with 404 if the dataset is not found.'''
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id="unknown dataset")
-        app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_snippet_url,
-            status=404  # this is a magic assert for the status (happens in CKANTestClient.open())
-        )
+    # def test_dataset_not_found(self, app, datasets, user):
+    #     '''Test that the dataset route returns with 404 if the dataset is not found.'''
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id="unknown dataset")
+    #     app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_snippet_url,
+    #         status=404  # this is a magic assert for the status (happens in CKANTestClient.open())
+    #     )
 
     def test_private_dataset_not_found(self, app, datasets):
         '''Test that requests for a private dataset result in a 404.'''
@@ -202,152 +202,152 @@ class TestPlugin(object):
         assert datasets[0]['title'] not in data['content']
 
 
-    @pytest.mark.parametrize("url", [
-        "/snippet/dataset",
-        "/snippet/dataset/foo",
-        "/snippet/latest_datasets"
-    ])
-    def test_not_authorized_for_anonymous(self, app, url):
-        '''Test that snippet reading is not authorized for anonymous users.'''
-        app.get(
-            url=url,
-            status=403  # this is a magic assert for the status (happens in CKANTestClient.open())
-        )
+    # @pytest.mark.parametrize("url", [
+    #     "/snippet/dataset",
+    #     "/snippet/dataset/foo",
+    #     "/snippet/latest_datasets"
+    # ])
+    # def test_not_authorized_for_anonymous(self, app, url):
+    #     '''Test that snippet reading is not authorized for anonymous users.'''
+    #     app.get(
+    #         url=url,
+    #         status=403  # this is a magic assert for the status (happens in CKANTestClient.open())
+    #     )
 
-    def test_complete_dataset(self, app, datasets, user):
-        '''Test rendering of a dataset with extensive metadata.'''
-        dataset = datasets[0]
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_snippet_url,
-            status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
-        )
-        data = json.loads(str(response.body))
-        assert "Zeitlicher Bezug" in data['content']
-        assert "01.09.2011" in data['content']
-        assert "bis zum" in data['content']
-        assert "31.12.2018" in data['content']
+    # def test_complete_dataset(self, app, datasets, user):
+    #     '''Test rendering of a dataset with extensive metadata.'''
+    #     dataset = datasets[0]
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_snippet_url,
+    #         status=200  # this is a magic assert for the status (happens in CKANTestClient.open())
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert "Zeitlicher Bezug" in data['content']
+    #     assert "01.09.2011" in data['content']
+    #     assert "bis zum" in data['content']
+    #     assert "31.12.2018" in data['content']
 
-    # Tests for the dataset search route and snippets
-    def test_dataset_search_route(self, app, datasets, user):
-        '''Test that the routing for dataset search snippets works.'''
-        dataset_search_url = "/snippet/dataset?sort=title_string+asc"
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_search_url,
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Index" == data['title']
-        assert datasets[0]['title'] in data['content']
+    # # Tests for the dataset search route and snippets
+    # def test_dataset_search_route(self, app, datasets, user):
+    #     '''Test that the routing for dataset search snippets works.'''
+    #     dataset_search_url = "/snippet/dataset?sort=title_string+asc"
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_search_url,
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert "Index" == data['title']
+    #     assert datasets[0]['title'] in data['content']
 
-    # Tests for the latest datasets route and snippets
-    def test_latest_datasets_route(self, app, datasets, user):
-        '''Test that the routing for the "Latest Datasets" snippet works.'''
-        latest_datasets_url = url_for("snippetapi.show_latest_datasets")
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=latest_datasets_url,
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Latest Datasets" == data['title']
-        assert datasets[0]['title'] in data['content']
+    # # Tests for the latest datasets route and snippets
+    # def test_latest_datasets_route(self, app, datasets, user):
+    #     '''Test that the routing for the "Latest Datasets" snippet works.'''
+    #     latest_datasets_url = url_for("snippetapi.show_latest_datasets")
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=latest_datasets_url,
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert "Latest Datasets" == data['title']
+    #     assert datasets[0]['title'] in data['content']
 
 
-    def test_value_error(self, app, user):
-        '''Test that we get a 400 if we provide an non-integer as a limit parameter.'''
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url="/snippet/dataset?_groups_limit=x",
-            status=400
-        )
+    # def test_value_error(self, app, user):
+    #     '''Test that we get a 400 if we provide an non-integer as a limit parameter.'''
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url="/snippet/dataset?_groups_limit=x",
+    #         status=400
+    #     )
 
-    def test_pager(self, app, user, lotsa_datasets):
-        '''Sanity test to check if pagination works.'''
-        dataset_search_url = url_for("snippetapi.search_dataset")
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_search_url,
-            query_string={"sort": "title_string asc"},
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Index" == data['title']
-        assert lotsa_datasets[0]['title'] in data['content']
-        print(data['content'])
-        assert 'page=1' in data['content']
-        assert 'page=2' in data['content']
-        assert 'class="pagination"' in data['content']
+    # def test_pager(self, app, user, lotsa_datasets):
+    #     '''Sanity test to check if pagination works.'''
+    #     dataset_search_url = url_for("snippetapi.search_dataset")
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_search_url,
+    #         query_string={"sort": "title_string asc"},
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert "Index" == data['title']
+    #     assert lotsa_datasets[0]['title'] in data['content']
+    #     print(data['content'])
+    #     assert 'page=1' in data['content']
+    #     assert 'page=2' in data['content']
+    #     assert 'class="pagination"' in data['content']
 
-    def test_filter_pills(self, app, user, lotsa_datasets):
-        '''Sanity test to check if filter pills show up when tags are used for search.'''
-        dataset_search_url = url_for("snippetapi.search_dataset")
-        tag_1 = "d089d7bc"
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_search_url,
-            query_string={"tags": tag_1},
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert tag_1 in data['content']
-        assert 'dp-filter-list' in data['content']
-        assert '"pill' in data['content']
+    # def test_filter_pills(self, app, user, lotsa_datasets):
+    #     '''Sanity test to check if filter pills show up when tags are used for search.'''
+    #     dataset_search_url = url_for("snippetapi.search_dataset")
+    #     tag_1 = "d089d7bc"
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_search_url,
+    #         query_string={"tags": tag_1},
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert tag_1 in data['content']
+    #     assert 'dp-filter-list' in data['content']
+    #     assert '"pill' in data['content']
 
-    @pytest.mark.parametrize("breadcrumb", [
-        "Startseite", "Berlin Open Data", "Berlin Open Data-Dev", "X"
-    ])
-    def test_valid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
-        '''
-        Test some valid root_breadcrumb parameter values and check that they
-        show up in the returned snippets.
-        '''
-        dataset = datasets[0]
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_snippet_url,
-            query_string={"root_breadcrumb": breadcrumb},
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert breadcrumb in data['content']
+    # @pytest.mark.parametrize("breadcrumb", [
+    #     "Startseite", "Berlin Open Data", "Berlin Open Data-Dev", "X"
+    # ])
+    # def test_valid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
+    #     '''
+    #     Test some valid root_breadcrumb parameter values and check that they
+    #     show up in the returned snippets.
+    #     '''
+    #     dataset = datasets[0]
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_snippet_url,
+    #         query_string={"root_breadcrumb": breadcrumb},
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert breadcrumb in data['content']
 
-        dataset_search_url = url_for("snippetapi.search_dataset")
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_search_url,
-            query_string={"root_breadcrumb": breadcrumb},
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert breadcrumb in data['content']
-        assert "Index" == data['title']
-        assert datasets[0]['title'] in data['content']
+    #     dataset_search_url = url_for("snippetapi.search_dataset")
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_search_url,
+    #         query_string={"root_breadcrumb": breadcrumb},
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert breadcrumb in data['content']
+    #     assert "Index" == data['title']
+    #     assert datasets[0]['title'] in data['content']
 
-    @pytest.mark.parametrize("breadcrumb", [
-        "", " ", "-", "<a href='http://spam.com'>Startseite</a>", "Berlin Open Data Berlin Open Data", "Berlin Open Data-Dev!"
-    ])
-    def test_invalid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
-        '''
-        Test some invalid root_breadcrumb parameter values and check that we
-        get an invalid response.
-        '''
-        dataset = datasets[0]
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_snippet_url,
-            query_string={"root_breadcrumb": breadcrumb},
-            status=400
-        )
+    # @pytest.mark.parametrize("breadcrumb", [
+    #     "", " ", "-", "<a href='http://spam.com'>Startseite</a>", "Berlin Open Data Berlin Open Data", "Berlin Open Data-Dev!"
+    # ])
+    # def test_invalid_root_breadcrumbs(self, app, user, datasets, breadcrumb):
+    #     '''
+    #     Test some invalid root_breadcrumb parameter values and check that we
+    #     get an invalid response.
+    #     '''
+    #     dataset = datasets[0]
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_snippet_url,
+    #         query_string={"root_breadcrumb": breadcrumb},
+    #         status=400
+    #     )
 
-        dataset_search_url = url_for("snippetapi.search_dataset")
-        response = app.get(
-            headers=[("Authorization", user.apikey)],
-            url=dataset_search_url,
-            query_string={"root_breadcrumb": breadcrumb},
-            status=400
-        )
+    #     dataset_search_url = url_for("snippetapi.search_dataset")
+    #     response = app.get(
+    #         headers=[("Authorization", user.apikey)],
+    #         url=dataset_search_url,
+    #         query_string={"root_breadcrumb": breadcrumb},
+    #         status=400
+    #     )

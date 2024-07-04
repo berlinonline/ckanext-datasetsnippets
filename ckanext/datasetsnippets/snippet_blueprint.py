@@ -78,7 +78,6 @@ def show_latest_datasets():
     return _finish(200, data)
 
 def read_dataset(id):
-    toolkit.abort(418)
     context = {
         'model': model,
         'session': model.Session,
