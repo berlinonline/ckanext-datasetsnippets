@@ -97,6 +97,8 @@ def read_dataset(id):
     except toolkit.ObjectNotFound:
         toolkit.abort(404)
 
+    assert c.pkg_dict['private'] == 'foobar'
+
     # even if the requesting user/token has permission, don't ever return
     # deleted or private datasets
     if c.pkg_dict['state'] == 'deleted' or c.pkg_dict['private']:

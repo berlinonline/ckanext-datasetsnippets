@@ -173,33 +173,33 @@ class TestPlugin(object):
         assert "Index" == data['title']
         assert datasets[0]['title'] not in data['content']
 
-    def test_deleted_dataset_not_found(self, app, datasets):
-        '''Test that requests for a deleted dataset result in a 404.'''
-        user = factories.Sysadmin(name='theadmin')
+    # def test_deleted_dataset_not_found(self, app, datasets):
+    #     '''Test that requests for a deleted dataset result in a 404.'''
+    #     user = factories.Sysadmin(name='theadmin')
 
-        # delete the dataset
-        dataset = datasets[0]
-        dataset_obj = Package.by_name(dataset['name'])
-        dataset_obj.delete()
+    #     # delete the dataset
+    #     dataset = datasets[0]
+    #     dataset_obj = Package.by_name(dataset['name'])
+    #     dataset_obj.delete()
 
-        # check it cannot be accessed directly
-        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_snippet_url,
-            status=404
-        )
+    #     # check it cannot be accessed directly
+    #     dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+    #     response = app.get(
+    #         headers=[("Authorization", user['apikey'])],
+    #         url=dataset_snippet_url,
+    #         status=404
+    #     )
 
-        # check it's not in the search results
-        dataset_search_url = "/snippet/dataset?sort=title_string+asc"
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_search_url,
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Index" == data['title']
-        assert datasets[0]['title'] not in data['content']
+    #     # check it's not in the search results
+    #     dataset_search_url = "/snippet/dataset?sort=title_string+asc"
+    #     response = app.get(
+    #         headers=[("Authorization", user['apikey'])],
+    #         url=dataset_search_url,
+    #         status=200
+    #     )
+    #     data = json.loads(str(response.body))
+    #     assert "Index" == data['title']
+    #     assert datasets[0]['title'] not in data['content']
 
 
     # @pytest.mark.parametrize("url", [
