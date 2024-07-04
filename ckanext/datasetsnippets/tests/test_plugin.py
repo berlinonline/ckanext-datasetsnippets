@@ -153,7 +153,8 @@ class TestPlugin(object):
         dataset = datasets[0]
         dataset_obj = Package.by_name(dataset['name'])
         dataset_obj.private = True
-
+        model.Session.commit()
+        
         # check it cannot be accessed directly
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
         response = app.get(
