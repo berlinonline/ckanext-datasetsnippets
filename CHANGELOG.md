@@ -2,6 +2,13 @@
 
 ## Development
 
+## [0.1.7](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.7)
+
+_(2024-07-04)_
+
+- Even if the requesting user has permission, private and deleted datasets are not returned in the search results.
+- Even if the requesting user has permission, requests for private and deleted datasets return a 404.
+
 ## [0.1.6](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.6)
 
 _(2024-05-29)_

@@ -97,6 +97,11 @@ def read_dataset(id):
     except toolkit.ObjectNotFound:
         toolkit.abort(404)
 
+    # even if the requesting user/token has permission, don't ever return
+    # deleted or private datasets
+    if c.pkg_dict['state'] == 'deleted' or c.pkg_dict['private']:
+        toolkit.abort(404)
+
     if 'root_breadcrumb' in request.args:
         root_breadcrumb = request.args.get('root_breadcrumb')
         if not _is_breadcrumb_valid(root_breadcrumb):
@@ -234,8 +239,8 @@ def search_dataset():
             'start': (page - 1) * limit,
             'sort': sort_by,
             'extras': search_extras,
-            'include_private': asbool(config.get(
-                'ckan.search.default_include_private', True)),
+            'include_drafts': False,
+            'include_private': False,
         }
 
         query = toolkit.get_action('package_search')(context, data_dict)
