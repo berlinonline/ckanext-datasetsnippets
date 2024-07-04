@@ -97,9 +97,9 @@ def read_dataset(id):
     except toolkit.ObjectNotFound:
         toolkit.abort(404)
 
-    LOG.info(f"private: {c.pkg_dict['private']}")
-    LOG.info(f"state: {c.pkg_dict['state']}")
-
+    print(f"private: {c.pkg_dict['private']}")
+    print(f"state: {c.pkg_dict['state']}")
+    assert(c.pkg_dict['private'])
     # even if the requesting user/token has permission, don't ever return
     # deleted or private datasets
     if c.pkg_dict['state'] == 'deleted' or c.pkg_dict['private']:
