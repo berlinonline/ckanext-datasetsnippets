@@ -34,6 +34,7 @@ def datasets():
     model.Session.add(sysadminuser)
     model.Session.commit()
     group = factories.Group()
+    org = factories.Organization()
     data = {
         "id": group['id'],
         "username": sysadminuser.name,
@@ -62,7 +63,8 @@ def datasets():
             "jeden Monat.\r\n\r\nDer Datensatz wird monatlich erneuert.",
             "groups": [
                 {"name": group['name']}
-            ]
+            ],
+            "owner_org": org['id']
         }
     ]
 
@@ -151,9 +153,15 @@ class TestPlugin(object):
 
         # make the dataset private
         dataset = datasets[0]
-        dataset_obj = Package.by_name(dataset['name'])
-        dataset_obj.private = True
-        model.Session.commit()
+        patch = {
+            'private': True
+        }
+        test_helpers.call_action(
+            "package_patch",
+            id=dataset['name'],
+            context={"user": user['id']},
+            **patch
+        )
         
         # check it cannot be accessed directly
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
