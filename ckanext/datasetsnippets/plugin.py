@@ -9,9 +9,11 @@ import ckan.plugins.toolkit as toolkit
 from ckan.plugins.toolkit import config
 
 import ckanext.datasetsnippets.helpers as theme_helpers
-from ckanext.datasetsnippets import snippet_blueprint
 import ckanext.datasetsnippets.auth as snippet_auth
 from ckanext.datasetsnippets.resource_mappings import ResourceMapping
+from ckanext.datasetsnippets.blueprints.snippet_blueprint import snippetapi as snippetapi
+from ckanext.datasetsnippets.blueprints.feeds import drupal_feeds as drupal_feeds
+
 
 class DatasetsnippetsPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
@@ -41,7 +43,7 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
     # IBlueprint
 
     def get_blueprint(self):
-        return snippet_blueprint.snippetapi
+        return [snippetapi, drupal_feeds]
 
 
     # ITemplateHelpers
