@@ -241,7 +241,7 @@ def tag(id):
     title = u'%s - Tag: "%s"' % (SITE_TITLE, id)
     desc = u'Recently created or updated datasets on %s by tag: "%s"' % \
            (SITE_TITLE, id)
-    guid = _create_atom_id(u'/feeds/tag/%s.atom' % id)
+    guid = _create_atom_id(u'/drupal_feeds/tag/%s.atom' % id)
 
     return output_feed(
         results,
@@ -322,6 +322,9 @@ def _parse_url_params():
 
 
 def general():
+    '''
+        All Datasets of the portal
+    '''
     data_dict, params = _parse_url_params()
     data_dict['q'] = u'*:*'
 
@@ -338,7 +341,7 @@ def general():
 
     alternate_url = _alternate_url(params)
 
-    guid = _create_atom_id(u'/feeds/dataset.atom')
+    guid = _create_atom_id(u'/drupal_feeds/dataset.atom')
 
     desc = u'Recently created or updated datasets on %s' % SITE_TITLE
 
@@ -531,7 +534,6 @@ def _create_atom_id(resource_path, authority_name=None, date_string=None):
     [3] http://tools.ietf.org/html/rfc4151#section-2.1
     [4] http://www.ietf.org/rfc/rfc4287
     """
-    print ('WE ARE IN FEED ATOM CREATE')
     if authority_name is None:
         authority_name = config.get(u'ckan.feeds.authority_name', u'').strip()
         if not authority_name:

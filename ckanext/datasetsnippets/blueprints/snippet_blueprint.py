@@ -246,6 +246,13 @@ def search_dataset():
         query = toolkit.get_action('package_search')(context, data_dict)
         c.sort_by_selected = query['sort']
 
+        # we want to generate the URL to feeds by using the same parameters
+        # that search function is taking, in order to produce the results for the feeds
+        from ckanext.datasetsnippets.blueprints import feeds
+        fq_feed = fq.replace('+dataset_type:dataset', '')
+        feed = 'drupal_feeds/custom.atom?q=' + q + '&fq=' + fq_feed
+        c.feed = feed
+
         c.page = h.Page(
             collection=query['results'],
             page=page,
@@ -254,6 +261,7 @@ def search_dataset():
         )
         c.search_facets = query['search_facets']
         c.page.items = query['results']
+
     except SearchQueryError as se:  # pragma: no cover
         # User's search parameters are invalid, in such a way that is not
         # achievable with the web interface, so return a proper error to
