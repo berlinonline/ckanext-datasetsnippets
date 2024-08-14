@@ -40,7 +40,7 @@ The `root_breadcrumb`-URL-parameter takes precedence over the `datasetsnippets.d
 
 ## Configuration
 
-The plugin introduces two configuration options:
+The plugin introduces the following configuration options:
 
 ### datasetsnippets.path
 
@@ -66,6 +66,22 @@ Defines the string that is used as the root element for the breadcrumb that is p
 
 ```ini
 datasetsnippets.default_root_breadcrumb = 'Berlin Open Data'
+```
+
+### datasetsnippets.datenportal_url
+
+Defines the url to the datenportal. The url will then be used for generating the feeds using the provided url.
+
+```ini
+datasetsnippets.datenportal_url = link_to_portal
+```
+
+### datasetsnippets.datenportal_title
+
+Defines a string that will be used as a title in the feeds.
+
+```ini
+datasetsnippets.datenportal_title = 'Berlin Open Data'
 ```
 
 ## License
