@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 import logging
 
 from six.moves.urllib.parse import urlparse
@@ -15,8 +14,6 @@ import ckan.model as model
 import ckan.logic as logic
 import ckan.plugins as plugins
 import json
-import flask
-from flask import Blueprint
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +50,7 @@ def _package_search(data_dict):
 
 
 def _enclosure(pkg):
-    url = config.get(u'ckan.datenportal_url', u'').strip() + '/datensaetze/' + pkg['name']
+    url = config.get(u'ckan.url', u'').strip() + '/datensaetze/' + pkg['name']
     enc = Enclosure(url)
     enc.type = u'application/json'
     enc.length = text_type(len(json.dumps(pkg)))
@@ -110,7 +107,7 @@ class DrupalCKANFeed(FeedGenerator):
             self.link(href=href, rel=rel)
 
     def writeString(self, encoding):
-        return self.atom_str(encoding=encoding)
+        return self.rss_str(pretty=True).decode(encoding)
 
     def add_item(self, **kwargs):
         entry = self.add_entry()
@@ -172,15 +169,14 @@ def output_feed(results, feed_title, feed_description, feed_link, feed_url,
             description=pkg.get(u'notes', u''),
             updated=h.date_str_to_datetime(pkg.get(u'metadata_modified')),
             published=h.date_str_to_datetime(pkg.get(u'metadata_created')),
-            unique_id=_create_atom_id(u'/dataset/%s' % pkg['id']),
+            unique_id=_create_rss_id(u'/dataset/%s' % pkg['id']),
             author_name=pkg.get(u'author', u''),
             author_email=pkg.get(u'author_email', u''),
             categories=[t[u'name'] for t in pkg.get(u'tags', [])],
-            enclosure=_enclosure(pkg),
             **additional_fields)
 
     resp = make_response(feed.writeString(u'utf-8'), 200)
-    resp.headers['Content-Type'] = u'application/atom+xml'
+    resp.headers['Content-Type'] = u'application/rss+xml'
     return resp
 
 
@@ -241,7 +237,7 @@ def tag(id):
     title = u'%s - Tag: "%s"' % (SITE_TITLE, id)
     desc = u'Recently created or updated datasets on %s by tag: "%s"' % \
            (SITE_TITLE, id)
-    guid = _create_atom_id(u'/drupal_feeds/tag/%s.atom' % id)
+    guid = _create_rss_id(u'/drupal_feeds/tag/%s.rss' % id)
 
     return output_feed(
         results,
@@ -278,15 +274,15 @@ def group_or_organization(obj_dict, is_org):
         params, controller=u'feeds', action=group_type, id=obj_dict['name'])
     # site_title = SITE_TITLE
     if is_org:
-        guid = _create_atom_id(
-            u'feeds/organization/%s.atom' % obj_dict['name'])
+        guid = _create_rss_id(
+            u'drupal_feeds/organization/%s.rss' % obj_dict['name'])
         alternate_url = _alternate_url(params, organization=obj_dict['name'])
         desc = u'Recently created or updated datasets on %s '\
                'by organization: "%s"' % (SITE_TITLE, obj_dict['title'])
         title = u'%s - Organization: "%s"' % (SITE_TITLE, obj_dict['title'])
 
     else:
-        guid = _create_atom_id(u'feeds/group/%s.atom' % obj_dict['name'])
+        guid = _create_rss_id(u'drupal_feeds/group/%s.rss' % obj_dict['name'])
         alternate_url = _alternate_url(params, groups=obj_dict['name'])
         desc = u'Recently created or updated datasets on %s '\
                'by group: "%s"' % (SITE_TITLE, obj_dict['title'])
@@ -341,7 +337,8 @@ def general():
 
     alternate_url = _alternate_url(params)
 
-    guid = _create_atom_id(u'/drupal_feeds/dataset.atom')
+    guid = _create_rss_id(u'/drupal_feeds/dataset.rss')
+    print(guid)
 
     desc = u'Recently created or updated datasets on %s' % SITE_TITLE
 
@@ -357,7 +354,7 @@ def general():
 
 def custom():
     """
-    Custom atom feed
+    Custom rss feed
 
     """
     q = request.params.get(u'q', u'')
@@ -391,7 +388,7 @@ def custom():
 
     feed_url = _feed_url(request.params, controller=u'feeds', action=u'custom')
 
-    atom_url = h._url_with_params(u'/drupal_feeds/custom.atom', search_params.items())
+    rss_url = h._url_with_params(u'/drupal_feeds/custom.rss', search_params.items())
 
     alternate_url = _alternate_url(request.params)
 
@@ -401,7 +398,7 @@ def custom():
         feed_description=u'Recently created or updated'
         ' datasets on %s. Custom query: \'%s\'' % (SITE_TITLE, q),
         feed_link=alternate_url,
-        feed_guid=_create_atom_id(atom_url),
+        feed_guid=_create_rss_id(rss_url),
         feed_url=feed_url,
         navigation_urls=navigation_urls)
 
@@ -470,20 +467,9 @@ def _navigation_urls(query, controller, action, item_count, limit, **kwargs):
     return urls
 
 
-def _create_atom_id(resource_path, authority_name=None, date_string=None):
+def _create_rss_id(resource_path, authority_name=None, date_string=None):
     """
-    Helper method that creates an atom id for a feed or entry.
-
-    An id must be unique, and must not change over time.  ie - once published,
-    it represents an atom feed or entry uniquely, and forever.  See [4]:
-
-        When an Atom Document is relocated, migrated, syndicated,
-        republished, exported, or imported, the content of its atom:id
-        element MUST NOT change.  Put another way, an atom:id element
-        pertains to all instantiations of a particular Atom entry or feed;
-        revisions retain the same content in their atom:id elements.  It is
-        suggested that the atom:id element be stored along with the
-        associated resource.
+    Helper method that creates an rss id for a feed or entry.
 
     resource_path
         The resource path that uniquely identifies the feed or element.  This
@@ -499,75 +485,32 @@ def _create_atom_id(resource_path, authority_name=None, date_string=None):
         config file.  First trying ``ckan.feeds.authority_name``, and failing
         that, it uses ``ckan.site_url``.  Again, this should not change over
         time.
-
-    date_string
-        A string representing a date on which the authority_name is owned by
-        the publisher of the feed.
-
-        e.g. ``"2012-03-22"``
-
-        Again, this should not change over time.
-
-        If date_string is None, then an attempt is made to read the config
-        option ``ckan.feeds.date``.  If that's not available,
-        then the date_string is not used in the generation of the atom id.
-
-    Following the methods outlined in [1], [2] and [3], this function produces
-    tagURIs like:
-    ``"tag:thedatahub.org,2012:/group/933f3857-79fd-4beb-a835-c0349e31ce76"``.
-
-    If not enough information is provide to produce a valid tagURI, then only
-    the resource_path is used, e.g.: ::
-
-        "http://thedatahub.org/group/933f3857-79fd-4beb-a835-c0349e31ce76"
-
-    or
-
-        "/group/933f3857-79fd-4beb-a835-c0349e31ce76"
-
-    The latter of which is only used if no site_url is available.   And it
-    should be noted will result in an invalid feed.
-
-    [1] http://web.archive.org/web/20110514113830/http://diveintomark.org/\
-    archives/2004/05/28/howto-atom-id
-    [2] http://www.taguri.org/
-    [3] http://tools.ietf.org/html/rfc4151#section-2.1
-    [4] http://www.ietf.org/rfc/rfc4287
     """
     if authority_name is None:
-        authority_name = config.get(u'ckan.feeds.authority_name', u'').strip()
+        authority_name = config.get('ckan.feeds.authority_name', '').strip()
         if not authority_name:
             site_url = config.get(u'ckanext.datasetsnippets.datenportal_url', u'').strip()
             authority_name = urlparse(site_url).netloc
 
     if not authority_name:
-        log.warning(u'No authority_name available for feed generation.  '
-                    'Generated feed will be invalid.')
+        log.warning('No authority_name available for feed generation. '
+                    'Generated feed might be invalid.')
 
-    if date_string is None:
-        date_string = config.get(u'ckan.feeds.date', u'')
-
-    if not date_string:
-        log.warning(u'No date_string available for feed generation.  '
-                    'Please set the "ckan.feeds.date" config value.')
-
-        # Don't generate a tagURI without a date as it wouldn't be valid.
-        # This is best we can do, and if the site_url is not set, then
-        # this still results in an invalid feed.
-        site_url = config.get(u'ckanext.datasetsnippets.datenportal_url', u'')
-        return u''.join([site_url, resource_path])
-
-    tagging_entity = u','.join([authority_name, date_string])
-    return u':'.join(['tag', tagging_entity, resource_path])
+    # Construct the GUID as a full URL
+    if authority_name:
+        return f"http://{authority_name}{resource_path}"
+    else:
+        # Fallback to just the resource path if authority_name is not available
+        return resource_path
 
 
 # Routing
-drupal_feeds.add_url_rule(u'/dataset.atom', methods=[u'GET'], view_func=general)
-drupal_feeds.add_url_rule(u'/custom.atom', methods=[u'GET'], view_func=custom)
-drupal_feeds.add_url_rule(u'/tag/<string:id>.atom', methods=[u'GET'], view_func=tag)
+drupal_feeds.add_url_rule(u'/dataset.rss', methods=[u'GET'], view_func=general)
+drupal_feeds.add_url_rule(u'/custom.rss', methods=[u'GET'], view_func=custom)
+drupal_feeds.add_url_rule(u'/tag/<string:id>.rss', methods=[u'GET'], view_func=tag)
 drupal_feeds.add_url_rule(
-    u'/group/<string:id>.atom', methods=[u'GET'], view_func=group)
+    u'/group/<string:id>.rss', methods=[u'GET'], view_func=group)
 drupal_feeds.add_url_rule(
-    u'/organization/<string:id>.atom',
+    u'/organization/<string:id>.rss',
     methods=[u'GET'],
     view_func=organization)

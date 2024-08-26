@@ -250,7 +250,7 @@ def search_dataset():
         # that search function is taking, in order to produce the results for the feeds
         from ckanext.datasetsnippets.blueprints import feeds
         fq_feed = fq.replace('+dataset_type:dataset', '')
-        feed = 'drupal_feeds/custom.atom?q=' + q + '&' + fq_feed
+        feed = 'sni/custom.atom?q=' + q + '&' + fq_feed
         c.feed = feed
 
         c.page = h.Page(
@@ -306,4 +306,3 @@ snippetapi.add_url_rule(u'/snippet/dataset',
                         methods=[u'GET'], view_func=search_dataset)
 snippetapi.add_url_rule(u'/snippet/latest_datasets',
                         methods=[u'GET'], view_func=show_latest_datasets)
-
