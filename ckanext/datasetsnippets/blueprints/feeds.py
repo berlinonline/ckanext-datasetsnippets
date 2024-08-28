@@ -359,13 +359,20 @@ def custom():
 
     """
     q = request.params.get(u'q', u'')
+    fields = request.params.get(u'fields', u'')
     fq = u''
     search_params = {}
     for (param, value) in request.params.items():
         if param not in [u'q', u'page', u'sort'] \
                 and len(value) and not param.startswith(u'_'):
-            search_params[param] = value
-            fq += u'%s:"%s"' % (param, value)
+            if param == u'fields':
+                field_tuple = eval(value)
+                field_dict = dict([field_tuple])
+                for key_dict in field_dict:
+                    fq += u'%s:"%s"' % (key_dict, field_dict[key_dict])
+            else:
+                search_params[param] = value
+                fq += u'%s:"%s"' % (param, value)
 
     page = h.get_page_number(request.params)
 

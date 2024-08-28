@@ -83,6 +83,8 @@
             {% endif %}
           {% endblock %}
           <div class="feed-icons">
+            <a href="{{ h.url_for(controller='drupal_feeds', action='custom', q=c.q, fields=c.fields) }}" class="ic-fa-rss">Diese Seite als RSS-Feed öffnen</a>
+
             <a href="{{c.feed}}" class="ic-fa-rss">Diese Seite als RSS-Feed öffnen</a>
           </div>
         </div>
