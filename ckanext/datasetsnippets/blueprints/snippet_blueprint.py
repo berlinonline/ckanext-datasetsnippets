@@ -124,6 +124,7 @@ def read_dataset(id):
 
     return _finish(200, data)
 
+
 def search_dataset():
     from ckan.lib.search import SearchError, SearchQueryError
 
@@ -188,12 +189,14 @@ def search_dataset():
         c.fields_grouped = {}
         search_extras = {}
         fq = ''
+        feed_params = ''
         for (param, value) in request.args.items(multi=True):
             # remove the root_breadcrumb parameter if present (will confuse search)
             if param not in ['q', 'page', 'sort', 'root_breadcrumb'] \
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
                 fq += f' {param}:"{value}"'
+                feed_params += u'%s="%s"' % (param, value)
                 c.fields_grouped.setdefault(param, [])
                 c.fields_grouped[param].append(value)
 
@@ -250,7 +253,7 @@ def search_dataset():
         # that search function is taking, in order to produce the results for the feeds
         from ckanext.datasetsnippets.blueprints import feeds
         fq_feed = fq.replace('+dataset_type:dataset', '')
-        feed = 'drupal_feeds/custom.rss?q=' + q + '&' + fq_feed
+        feed = 'drupal_feeds/custom.rss?q=' + q + '&' + feed_params + '&' + sort_by
         c.feed = feed
 
         c.page = h.Page(

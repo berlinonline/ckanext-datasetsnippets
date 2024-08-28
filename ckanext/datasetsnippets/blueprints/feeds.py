@@ -37,6 +37,7 @@ def _package_search(data_dict):
         u'user': g.user,
         u'auth_user_obj': g.userobj
     }
+
     if u'sort' not in data_dict or not data_dict['sort']:
         data_dict['sort'] = u'metadata_modified desc'
 
@@ -394,7 +395,7 @@ def custom():
 
     return output_feed(
         results,
-        feed_title=u'%s - Custom query' % SITE_TITLE,
+        feed_title=u'%s - Datasets' % SITE_TITLE,
         feed_description=u'Recently created or updated'
         ' datasets on %s. Custom query: \'%s\'' % (SITE_TITLE, q),
         feed_link=alternate_url,
