@@ -196,7 +196,7 @@ def search_dataset():
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
                 fq += f' {param}:"{value}"'
-                feed_params += u'%s="%s"' % (param, value)
+                feed_params += u'%s=%s' % (param, value)
                 c.fields_grouped.setdefault(param, [])
                 c.fields_grouped[param].append(value)
 
@@ -253,7 +253,7 @@ def search_dataset():
         # that search function is taking, in order to produce the results for the feeds
         from ckanext.datasetsnippets.blueprints import feeds
         fq_feed = fq.replace('+dataset_type:dataset', '')
-        feed = 'drupal_feeds/custom.rss?q=' + q + '&' + feed_params + '&' + sort_by
+        feed = 'drupal_feeds/custom.rss?q=' + q + '&' + feed_params
         c.feed = feed
 
         c.page = h.Page(
