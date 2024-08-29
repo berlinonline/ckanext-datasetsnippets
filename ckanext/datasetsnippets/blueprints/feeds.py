@@ -157,7 +157,9 @@ def output_feed(results, feed_title, feed_description, feed_link, feed_url,
         first_page=navigation_urls[u'first'],
         last_page=navigation_urls[u'last'], )
 
-    for pkg in results:
+    revert_results = results[::-1]
+
+    for pkg in revert_results:
         additional_fields = {}
 
         for plugin in plugins.PluginImplementations(plugins.IFeed):
@@ -339,7 +341,6 @@ def general():
     alternate_url = _alternate_url(params)
 
     guid = _create_rss_id(u'/drupal_feeds/dataset.rss')
-    print(guid)
 
     desc = u'Recently created or updated datasets on %s' % SITE_TITLE
 

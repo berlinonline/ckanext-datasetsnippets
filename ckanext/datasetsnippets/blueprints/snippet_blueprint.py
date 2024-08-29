@@ -15,6 +15,8 @@ import ckan.plugins as plugins
 from ckan.plugins import toolkit
 from ckan.common import _, c, request, config
 
+from ckanext.datasetsnippets.blueprints import feeds
+
 LOG = logging.getLogger(__name__)
 ROOT_BREADCRUMB_MIN_LENGTH = 1
 ROOT_BREADCRUMB_MAX_LENGTH = 25
@@ -196,7 +198,11 @@ def search_dataset():
                     and len(value) and not param.startswith('_'):
                 c.fields.append((param, value))
                 fq += f' {param}:"{value}"'
-                feed_params += u'%s=%s' % (param, value)
+                # the feeds function requires params and values in a different format
+                if feed_params:
+                    feed_params += u'&%s=%s' % (param, value)
+                else:
+                    feed_params += u'%s=%s' % (param, value)
                 c.fields_grouped.setdefault(param, [])
                 c.fields_grouped[param].append(value)
 
@@ -251,9 +257,8 @@ def search_dataset():
 
         # we want to generate the URL to feeds by using the same parameters
         # that search function is taking, in order to produce the results for the feeds
-        from ckanext.datasetsnippets.blueprints import feeds
-        fq_feed = fq.replace('+dataset_type:dataset', '')
-        feed = 'drupal_feeds/custom.rss?q=' + q + '&' + feed_params
+        fq_feed = fq.replace('+dataset_type:dataset', '').strip()
+        feed = h.url_for(controller='drupal_feeds', action='custom', q=q, fq=feed_params, sort=sort_by)
         c.feed = feed
 
         c.page = h.Page(
