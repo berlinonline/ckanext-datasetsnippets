@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.1.9](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.9)
+
+_(2024-08-29)_
+
+- Fix for RSS Feeds
+
 ## [0.1.8](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.8)
 
 _(2024-08-29)_
