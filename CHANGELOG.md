@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.1.8](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.8)
+
+_(2024-08-29)_
+
+- Datasets RSS feeds
+
 ## [0.1.7](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.7)
 
 _(2024-07-04)_
