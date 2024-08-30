@@ -364,7 +364,7 @@ def custom():
     fq = u''
     search_params = {}
     # some facets are not with the name used in CKAN
-    changed_facets = {'author_string': 'autor'}
+    changed_facets = {'author_string': 'author'}
 
     for (param, value) in request.params.items():
         if param not in [u'q', u'page', u'sort'] \
