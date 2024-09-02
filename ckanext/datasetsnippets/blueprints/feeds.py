@@ -363,6 +363,9 @@ def custom():
     fields = request.params.get(u'fields', u'')
     fq = u''
     search_params = {}
+    # some facets are not with the name used in CKAN
+    changed_facets = {'author_string': 'author'}
+
     for (param, value) in request.params.items():
         if param not in [u'q', u'page', u'sort'] \
                 and len(value) and not param.startswith(u'_'):
@@ -370,8 +373,13 @@ def custom():
                 value_tmp = value.split('&')
                 result_dict = dict(pair.split('=') for pair in value_tmp)
                 for res in result_dict:
-                    search_params[res] = result_dict[res]
-                    fq += u' +%s:%s' % (res, result_dict[res])
+                    if res in changed_facets.keys():
+                        res_tmp = changed_facets[res]
+                        search_params[res] = result_dict[res]
+                        fq += u' +%s:%s' % (res_tmp, result_dict[res])
+                    else:
+                        search_params[res] = result_dict[res]
+                        fq += u' +%s:%s' % (res, result_dict[res])
             else:
                 search_params[param] = value
                 fq += u' %s:%s' % (param, value)
@@ -508,7 +516,7 @@ def _create_rss_id(resource_path, authority_name=None, date_string=None):
 
     # Construct the GUID as a full URL
     if authority_name:
-        return f"http://{authority_name}{resource_path}"
+        return f"https://{authority_name}{resource_path}"
     else:
         # Fallback to just the resource path if authority_name is not available
         return resource_path
