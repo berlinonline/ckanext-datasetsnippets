@@ -2,6 +2,12 @@
 
 ## Development
 
+## [0.1.10](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.10)
+
+_(2024-09-02)_
+
+- Sanitize user input & handle author_string/author
+
 ## [0.1.9](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.9)
 
 _(2024-08-29)_

@@ -14,6 +14,7 @@ import ckan.model as model
 import ckan.plugins as plugins
 from ckan.plugins import toolkit
 from ckan.common import _, c, request, config
+from six.moves.urllib.parse import unquote
 
 from ckanext.datasetsnippets.blueprints import feeds
 
@@ -156,7 +157,8 @@ def search_dataset():
                         if k != 'root_breadcrumb']
 
     # unicode format (decoded from utf8)
-    q = c.q = request.params.get('q', u'')
+    q = request.params.get('q', u'')
+    c.q = unquote(q)
     c.query_error = False
     page = h.get_page_number(request.params)
 
