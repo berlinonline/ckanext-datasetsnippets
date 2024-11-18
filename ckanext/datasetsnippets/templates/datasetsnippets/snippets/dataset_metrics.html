@@ -1,0 +1,136 @@
+{#
+
+Renders a dataset metadata quality metrics as a series of cards with table lists.
+
+package - The package object for the metrics.
+
+Example:
+
+  {% snippet "datasetsnippets/snippets/dataset_metrics.html", package=package %}
+
+#}
+
+
+<div class="fullwidth panel--heavy">
+  <div class="fullwidth__inner block">
+    <h2 class="title">Metadatenqualität</h2>
+    
+    <article class="modul-card">
+      <header class="card__header">
+        <h3 class="title">Accessibility</h3>
+      </header>
+      <ul class="list--tablelist ">
+        <li>
+            <div class="cell nowrap"><strong>Download URL Availibility:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 0% | <strong>No</strong>: 100%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Most Frequent Access URL Status Code:</strong></div>
+            <div class="cell"><strong>200</strong>: 100%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Most Frequent Access URL Status Code:</strong></div>
+            <div class="cell">n/a</div>
+        </li>
+      </ul>
+    </article>
+
+    <article class="modul-card">
+      <header class="card__header">
+        <h3 class="title">Reusability</h3>
+      </header>
+      <ul class="list--tablelist ">
+        <li>
+            <div class="cell nowrap"><strong>Access Rights Availability:</strong></div>
+            <div class="cell">False</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>License Information Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 100% | <strong>No</strong>: 0%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Contact Point Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Publisher Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+      </ul>
+    </article>
+
+    <article class="modul-card">
+      <header class="card__header">
+        <h3 class="title">Contextuality</h3>
+      </header>
+      <ul class="list--tablelist ">
+        <li>
+            <div class="cell nowrap"><strong>File Size Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 0% | <strong>No</strong>: 100%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Rights Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 0% | <strong>No</strong>: 100%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Modification Date Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Date Issued Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+      </ul>
+
+    </article>
+
+    <article class="modul-card">
+      <header class="card__header">
+        <h3 class="title">Findability</h3>
+      </header>
+      <ul class="list--tablelist ">
+        <li>
+            <div class="cell nowrap"><strong>Keyword Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Category Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 100% | <strong>No</strong>: 0%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Spatial Metadata Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Temporal Metadata Availability:</strong></div>
+            <div class="cell">True</div>
+        </li>
+      </ul>
+    </article>
+
+    <article class="modul-card">
+      <header class="card__header">
+        <h3 class="title">Interoperability</h3>
+      </header>
+      <ul class="list--tablelist ">
+        <li>
+            <div class="cell nowrap"><strong>DCAT-AP Compliance:</strong></div>
+            <div class="cell">False</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Format Information Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 80% | <strong>No</strong>: 20%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Media Type Information Availability:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 0% | <strong>No</strong>: 100%</div>
+        </li>
+        <li>
+            <div class="cell nowrap"><strong>Format Media Type from Vocabulary:</strong></div>
+            <div class="cell"><strong>Yes</strong>: 0% | <strong>No</strong>: 100%</div>
+        </li>
+      </ul>
+    </article>
+
+  </div>
+</div>

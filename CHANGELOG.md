@@ -2,6 +2,8 @@
 
 ## Development
 
+- Add a template for dataset metadata quality metrics, using the [Piveau Metrics API](https://doc.piveau.io/metrics/).
+
 ## [0.1.10](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.10)
 
 _(2024-09-02)_
