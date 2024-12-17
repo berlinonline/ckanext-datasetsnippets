@@ -2,6 +2,14 @@
 
 ## Development
 
+## [0.1.11](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.11)
+
+_(2024-12-17)_
+
+- Add publiccode.yml file
+- Fix failing CI/CD
+- Update information
+
 ## [0.1.10](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.10)
 
 _(2024-09-02)_
