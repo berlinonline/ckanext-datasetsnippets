@@ -1,7 +1,7 @@
 # ckanext-datasetsnippets
 
-[![Tests](https://github.com/berlinonline/ckanext-datasetsnippets/workflows/Tests/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-datasetsnippets/actions)
-[![Code Coverage](http://codecov.io/github/berlinonline/ckanext-datasetsnippets/coverage.svg?branch=master)](http://codecov.io/github/berlinonline/ckanext-datasetsnippets?branch=master)
+[![Tests](https://github.com/berlinonline/ckanext-datasetsnippets/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/berlinonline/ckanext-datasetsnippets/actions)
+[![Code Coverage](https://codecov.io/github/berlinonline/ckanext-datasetsnippets/coverage.svg?branch=master)](http://codecov.io/github/berlinonline/ckanext-datasetsnippets?branch=master)
 
 This plugin belongs to a set of plugins for the _Datenregister_ – the non-public [CKAN](https://ckan.org) instance that is part of Berlin's open data portal [daten.berlin.de](https://daten.berlin.de).
 _ckanext-datasetsnippets_ provides markup snippets for dataset pages and dataset search.
@@ -15,7 +15,7 @@ The plugin implements the following CKAN interfaces:
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.9 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.10 (which requires Python 3).
 
 ## API
 
