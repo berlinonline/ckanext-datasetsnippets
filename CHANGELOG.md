@@ -6,27 +6,27 @@
 
 _(2024-12-17)_
 
-- Add publiccode.yml file
-- Fix failing CI/CD
-- Update information
+- Add [publiccode.yml](publiccode.yml) file.
+- Fix failing CI/CD.
+- Update README.
 
 ## [0.1.10](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.10)
 
 _(2024-09-02)_
 
-- Sanitize user input & handle author_string/author
+- Sanitize user input & handle author_string/author.
 
 ## [0.1.9](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.9)
 
 _(2024-08-29)_
 
-- Fix for RSS Feeds
+- Fix RSS Feeds.
 
 ## [0.1.8](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.8)
 
 _(2024-08-29)_
 
-- Datasets RSS feeds
+- Add dataset RSS feeds.
 
 ## [0.1.7](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.7)
 
