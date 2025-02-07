@@ -4,58 +4,55 @@
 {% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
 {% set form_id = form_id if form_id else false %}
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %} data-module="select-switch">
-
-  <button class="button button--filter js-facetingform-toggler"
-    data-containerid="facetingform">Filter</button>
-  <div class="modul-facetingform js-facetingform" id="facetingform">
-    <div class="facetingform__container">
-      <div class="container__head">
-        <h2 class="title">Facettierung</h2>
-      </div>
-      <div class="container__body">
-        <div class="facets">
-          <fieldset class="facet">
-            <legend class="facet__head">
-              <div class="facet-title">
-                <span class="text">Schlagwort</span>
-                <a href="#" role="button" class="js-formhelp-flyin-overlay qmark-icon" title="Hilfe"
-                  data-original-title="{{ h.berlin_description_for_facet('tags') }}" data-title="Hilfe: Schlagwort"
-                  aria-expanded="false">?</a>
-              </div>
-            </legend>
-            <div class="facet__body">
-              <div class="form-group">
-                <input aria-label="Geben Sie hier ein Stichwort ein" class="tagify--outside"
-                  id="dataset_tag_search" type="text" name="dataset_tags" autocomplete="off"
-                  placeholder=""
-                  value="{{ request.params.getlist('tags')|join(', ') }}">
-              </div>
+<button class="button button--filter js-facetingform-toggler"
+  data-containerid="facetingform">Filter</button>
+<div class="modul-facetingform js-facetingform" id="facetingform">
+  <div class="facetingform__container">
+    <div class="container__head">
+      <h2 class="title">Facettierung</h2>
+    </div>
+    <div class="container__body">
+      <form class="facets">
+        <fieldset class="facet">
+          <legend class="facet__head">
+            <div class="facet-title">
+              <span class="text">Schlagwort</span>
+              <a href="#" role="button" class="js-formhelp-flyin-overlay qmark-icon" title="Hilfe"
+                data-original-title="{{ h.berlin_description_for_facet('tags') }}" data-title="Hilfe: Schlagwort"
+                aria-expanded="false">?</a>
             </div>
-          </fieldset>
-          {% for facet in c.facet_titles %}
-            {% if facet != 'tags' and facet != 'berlin_type' and facet != 'organization' %}
-              {{ h.snippet('datasetsnippets/snippets/facet_list.html',
-                title=c.facet_titles[facet],
-                name=facet,
-                search_facets=search_facets,
-                alternative_url="/" ~ h.berlin_dataset_path())
-              }}
-            {% endif %}
-          {% endfor %}
-          <div class="facets__actions">
-            <div class="left">
-              <a href="/datensaetze" title="Alle Filter zurücksetzen">
-                Zurücksetzen
-              </a>
-            </div>
-            <div class="right">
-              <button type="submit" class="button button--light">Jetzt filtern</button>
+          </legend>
+          <div class="facet__body">
+            <div class="form-group">
+              <input aria-label="Geben Sie hier ein Stichwort ein" class="tagify--outside"
+                id="dataset_tag_search" type="text" name="dataset_tags" autocomplete="off"
+                placeholder=""
+                value="{{ request.params.getlist('tags')|join(', ') }}">
             </div>
           </div>
+        </fieldset>
+        {% for facet in c.facet_titles %}
+          {% if facet != 'tags' and facet != 'berlin_type' and facet != 'organization' %}
+            {{ h.snippet('datasetsnippets/snippets/facet_list.html',
+              title=c.facet_titles[facet],
+              name=facet,
+              search_facets=search_facets,
+              alternative_url="/" ~ h.berlin_dataset_path())
+            }}
+          {% endif %}
+        {% endfor %}
+        <div class="facets__actions">
+          <div class="form-actions__left">
+            <a href="/datensaetze" title="Alle Filter zurücksetzen">
+              Zurücksetzen
+            </a>
+          </div>
+          <div class="form-actions__right">
+            <button type="submit" class="button button--light">Jetzt filtern</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
-</form>
+</div>
 
