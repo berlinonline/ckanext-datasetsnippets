@@ -4,10 +4,10 @@
 {% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
 {% set form_id = form_id if form_id else false %}
 
-<form {% if form_id %}id="{{ form_id }}" {% endif %} data-module="select-switch">
+<button class="button button--filter js-facetingform-toggler"
+  data-containerid="facetingform">Filter</button>
 
-  <button class="button button--filter js-facetingform-toggler"
-    data-containerid="facetingform">Filter</button>
+<form {% if form_id %}id="{{ form_id }}" {% endif %} data-module="select-switch">
   <div class="modul-facetingform js-facetingform" id="facetingform">
     <div class="facetingform__container">
       <div class="container__head">
