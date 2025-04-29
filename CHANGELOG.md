@@ -4,9 +4,10 @@
 
 ## [0.1.12](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.12)
 
-_(2025-04-22)_
+_(2025-04-29)_
 
 - Fix facetted search UX problem (form always open on mobile).
+- Add a link back to the Datenregister for dataset views.
 
 ## [0.1.11](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.11)
 

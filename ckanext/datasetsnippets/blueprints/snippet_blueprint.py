@@ -62,6 +62,12 @@ def _finish(status_int, response_data=None):
             for_json=True)  # handle objects with for_json methods
     return make_response(response_msg, status_int, response_headers)
 
+def _is_true(value: str) -> bool:
+    '''Inspect `value` and return `True` if it looks like `'true'``
+    '''
+    return value.lower() == 'true'
+
+
 def show_latest_datasets():
     try:
         context = {'model': model, 'user': c.user,
@@ -117,8 +123,10 @@ def read_dataset(id):
         root_breadcrumb = config.get(
         'datasetsnippets.default_root_breadcrumb', 'Homepage')
 
+    contextual_menues = request.args.get('contextual_menues', default='false', type=_is_true)
+
     template = "datasetsnippets/dataset.html"
-    output = base.render(template, extra_vars={"root_breadcrumb": root_breadcrumb})
+    output = base.render(template, extra_vars={"root_breadcrumb": root_breadcrumb, "contextual_menues": contextual_menues})
 
     data = {
         "title": c.pkg_dict['title'],

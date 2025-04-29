@@ -21,6 +21,18 @@
 </div>
 <div id="layout-grid__area--maincontent">
   <h1 class="title">{{ h.dataset_display_name(package) }}</h1>
+
+  {% if contextual_menues %}
+    <div id="dp-open-datenregister" class="modul-servicepanel panel--heavy">
+      <div class="servicepanel__main">
+        <p>Datensatz im Datenregister öffnen</p>
+      </div>
+      <div class="servicepanel__right">
+        <a class="button dp-button-pen" href="{{ h.url_for('dataset.read', id=package.name, _external=True) }}" target="_blank">{{ _('Edit') }}</a>
+      </div>
+    </div>
+  {% endif %}
+
   {% if h.berlin_org_is_external(package.owner_org) %}
     <div class="modul-text_wichtig dp-message">
       <div>
