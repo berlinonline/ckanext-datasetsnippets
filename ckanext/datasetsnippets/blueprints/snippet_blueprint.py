@@ -105,6 +105,9 @@ def read_dataset(id):
         c.pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
     except toolkit.ObjectNotFound:
         toolkit.abort(404)
+    except logic.NotAuthorized:
+        LOG.info(f"{c.user} is not authorized to package_show('{id}'), maybe the package is deleted or private?")
+        toolkit.abort(404)
 
     # even if the requesting user/token has permission, don't ever return
     # deleted or private datasets

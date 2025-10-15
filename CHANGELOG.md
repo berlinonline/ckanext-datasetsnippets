@@ -2,6 +2,8 @@
 
 ## Development
 
+- Fix response to requesting deleted or private datasets: this now results in a 404 response, not a 500.
+
 ## [0.1.12](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.12)
 
 _(2025-04-29)_
