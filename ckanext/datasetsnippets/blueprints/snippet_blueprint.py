@@ -99,14 +99,17 @@ def read_dataset(id):
     try:
         c.pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
     except toolkit.ObjectNotFound:
+        # dataset doesn't exist/was purged
         toolkit.abort(404)
     except logic.NotAuthorized:
+        # dataset was deleted or is private and user is not sysadmin
         LOG.info(f"{c.user} is not authorized to package_show('{id}'), maybe the package is deleted or private?")
         toolkit.abort(404)
 
     # even if the requesting user/token has permission, don't ever return
     # deleted or private datasets
     if c.pkg_dict['state'] == 'deleted' or c.pkg_dict['private']:
+        # we can only get here if user is sysadmin
         toolkit.abort(404)
 
     if 'root_breadcrumb' in request.args:

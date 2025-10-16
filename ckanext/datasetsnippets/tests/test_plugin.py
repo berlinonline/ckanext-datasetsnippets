@@ -151,7 +151,12 @@ class TestPlugin(object):
 
     def test_private_dataset_not_found(self, app, datasets):
         '''Test that requests for a private dataset result in a 404.'''
-        user = factories.Sysadmin(name='theadmin')
+
+        admin = factories.Sysadmin(name='theadmin')
+        users = [
+            admin,
+            factories.User(name="nobdoy")
+        ]
 
         # make the dataset private
         dataset = datasets[0]
@@ -161,32 +166,38 @@ class TestPlugin(object):
         test_helpers.call_action(
             "package_patch",
             id=dataset['name'],
-            context={"user": user['id']},
+            context={"user": admin['id']},
             **patch
         )
 
         # check it cannot be accessed directly
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_snippet_url,
-            status=404
-        )
-
-        # check it's not in the search results
         dataset_search_url = "/snippet/dataset?sort=title_string+asc"
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_search_url,
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Index" == data['title']
-        assert datasets[0]['title'] not in data['content']
+        for user in users:
+            response = app.get(
+                headers=[("Authorization", user['apikey'])],
+                url=dataset_snippet_url,
+                status=404
+            )
+
+            # check it's not in the search results
+            response = app.get(
+                headers=[("Authorization", user['apikey'])],
+                url=dataset_search_url,
+                status=200
+            )
+            data = json.loads(str(response.body))
+            assert "Index" == data['title']
+            assert datasets[0]['title'] not in data['content']
 
     def test_deleted_dataset_not_found(self, app, datasets):
         '''Test that requests for a deleted dataset result in a 404.'''
-        user = factories.Sysadmin(name='theadmin')
+
+        admin = factories.Sysadmin(name='theadmin')
+        users = [
+            admin,
+            factories.User(name="nobdoy")
+        ]
 
         # delete the dataset
         dataset = datasets[0]
@@ -196,22 +207,23 @@ class TestPlugin(object):
 
         # check it cannot be accessed directly
         dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_snippet_url,
-            status=404
-        )
-
-        # check it's not in the search results
         dataset_search_url = "/snippet/dataset?sort=title_string+asc"
-        response = app.get(
-            headers=[("Authorization", user['apikey'])],
-            url=dataset_search_url,
-            status=200
-        )
-        data = json.loads(str(response.body))
-        assert "Index" == data['title']
-        assert datasets[0]['title'] not in data['content']
+        for user in users:
+            response = app.get(
+                headers=[("Authorization", user['apikey'])],
+                url=dataset_snippet_url,
+                status=404
+            )
+
+            # check it's not in the search results
+            response = app.get(
+                headers=[("Authorization", user['apikey'])],
+                url=dataset_search_url,
+                status=200
+            )
+            data = json.loads(str(response.body))
+            assert "Index" == data['title']
+            assert datasets[0]['title'] not in data['content']
 
 
     @pytest.mark.parametrize("url", [
