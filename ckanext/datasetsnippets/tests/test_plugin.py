@@ -54,6 +54,7 @@ def datasets():
             "temporal_coverage_to": "2018-12-31",
             "maintainer_email": "opendata@berlin.de",
             "author": "BerlinOnline Stadtportal GmbH & Co. KG",
+            "author_uri": "org_a02b149b-d470-5b32-a51e-58cde32a902e", # this can be any valid URL, see ckanext-berlin_dataset_schema
             "license_id": "cc-by",
             "notes": "Zugriffsstatistik des Berliner Datenportals"
             "(daten.berlin.de). Enthalten sind die Gesamtzugriffe"
@@ -103,6 +104,7 @@ def lotsa_datasets():
             "temporal_coverage_to": "2018-12-31",
             "maintainer_email": "opendata@berlin.de",
             "author": "BerlinOnline Stadtportal GmbH & Co. KG",
+            "author_uri": "org_a02b149b-d470-5b32-a51e-58cde32a902e", # this can be any valid URL, see ckanext-berlin_dataset_schema
             "license_id": "cc-by",
             "notes": f"Ein Testdatensatz, nämlich der {i}.",
             "groups": [
