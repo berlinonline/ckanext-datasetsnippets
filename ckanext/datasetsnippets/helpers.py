@@ -241,3 +241,8 @@ def pagination_url_for_page(page: int) -> str:
                         if k != 'page']
     params_nopage.append(('page', page))
     return url_with_params(dataset_path(), MultiDict(params_nopage))
+
+def is_true(value: str) -> bool:
+    '''Inspect `value` and return `True` if it looks like `'true'``
+    '''
+    return str(value).lower() == 'true'

@@ -17,6 +17,7 @@ from ckan.common import _, c, request, config
 from six.moves.urllib.parse import unquote
 
 from ckanext.datasetsnippets.blueprints import feeds
+from ckanext.datasetsnippets.helpers import is_true
 
 LOG = logging.getLogger(__name__)
 ROOT_BREADCRUMB_MIN_LENGTH = 1
@@ -61,12 +62,6 @@ def _finish(status_int, response_data=None):
             response_data,
             for_json=True)  # handle objects with for_json methods
     return make_response(response_msg, status_int, response_headers)
-
-def _is_true(value: str) -> bool:
-    '''Inspect `value` and return `True` if it looks like `'true'``
-    '''
-    return value.lower() == 'true'
-
 
 def show_latest_datasets():
     try:
@@ -126,7 +121,7 @@ def read_dataset(id):
         root_breadcrumb = config.get(
         'datasetsnippets.default_root_breadcrumb', 'Homepage')
 
-    contextual_menues = request.args.get('contextual_menues', default='false', type=_is_true)
+    contextual_menues = request.args.get('contextual_menues', default='false', type=is_true)
 
     template = "datasetsnippets/dataset.html"
     output = base.render(template, extra_vars={"root_breadcrumb": root_breadcrumb, "contextual_menues": contextual_menues})

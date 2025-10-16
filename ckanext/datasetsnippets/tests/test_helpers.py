@@ -212,3 +212,16 @@ class TestHelpers(object):
         '''Sanity test to check that the correct css class for a given format string is
            generated.'''
         assert dshelpers.css_class_for_format_string(data['format_string']) == data['css_class']
+
+    @pytest.mark.parametrize("data", [
+        { "value": "true", "expected": True },
+        { "value": "True", "expected": True },
+        { "value": "TRUE", "expected": True },
+        { "value": "tRue", "expected": True },
+        { "value": "whatever", "expected": False },
+        { "value": 1, "expected": False },
+        { "value": None, "expected": False },
+    ])
+    def test_truth_converter(self, data: dict):
+        '''Test to see if values passed to is_true are correctly converted to a boolean.'''
+        assert dshelpers.is_true(data['value']) is data['expected']
