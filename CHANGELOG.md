@@ -3,6 +3,7 @@
 ## Development
 
 - Fix response to requesting deleted or private datasets: this now results in a 404 response, not a 500.
+- Set env variables for database and Solr index in scripts for running unit tests locally.
 
 ## [0.1.12](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.12)
 
