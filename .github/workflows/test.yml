@@ -52,7 +52,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Install CURL
-      run: sudo apt-get install curl
+      run: apt update && apt install curl -y
     - name: Install requirements
       run: |
         pip install -r dev-requirements.txt
