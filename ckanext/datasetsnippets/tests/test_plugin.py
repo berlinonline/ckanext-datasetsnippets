@@ -18,6 +18,26 @@ LOG = logging.getLogger(__name__)
 SCHEMA_PLUGIN = 'berlin_dataset_schema'
 THEME_PLUGIN = 'berlintheme'
 SNIPPET_PLUGIN = 'datasetsnippets'
+DATASET_BASE = {
+    "name": "zugriffsstatistik-daten-berlin-de",
+    "title": "Zugriffsstatistik daten.berlin.de",
+    "berlin_source": "test",
+    "berlin_type": "datensatz",
+    "date_released": "2018-06-25",
+    "date_updated": "2019-01-01",
+    "temporal_coverage_from": "2011-09-01",
+    "temporal_coverage_to": "2018-12-31",
+    "maintainer_email": "opendata@berlin.de",
+    "author": "BerlinOnline Stadtportal GmbH & Co. KG",
+    "author_uri": "org_a02b149b-d470-5b32-a51e-58cde32a902e", # this can be any valid URL, see ckanext-berlin_dataset_schema
+    "license_id": "cc-by",
+    "notes": "Zugriffsstatistik des Berliner Datenportals"
+    "(daten.berlin.de). Enthalten sind die Gesamtzugriffe"
+    "auf die Domain daten.berlin.de('impressions' und"
+    "'visits') für jeden Monat, sowie die Zugriffszahlen"
+    "('impressions' und 'visits') für alle Datensätze für"
+    "jeden Monat.\r\n\r\nDer Datensatz wird monatlich erneuert.",
+}
 
 @pytest.fixture
 def user():
@@ -42,31 +62,14 @@ def datasets():
     }
     result = test_helpers.call_action("group_member_create", **data)
 
+    dataset = DATASET_BASE.copy()
+    dataset['groups'] = [
+        {"name": group['name']}
+    ]
+    dataset['owner_org'] = org['id']
+
     dataset_dicts = [
-        {
-            "name": "zugriffsstatistik-daten-berlin-de",
-            "title": "Zugriffsstatistik daten.berlin.de",
-            "berlin_source": "test",
-            "berlin_type": "datensatz",
-            "date_released": "2018-06-25",
-            "date_updated": "2019-01-01",
-            "temporal_coverage_from": "2011-09-01",
-            "temporal_coverage_to": "2018-12-31",
-            "maintainer_email": "opendata@berlin.de",
-            "author": "BerlinOnline Stadtportal GmbH & Co. KG",
-            "author_uri": "org_a02b149b-d470-5b32-a51e-58cde32a902e", # this can be any valid URL, see ckanext-berlin_dataset_schema
-            "license_id": "cc-by",
-            "notes": "Zugriffsstatistik des Berliner Datenportals"
-            "(daten.berlin.de). Enthalten sind die Gesamtzugriffe"
-            "auf die Domain daten.berlin.de('impressions' und"
-            "'visits') für jeden Monat, sowie die Zugriffszahlen"
-            "('impressions' und 'visits') für alle Datensätze für"
-            "jeden Monat.\r\n\r\nDer Datensatz wird monatlich erneuert.",
-            "groups": [
-                {"name": group['name']}
-            ],
-            "owner_org": org['id']
-        }
+        dataset
     ]
 
     for dataset_dict in dataset_dicts:
@@ -375,3 +378,37 @@ class TestPlugin(object):
             query_string={"root_breadcrumb": breadcrumb},
             status=400
         )
+
+    @pytest.mark.parametrize("anonymized", [ True, False ])
+    def test_data_anonymized_shows(self, app, datasets, anonymized):
+        '''
+        Test that the anonymized message is shown for and only for datasets where
+        `data_anonymized` is `True`.
+        '''
+        admin = factories.Sysadmin(name='theadmin')
+        user = factories.User(name="nobdoy")
+
+        dataset = datasets[0]
+        patch = {
+            'data_anonymized': anonymized
+        }
+        test_helpers.call_action(
+            "package_patch",
+            id=dataset['name'],
+            context={"user": admin['id']},
+            **patch
+        )
+
+        # check that the css class indicating the presence of the anonymized info is there
+        # (or not)
+        dataset_snippet_url = url_for("snippetapi.read_dataset", id=dataset['name'])
+        response = app.get(
+            headers=[("Authorization", user['apikey'])],
+            url=dataset_snippet_url,
+            status=200
+        )
+        data = json.loads(str(response.body))
+        if anonymized:
+            assert "dr-anonymized_message" in data['content']
+        else:
+            assert "dr-anonymized_message" not in data['content']
