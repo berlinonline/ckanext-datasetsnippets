@@ -388,7 +388,6 @@ class TestPlugin(object):
         admin = factories.Sysadmin(name='theadmin')
         user = factories.User(name="nobdoy")
 
-        # make the dataset private
         dataset = datasets[0]
         patch = {
             'data_anonymized': anonymized
