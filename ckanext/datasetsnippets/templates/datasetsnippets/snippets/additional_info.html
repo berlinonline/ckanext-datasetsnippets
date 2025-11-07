@@ -120,10 +120,11 @@
   {% endif %}
 </ul>
 
-{% if package.data_anonymized %}
-  <div class="message text--strong">Personenbezogene Daten in diesem Datensatz wurden anonymisiert.</div>
-{% endif %}
-
+{% block data_anonymized %}
+  {% if package.data_anonymized %}
+    <div class="message text--strong">Personenbezogene Daten in diesem Datensatz wurden anonymisiert.</div>
+  {% endif %}
+{% endblock data_anonymized %}
 
 {# TODO: Weitere Metadaten in collapsible box (only show if any)
   <h3>{{ _('Weitere Metadaten') }}</h3>
