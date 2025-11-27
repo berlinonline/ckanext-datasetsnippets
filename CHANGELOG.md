@@ -2,7 +2,7 @@
 
 ## Development
 
-- Display new `data_anonymized` field to indicate if datasets that contain personal data have been anonymized prior to publication. If `package.data_anonymized` a text info box is displayed below the other metadata. Just having an entry "Daten anonymisiert: Ja/Nein" might trigger the wrong conclusions if a dataset has no personal data at all, but the field says: "Daten anonymisiert: nein" ("they forgot to anonymise the data!").
+- Display new `data_anonymized` or `personal_data_exemption` fields to indicate if datasets that contain personal data have been anonymized prior to publication, or can be published without anonymization based on a law or special arrangement. If `package.data_anonymized` or `personal_data_exemption` a text info box is displayed below the other metadata.
 
 ## [0.1.13](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.13)
 
