@@ -390,6 +390,7 @@ class TestPlugin(object):
 
         dataset = datasets[0]
         patch = {
+            'personal_data': anonymized,
             'data_anonymized': anonymized
         }
         test_helpers.call_action(
@@ -409,6 +410,6 @@ class TestPlugin(object):
         )
         data = json.loads(str(response.body))
         if anonymized:
-            assert "dr-anonymized_message" in data['content']
+            assert "dr-personal_data_message" in data['content']
         else:
-            assert "dr-anonymized_message" not in data['content']
+            assert "dr-personal_data_message" not in data['content']
