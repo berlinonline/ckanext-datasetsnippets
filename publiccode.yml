@@ -6,7 +6,7 @@ publiccodeYmlVersion: '0.2'
 name: ckanext-datasetsnippets
 url: 'https://github.com/berlinonline/ckanext-datasetsnippets'
 releaseDate: '2022-02-22'
-softwareVersion: 0.1.11
+softwareVersion: 0.1.14
 developmentStatus: stable
 softwareType: addon
 categories:
