@@ -3,6 +3,7 @@
 ## Development
 
 - Add an additional resource "WFS Explorer" for all datasets that are WFSes and have a defined endpoint (only in output, not in the actual metadata). WFS-Explorer resources are added as a special panel (`panel--colored`), to distinguish them from "normal" resources.
+- Add type hints to all helper functions in [helpers.py](ckanext/datasetsnippets/helpers.py).
 
 ## [0.1.14](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.14)
 

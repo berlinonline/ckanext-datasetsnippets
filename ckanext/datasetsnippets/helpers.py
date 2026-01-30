@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from datetime import datetime
 import os
 import re
 import json
@@ -21,36 +22,36 @@ log = logging.getLogger(__name__)
 get_action = logic.get_action
 NotAuthorized = logic.NotAuthorized
 
-def url_with_params(url, params):
+def url_with_params(url: str, params: dict) -> str:
     '''Helper function to convert a base-URL (or path) and a dictionary with 
-       parameters to an URL string. Takes care of encoding issues in the 
+       parameters to a URL string. Takes care of encoding issues in the 
        parameter values, such that e.g. "köln" is encoded as "k%C3%B6ln".
     '''
     if not params:
         return url
     return url + u'?' + encode_params(params)
 
-def encode_params(params):
+def encode_params(params: dict) -> str:
     params = [(k, v.encode('utf-8') if isinstance(v, str) else str(v))
               for k, v in params.items()]
     return urlencode(params)
    
-def dataset_path():
+def dataset_path() -> str:
   return config.get('datasetsnippets.path', 'dataset')
 
-def unlink_email(email):
+def unlink_email(email: str) -> str:
   return email.replace("@", " AT ")
 
 
-def dateformat():
+def dateformat() -> str:
   return "%d.%m.%Y"
 
 
-def render_datetime(datetime):
-  return h.render_datetime(datetime, date_format=dateformat())
+def render_datetime(_datetime: datetime) -> str:
+  return h.render_datetime(_datetime, date_format=dateformat())
 
 
-def recent_packages(package_type="dataset", sort_by='metadata_created desc', limit=6):
+def recent_packages(package_type:str="dataset", sort_by:str='metadata_created desc', limit:int=6) -> list:
   from ckan.lib.search import SearchError, SearchQueryError
 
   context = {'model': model, 'user': c.user,
@@ -82,27 +83,32 @@ def recent_packages(package_type="dataset", sort_by='metadata_created desc', lim
   except NotAuthorized:  # pragma: no cover
     abort(403, _('Not authorized to see this page'))  # pragma: no cover
 
-def resource_label(resource):
-  label = "Unbekannt"
+def resource_label(resource_dict: dict) -> str:
+    '''Return a human-readable label for a resource_dict, based on (in order of preference):
+        - the `name` key
+        - the filename of the `url` key
+        - "Unbekannt"
+    '''
+    label = _("Unbekannt")
 
-  if resource['name']:
-    name = resource['name']
-  else:
-    url = resource['url']
-    name = url[url.rfind("/") + 1:].split('?')[0]
+    if resource_dict['name']:
+        name = resource_dict['name']
+    else:
+        url = resource_dict['url']
+        name = url[url.rfind("/") + 1:].split('?')[0]
 
-  if len(name) > 0:
-    label = name
+    if len(name) > 0:
+        label = name
 
-  return label
+    return label
 
-def get_facet_id_prefix(name):
+def get_facet_id_prefix(name: str) -> str:
     '''Helper function to generate the markup id-prefix for a facet
        selection box.
     '''
     return "dp_facet_" + name
 
-def facet_plural_mapping():
+def facet_plural_mapping() -> dict:
     return {
         'groups': u'Kategorien',
         'author_string': u'Quellen',
@@ -117,18 +123,18 @@ def facet_plural_mapping():
     }
 
 
-def active_item_count(items):
+def active_item_count(items: list) -> int:
     '''Helper function that returns the number of active items from a list of
        facet items.'''
     return len(active_items(items))
 
-def active_items(items):
+def active_items(items: list) -> list:
     '''Helper function that returns the list of all active items from 
        a list of facet items.
     '''
     return [item for item in items if item['active']]
 
-def active_item_labels(items):
+def active_item_labels(items: list) -> str:
     '''Helper function that returns a comma-separated string with the labels of
        all active items from a list of facet items.
     '''
