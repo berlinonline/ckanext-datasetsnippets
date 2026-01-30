@@ -246,3 +246,13 @@ def is_true(value: str) -> bool:
     '''Inspect `value` and return `True` if it looks like `'true'``
     '''
     return str(value).lower() == 'true'
+
+def wfs_endpoint_for_dataset(dataset_dict: dict) -> str:
+    '''Returns the WFS endpoint for a dataset. If the dataset is not a WFS,
+    or doesn't have a resource that looks like an API endpoint, return `None`.'''
+    for resource in dataset_dict['resources']:
+        if resource.get('format') and resource['format'].upper() == "WFS":
+            if resource.get('internal_function') == 'api_endpoint':
+                if resource.get('url'):
+                    return resource['url']
+    return None

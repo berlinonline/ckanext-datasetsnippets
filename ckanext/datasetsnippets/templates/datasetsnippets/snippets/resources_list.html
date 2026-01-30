@@ -17,12 +17,29 @@ Example:
       {% if resources %}
         {% block resource_list_inner %}
           {% for resource in resources %}
-            {% snippet 'datasetsnippets/snippets/resource_item.html', package=package, resource=resource %}
+            {% snippet 'datasetsnippets/snippets/resource_item.html',
+              package=package,
+              resource=resource,
+              paneltype="white" %}
           {% endfor %}
-        {% endblock %}
+          {% block wfs_explorer %}
+            {% set endpoint = h.berlin_wfs_endpoint_for_dataset(package) %}
+            {% if endpoint %}
+              {% snippet 'datasetsnippets/snippets/resource_item.html',
+                package=package, 
+                resource = { 
+                  "name": "Ansicht im WFS-Explorer",
+                  "format": "HTML",
+                  "description": "Darstellung der Daten als Karte und Tabelle",
+                  "url": "https://wfsexplorer.odis-berlin.de/?wfs=" + endpoint
+                },
+                paneltype="colored" %}
+            {% endif %}
+          {% endblock wfs_explorer %}
+        {% endblock resource_list_inner %}
       {% else %}
         <p class="empty">{{ _('This dataset has no data') }}</p>
       {% endif %}
-    {% endblock %}
+    {% endblock resource_list %}
   </div>
 </div>

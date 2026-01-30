@@ -225,3 +225,91 @@ class TestHelpers(object):
     def test_truth_converter(self, data: dict):
         '''Test to see if values passed to is_true are correctly converted to a boolean.'''
         assert dshelpers.is_true(data['value']) is data['expected']
+
+    @pytest.mark.parametrize('data', [
+        {
+            # this is what a WFS usually looks like: several resources, one of which has `'format': 'WFS'` and
+            # `'internal_function': 'ap_endpoint'`
+            'dataset_dict': {
+                "resources": [
+                    {
+                        "format": "WFS",
+                        "internal_function": "api_description",
+                        "name": "Endpunkt-Beschreibung des WFS-Service",
+                        "url": "https://gdi.berlin.de/services/wfs/baumbestand?REQUEST=GetCapabilities&SERVICE=wfs",
+                    },
+                    {
+                        "format": "HTML",
+                        "internal_function": "documentation",
+                        "name": "Inhaltliche Beschreibung",
+                        "url": "https://fbinter.stadt-berlin.de/fb_daten/beschreibung/sachdaten/baumbestand.html",
+                    },
+                    {
+                        "format": "WFS",
+                        "internal_function": "api_endpoint",
+                        "name": "API-Endpunkt des WFS-Service",
+                        "url": "https://gdi.berlin.de/services/wfs/baumbestand",
+                    },
+                    {
+                        "format": "PDF",
+                        "internal_function": "documentation",
+                        "name": "Technische Beschreibung",
+                        "url": "https://fbinter.stadt-berlin.de/fb_daten/beschreibung/datenformatbeschreibung/Datenformatbeschreibung_Baeume.pdf",
+                    }
+                ]
+            } ,
+            'expected': 'https://gdi.berlin.de/services/wfs/baumbestand'
+        } ,
+        {
+            # a WMS is not a WFS
+            'dataset_dict': {
+                'resources': [
+                    {
+                        'format': 'wms',
+                        'internal_function': 'api_endpoint',
+                        'url': 'https://gdi.berlin.de/services/wms/ua_einwohnerdichte_2023'
+                    }
+                ]
+            } ,
+            'expected': None
+        } ,
+        {
+            # it's a WFS, but doesn't seem to have an endpoint
+            'dataset_dict': {
+                'resources': [
+                    {
+                        'format': 'wfs',
+                        "name": "Endpunkt-Beschreibung des WFS-Service",
+                        'internal_function': 'api_description',
+                        "url": "https://gdi.berlin.de/services/wfs/baumbestand?REQUEST=GetCapabilities&SERVICE=wfs",
+                    }
+                ]
+            } ,
+            'expected': None
+        } ,
+        {
+            # just one WFS resource
+            'dataset_dict': {
+                "resources": [
+                    {
+                        "format": "wfs",
+                        "internal_function": "api_endpoint",
+                        "name": "API-Endpunkt des WFS-Service",
+                        "url": "https://gdi.berlin.de/services/wfs/parkraumbewirtschaftung",
+                    },
+                ]
+            } ,
+            'expected': 'https://gdi.berlin.de/services/wfs/parkraumbewirtschaftung'
+        } ,
+        {
+            # no resources, so not a WFS
+            'dataset_dict': {
+                'resources': [
+                ]
+            } ,
+            'expected': None
+        } ,
+    ])
+    def test_wfs_endpoint_for_dataset(self, data: dict):
+        '''Test to see if the correct values is returned.'''
+        assert dshelpers.wfs_endpoint_for_dataset(data['dataset_dict']) == data['expected']
