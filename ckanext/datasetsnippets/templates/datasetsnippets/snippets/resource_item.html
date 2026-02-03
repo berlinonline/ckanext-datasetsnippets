@@ -3,14 +3,15 @@ Renders an individual resource.
 
 resource - The resource to render
 package - A package object that the resources belong to.
+paneltype - suffix for the `panel` class (see https://designsystem.berlin.de/latest/patterns/vertical_assetservice-page-element-panels/vertical_assetservice-page-element-panels.html)
 
 Example:
 
-  {% snippet "datasetsnippets/snippets/resource_item.html", package=package, resources=package.resources %}
+  {% snippet "datasetsnippets/snippets/resource_item.html", package=package, resource=resource, paneltype="colored" %}
 
 #}
 
-<div class="modul-download panel--white block--halfgap">
+<div class="modul-download panel--{{ paneltype }} block--halfgap">
   <div class="left">
     <div class="dp-resource-header">
       <h3 class="title">{{ h.berlin_resource_label(resource) }}</h3>
