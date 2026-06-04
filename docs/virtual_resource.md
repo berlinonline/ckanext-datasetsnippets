@@ -11,7 +11,7 @@ The following steps are necessary for adding a virtual resource:
 ## Helper Function
 
 Define a function that determines whether or not to add the resource.
-The example for the WFS explorer in [ckanext/datasetsnippets/helpers.py](ckanext/datasetsnippets/helpers.py):
+The example for the WFS explorer in [ckanext/datasetsnippets/helpers.py](../ckanext/datasetsnippets/helpers.py):
 
 ```python
 def wfs_endpoint_for_dataset(dataset_dict: dict) -> str:
@@ -29,7 +29,7 @@ def wfs_endpoint_for_dataset(dataset_dict: dict) -> str:
 
 The helper function needs to be registered in order to be available in a template:
 
-See [ckanext/datasetsnippets/plugin.py](ckanext/datasetsnippets/plugin.py):
+See [ckanext/datasetsnippets/plugin.py](../ckanext/datasetsnippets/plugin.py):
 
 ```python
 def get_helpers(self):
@@ -43,11 +43,11 @@ def get_helpers(self):
 ## Unit Test Helper Function
 
 The function should be unit tested.
-See [test_helpers.py/test_wfs_endpoint_for_dataset()](ckanext/datasetsnippets/tests/test_helpers.py) for a unit test with various configurations for good and bad input.
+See [test_helpers.py/test_wfs_endpoint_for_dataset()](../ckanext/datasetsnippets/tests/test_helpers.py) for a unit test with various configurations for good and bad input.
 
 ## Generate Markup
 
-Markup for the virtual resource gets generated in the [resources_list.html](ckanext/datasetsnippets/templates/datasetsnippets/snippets/resources_list.html) template:
+Markup for the virtual resource gets generated in the [resources_list.html](../ckanext/datasetsnippets/templates/datasetsnippets/snippets/resources_list.html) template:
 
 ```jinja
 {% block wfs_explorer %}
