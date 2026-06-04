@@ -2,6 +2,8 @@
 
 ## Development
 
+- [Documentation for adding "virtual resources"](docs/virtual_resource.md).
+
 ## [0.1.15](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.15)
 
 _(2026-02-03)_
