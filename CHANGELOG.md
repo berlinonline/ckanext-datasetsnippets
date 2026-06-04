@@ -3,6 +3,7 @@
 ## Development
 
 - [Documentation for adding "virtual resources"](docs/virtual_resource.md).
+- Install ckanext-harvest in github-CI (it's a requirement of ckanext-berlintheme).
 
 ## [0.1.15](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.15)
 
