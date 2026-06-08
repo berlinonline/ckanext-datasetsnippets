@@ -68,6 +68,7 @@ class DatasetsnippetsPlugin(plugins.SingletonPlugin):
             'berlin_pagination_url_for_page': theme_helpers.pagination_url_for_page ,
             'berlin_unique_resource_formats': theme_helpers.unique_resource_formats ,
             'berlin_wfs_endpoint_for_dataset': theme_helpers.wfs_endpoint_for_dataset ,
+            'berlin_orgchart_endpoint_for_dataset': theme_helpers.orgchart_endpoint_for_dataset ,
         }
 
     # IAuthFunctions

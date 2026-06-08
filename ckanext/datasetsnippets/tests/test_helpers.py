@@ -313,3 +313,103 @@ class TestHelpers(object):
     def test_wfs_endpoint_for_dataset(self, data: dict):
         '''Test to see if the correct values is returned.'''
         assert dshelpers.wfs_endpoint_for_dataset(data['dataset_dict']) == data['expected']
+
+    @pytest.mark.parametrize('data', [
+        {
+            # a typical orgchart dataset: tag `_organigramm` and a JSON resource
+            'dataset_dict': {
+                'tags': [
+                    {'name': 'organigramm'},
+                    {'name': '_organigramm'},
+                ],
+                'resources': [
+                    {
+                        'format': 'PDF',
+                        'name': 'Beschreibung',
+                        'url': 'https://example.org/orgchart.pdf',
+                    },
+                    {
+                        'format': 'JSON',
+                        'name': 'Organigramm-Daten',
+                        'url': 'https://example.org/orgchart.json',
+                    },
+                ],
+            },
+            'expected': 'https://example.org/orgchart.json',
+        },
+        {
+            # tag `_organigramm` missing, even though there is a JSON resource
+            'dataset_dict': {
+                'tags': [
+                    {'name': 'organigramm'},
+                ],
+                'resources': [
+                    {
+                        'format': 'JSON',
+                        'name': 'Organigramm-Daten',
+                        'url': 'https://example.org/orgchart.json',
+                    },
+                ],
+            },
+            'expected': None,
+        },
+        {
+            # tag `_organigramm` is present, but no JSON resource
+            'dataset_dict': {
+                'tags': [
+                    {'name': '_organigramm'},
+                ],
+                'resources': [
+                    {
+                        'format': 'PDF',
+                        'name': 'Beschreibung',
+                        'url': 'https://example.org/orgchart.pdf',
+                    },
+                ],
+            },
+            'expected': None,
+        },
+        {
+            # tag `_organigramm` is present, JSON resource is present but
+            # has no URL
+            'dataset_dict': {
+                'tags': [
+                    {'name': '_organigramm'},
+                ],
+                'resources': [
+                    {
+                        'format': 'JSON',
+                        'name': 'Organigramm-Daten',
+                    },
+                ],
+            },
+            'expected': None,
+        },
+        {
+            # lowercase `json` should still match
+            'dataset_dict': {
+                'tags': [
+                    {'name': '_organigramm'},
+                ],
+                'resources': [
+                    {
+                        'format': 'json',
+                        'name': 'Organigramm-Daten',
+                        'url': 'https://example.org/orgchart.json',
+                    },
+                ],
+            },
+            'expected': 'https://example.org/orgchart.json',
+        },
+        {
+            # no tags at all, no resources
+            'dataset_dict': {
+                'tags': [],
+                'resources': [],
+            },
+            'expected': None,
+        },
+    ])
+    def test_orgchart_endpoint_for_dataset(self, data: dict):
+        '''Test to see if the correct values is returned for orgchart datasets.'''
+        assert dshelpers.orgchart_endpoint_for_dataset(data['dataset_dict']) == data['expected']

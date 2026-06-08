@@ -262,3 +262,18 @@ def wfs_endpoint_for_dataset(dataset_dict: dict) -> str:
                 if resource.get('url'):
                     return resource['url']
     return None
+
+def orgchart_endpoint_for_dataset(dataset_dict: dict) -> str:
+    '''Returns the orgchart endpoint for a dataset. The dataset is considered
+    an orgchart dataset if it has the tag `_organigramm`. The endpoint is the
+    URL of the first resource with `format` == `JSON`. Returns `None` if the
+    dataset is not an orgchart dataset, or doesn't have a JSON resource with
+    a URL.'''
+    tags = [tag.get('name') for tag in dataset_dict.get('tags', [])]
+    if '_organigramm' not in tags:
+        return None
+    for resource in dataset_dict['resources']:
+        if resource.get('format') and resource['format'].upper() == "JSON":
+            if resource.get('url'):
+                return resource['url']
+    return None
