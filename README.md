@@ -15,7 +15,7 @@ The plugin implements the following CKAN interfaces:
 
 ## Requirements
 
-This plugin has been tested with CKAN 2.9.10 (which requires Python 3).
+This plugin has been tested with CKAN 2.9.11 (which requires Python 3).
 
 ## API
 

@@ -2,7 +2,12 @@
 
 ## Development
 
+## [0.1.16](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.16)
+
+_(2026-06-16)_
+
 - [Documentation for adding "virtual resources"](docs/virtual_resource.md).
+- Add additional virtual resources for organograms, by linking to https://organigramme.odis-berlin.de/ with a `dataurl`-parameter. Requires the dataset to be tagged `_organigramm` and have a JSON resource.
 - Install ckanext-harvest in github-CI (it's a requirement of ckanext-berlintheme).
 
 ## [0.1.15](https://github.com/berlinonline/ckanext-datasetsnippets/releases/tag/0.1.15)
