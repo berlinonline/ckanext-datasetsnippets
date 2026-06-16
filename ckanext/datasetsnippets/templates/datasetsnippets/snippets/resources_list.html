@@ -36,6 +36,29 @@ Example:
                 paneltype="colored" %}
             {% endif %}
           {% endblock wfs_explorer %}
+          {% block orgchart_viewer %}
+            {% set endpoint = h.berlin_orgchart_endpoint_for_dataset(package) %}
+            {% if endpoint %}
+              {% snippet 'datasetsnippets/snippets/resource_item.html',
+                package=package,
+                resource = {
+                  "name": "Organigramm ansehen",
+                  "format": "HTML",
+                  "description": "Organigramm ansehen und in verschiedenen Formaten herunterladen: RDF, PDF, PNG, JSON, barrierefreies HTML und barrierefreies PDF.",
+                  "url": "https://organigramme.odis-berlin.de/?dataurl=" + endpoint + "&readonly"
+                },
+                paneltype="colored" %}
+              {% snippet 'datasetsnippets/snippets/resource_item.html',
+                package=package,
+                resource = {
+                  "name": '<i class="icon bicon bicon-universal-access" aria-hidden="true"></i> Barrierefreie Organigramm-Ansicht'|safe,
+                  "format": "HTML",
+                  "description": "Darstellung des Organigramms als barrierefreie, für Screenreader optimierte Listenansicht.",
+                  "url": "https://organigramme.odis-berlin.de/?dataurl=" + endpoint + "&readonly&format=html-accessible"
+                },
+                paneltype="colored" %}
+            {% endif %}
+          {% endblock orgchart_viewer %}
         {% endblock resource_list_inner %}
       {% else %}
         <p class="empty">{{ _('This dataset has no data') }}</p>
